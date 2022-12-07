@@ -1,5 +1,4 @@
 import React from 'react'
-import useSWR from 'swr'
 import { ICharge } from '../models/Charge'
 import {
     BarChart,
@@ -12,28 +11,19 @@ import {
     Legend,
 } from 'recharts'
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-
 interface BarChartProps {
   data: any
 }
 
 function StackedBarChart({ data }: BarChartProps) {
-    // const { data, error } = useSWR('/api/data', fetcher)
     const courtCases = !!data ? JSON.parse(data) : []
     const retained = {
         attorney: 'Retained',
         count: 0,
-        test: 10,
-        something: 5,
-        // primaryCharges: {}
     }
     const appointed = {
         attorney: 'Court Appointed',
         count: 0,
-        test: 20,
-        something: 5,
-        // primaryCharges: {}
     }
 
     console.log('data ', data)

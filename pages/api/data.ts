@@ -1,5 +1,3 @@
-import path from 'path'
-import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import ChargeEvent from '../../models/ChargeEvent'
 import Charge, { RawCharge } from '../../models/Charge'
@@ -48,17 +46,8 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    
-    // const jsonDirectory = path.join(process.cwd(), 'data')
-    // const fileContents = await fs.readFile(
-    //     jsonDirectory + '/combined.json',
-    //     'utf8'
-    // )
-
     const file = await fetch(COMBINED_CHARGES_URL)
     const json = await file.json()
-
-    // let data = JSON.parse(fileContents)
     const results = combinedItems(json?.results)
 
     const charges: Array<Charge> = []
