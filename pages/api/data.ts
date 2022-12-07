@@ -6,6 +6,14 @@ import Charge, { RawCharge } from '../../models/Charge'
 
 const COMBINED_CHARGES_URL = 'https://github.com/open-austin/indigent-stats-frontend/raw/main/data/combined.json'
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '20mb',
+    },
+  },
+}
+
 const combinedItems = (arr = []) => {
     const res = arr.reduce(
         (
