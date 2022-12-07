@@ -4,30 +4,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import ChargeEvent from '../../models/ChargeEvent'
 import Charge, { RawCharge } from '../../models/Charge'
 
-// const combinedItems = (arr = []) => {
-//     const res = arr.reduce(
-//         (
-//             acc: Array<RawCharge & { count: number }>,
-//             obj: RawCharge & { count: number }
-//         ) => {
-//             let found = false
-//             for (let i = 0; i < acc.length; i++) {
-//                 if (acc[i].case_number === obj.case_number) {
-//                     found = true
-//                     acc[i].count++
-//                 }
-//             }
-//             if (!found) {
-//                 obj.count = 1
-//                 acc.push(obj)
-//             }
-//             return acc
-//         },
-//         []
-//     )
-//     return res
-// }
-
 const combinedItems = (arr = []) => {
     const res = arr.reduce(
         (
@@ -56,6 +32,7 @@ const combinedItems = (arr = []) => {
     return res
 }
 
+// TODO: Host JSON externally
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse

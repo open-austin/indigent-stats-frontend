@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React from 'react'
 import useSWR from 'swr'
-import * as d3 from 'd3'
 import { ICharge } from '../models/Charge'
 import {
     BarChart,
@@ -28,8 +27,6 @@ function BarGraph({}: BarChartProps) {
       count: 0
     }
 
-    console.log('results ', courtCases)
-
     courtCases.forEach((courtCase: ICharge) => {
       if (courtCase.attorney === 'Retained') {
         retained.count = retained.count + 1
@@ -54,7 +51,7 @@ function BarGraph({}: BarChartProps) {
                     maxBarSize={30}
                     key={'attorney'}
                     dataKey={'count'}
-                    fill={'red'}
+                    fill={'#70A37F'}
                 />
             </BarChart>
         </ResponsiveContainer>
