@@ -4,6 +4,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import ChargeEvent from '../../models/ChargeEvent'
 import Charge, { RawCharge } from '../../models/Charge'
 
+const COMBINED_CHARGES_URL = 'https://github.com/open-austin/indigent-stats-frontend/raw/main/data/combined.json'
+
 const combinedItems = (arr = []) => {
     const res = arr.reduce(
         (
@@ -37,14 +39,19 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const jsonDirectory = path.join(process.cwd(), 'data')
-    const fileContents = await fs.readFile(
-        jsonDirectory + '/combined.json',
-        'utf8'
-    )
+    
+    // const jsonDirectory = path.join(process.cwd(), 'data')
 
-    let data = JSON.parse(fileContents)
-    const results = combinedItems(data?.results)
+    // const fileContents = await fs.readFile(
+    //     jsonDirectory + '/combined.json',
+    //     'utf8'
+    // )
+
+    const file = await fetch(COMBINED_CHARGES_URL)
+    const json = await file.json()
+
+    // let data = JSON.parse(fileContents)
+    const results = combinedItems(json?.results)
 
     const charges: Array<Charge> = []
     results.forEach((result: RawCharge) => {
