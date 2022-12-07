@@ -1,9 +1,19 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import useSWR from 'swr'
 import BarChart from '../components/BarChart'
+import StackedBarChart from '../components/StackedBarChart'
 import styles from '../styles/Home.module.css'
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 export default function Home() {
+  const { data, error } = useSWR('/api/data', fetcher)
+
+  if (error) {
+    return <div>{error}</div>
+  }
+
     return (
         <div className={styles.container}>
             <Head>
@@ -16,7 +26,10 @@ export default function Home() {
             </Head>
 
             <main className={styles.main}>
-                <BarChart />
+              <div className={styles.charts}>
+                <BarChart data={data} />
+                <StackedBarChart data={data} />
+              </div>
             </main>
 
             <footer className={styles.footer}>
