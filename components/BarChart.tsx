@@ -13,10 +13,12 @@ import {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
-interface BarChartProps {}
+interface BarChartProps {
+  data: any
+}
 
-function BarGraph({}: BarChartProps) {
-    const { data, error } = useSWR('/api/data', fetcher)
+function BarGraph({ data }: BarChartProps) {
+    // const { data, error } = useSWR('/api/data', fetcher)
     const courtCases = !!data ? JSON.parse(data) : []
     const retained = {
       attorney: 'Retained',
@@ -37,7 +39,7 @@ function BarGraph({}: BarChartProps) {
 
     const formattedResults = [retained, appointed]
 
-    if (error) return <div>Failed to load</div>
+    // if (error) return <div>Failed to load</div>
     if (!data) return <div>Loading...</div>
 
     return (

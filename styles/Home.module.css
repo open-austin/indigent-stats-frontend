@@ -12,6 +12,13 @@
   align-items: center;
 }
 
+.charts {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4rem;
+}
+
 .footer {
   display: flex;
   flex: 1;

@@ -8,6 +8,7 @@ const COMBINED_CHARGES_URL = 'https://github.com/open-austin/indigent-stats-fron
 
 export const config = {
   api: {
+    responseLimit: '20mb',
     bodyParser: {
       sizeLimit: '20mb',
     },
@@ -49,7 +50,6 @@ export default async function handler(
 ) {
     
     // const jsonDirectory = path.join(process.cwd(), 'data')
-
     // const fileContents = await fs.readFile(
     //     jsonDirectory + '/combined.json',
     //     'utf8'
