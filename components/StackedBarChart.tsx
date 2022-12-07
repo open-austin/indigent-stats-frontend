@@ -1,5 +1,4 @@
 import React from 'react'
-import useSWR from 'swr'
 import { ICharge } from '../models/Charge'
 import {
     BarChart,
@@ -12,31 +11,22 @@ import {
     Legend,
 } from 'recharts'
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-
 interface BarChartProps {
-  data: any
+    data: any
 }
 
 function StackedBarChart({ data }: BarChartProps) {
-    // const { data, error } = useSWR('/api/data', fetcher)
     const courtCases = !!data ? JSON.parse(data) : []
-    const retained = {
+    const retained: any = {
         attorney: 'Retained',
         count: 0,
-        test: 10,
-        something: 5,
-        // primaryCharges: {}
     }
-    const appointed = {
+    const appointed: any = {
         attorney: 'Court Appointed',
         count: 0,
-        test: 20,
-        something: 5,
-        // primaryCharges: {}
     }
 
-    console.log('data ', data)
+    console.log('data', courtCases[0])
 
     const primaryCharges: any = {}
     courtCases.forEach((courtCase: ICharge) => {
@@ -45,7 +35,7 @@ function StackedBarChart({ data }: BarChartProps) {
         if (courtCase.attorney === 'Retained') {
             retained.count = retained.count + 1
             if (primaryCharge?.offenseTypeCode) {
-                retained[primaryCharge?.offenseTypeCode] =
+                retained[`${primaryCharge?.offenseTypeCode}`] =
                     (retained[primaryCharge?.offenseTypeCode] || 0) + 1
             }
         } else if (courtCase.attorney === 'Court Appointed') {
@@ -79,28 +69,32 @@ function StackedBarChart({ data }: BarChartProps) {
     const formattedResults = [retained, appointed]
 
     const colors = [
-        '#79b473ff',
-        '#70a37fff',
-        '#41658aff',
-        '#414073ff',
-        '#4c3957ff',
+      '#79b473ff',
+      '#414073ff',
+      '#4c3957ff',
+      '#ABC8C0',
+      '#41658aff',
+      '#D295BF'
     ]
 
-    console.log('formatted ', formattedResults)
-    console.log('primary ', primaryCharges)
-
-    // if (error) return <div>Failed to load</div>
     if (!data) return <div>Loading...</div>
 
     let tooltip = ''
-    const CustomTooltip = ({ active, payload, label }) => {
+    const CustomTooltip = ({
+        active,
+        payload,
+        label,
+    }: {
+        active: boolean
+        payload: any
+        label: string
+    }) => {
         if (!active || !tooltip) return null
-        console.log('payload ', payload)
         for (const bar of payload)
             if (bar.dataKey === tooltip)
                 return (
                     <div>
-                        Primary charge: 
+                        Primary charge:
                         {primaryCharges[bar.dataKey]}
                         <br />
                     </div>
@@ -114,7 +108,7 @@ function StackedBarChart({ data }: BarChartProps) {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="attorney" />
                 <YAxis />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={(props: any) => <CustomTooltip {...props} />} />
                 <br></br>
                 <Legend />
                 {Object.keys(primaryCharges)
@@ -122,12 +116,15 @@ function StackedBarChart({ data }: BarChartProps) {
                     .map((charge, index) => {
                         return (
                             <Bar
-                                maxBarSize={30}
+                                maxBarSize={200}
                                 key={`${charge}-${index}`}
                                 dataKey={charge}
-                                fill={colors[index % 5]}
+                                fill={colors[index % (Object.keys(primaryCharges).length)]}
                                 stackId="a"
-                                name={primaryCharges[charge]} onMouseOver={ () => { tooltip = charge }}
+                                name={primaryCharges[charge]}
+                                onMouseOver={() => {
+                                    tooltip = charge
+                                }}
                             />
                         )
                     })}
