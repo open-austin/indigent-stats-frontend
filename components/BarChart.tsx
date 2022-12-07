@@ -45,7 +45,7 @@ function BarGraph({ data }: BarChartProps) {
                 <YAxis dataKey="count" />
                 <Tooltip />
                 <Bar
-                    maxBarSize={30}
+                    maxBarSize={200}
                     key={'attorney'}
                     dataKey={'count'}
                     fill={'#70A37F'}
