@@ -1,5 +1,4 @@
 import React from 'react'
-import useSWR from 'swr'
 import { ICharge } from '../models/Charge'
 import {
     BarChart,
@@ -11,14 +10,11 @@ import {
     ResponsiveContainer,
 } from 'recharts'
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-
 interface BarChartProps {
   data: any
 }
 
 function BarGraph({ data }: BarChartProps) {
-    // const { data, error } = useSWR('/api/data', fetcher)
     const courtCases = !!data ? JSON.parse(data) : []
     const retained = {
       attorney: 'Retained',
@@ -39,7 +35,6 @@ function BarGraph({ data }: BarChartProps) {
 
     const formattedResults = [retained, appointed]
 
-    // if (error) return <div>Failed to load</div>
     if (!data) return <div>Loading...</div>
 
     return (
@@ -50,7 +45,7 @@ function BarGraph({ data }: BarChartProps) {
                 <YAxis dataKey="count" />
                 <Tooltip />
                 <Bar
-                    maxBarSize={30}
+                    maxBarSize={200}
                     key={'attorney'}
                     dataKey={'count'}
                     fill={'#70A37F'}
