@@ -101,12 +101,6 @@ function StackedBarChart({ data }: StackedBarChartProps) {
     if (!data) return <div>Loading...</div>
 
     let tooltip = ''
-
-    const totals: { [key: string]: string } = formattedResults.reduce(
-        (a, v) => ({ ...a, [v.attorney]: v.count }),
-        {}
-    )
-
     const CustomTooltip = ({
         active,
         payload,
@@ -116,10 +110,12 @@ function StackedBarChart({ data }: StackedBarChartProps) {
         active: boolean
         payload: Array<{ dataKey: string; value: number }>
     }) => {
+        const totals: { [key: string]: string } = formattedResults.reduce(
+            (a, v) => ({ ...a, [v.attorney]: v.count }),
+            {}
+        )
         if (!active || !tooltip) return null
-        console.log('payload\n', payload)
         for (const bar of payload) {
-            console.log('bar.value\n', bar.value)
             if (bar.dataKey === tooltip) {
                 return (
                     <div>
