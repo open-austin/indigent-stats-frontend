@@ -18,7 +18,7 @@ export default async function handler(
     const charges = combinedDataSchema.safeParse(json.results)
 
     if (charges.success) {
-        const payload = groupBy(charges.data)((a) => a.case_number)
+        const payload = groupBy(charges.data)((a) => a.case_number.toString())
 
         res.status(200).json(payload)
     } else {
