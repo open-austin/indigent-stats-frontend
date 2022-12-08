@@ -16,8 +16,8 @@ import { flattenObject } from '../lib/flatten'
 
 type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
-    count: number
-    charges: Record<string, number>
+    caseCount: number
+    totalCharges: Record<string, number>
 }
 
 interface StackedBarChartProps {
@@ -27,44 +27,57 @@ interface StackedBarChartProps {
 function StackedBarChart({ data }: StackedBarChartProps) {
     const retained: AttorneySummary = {
         attorney: 'Retained',
-        count: 0,
-        charges: {},
+        caseCount: 0,
+        totalCharges: {},
     }
     const appointed: AttorneySummary = {
         attorney: 'Court Appointed',
-        count: 0,
-        charges: {},
+        caseCount: 0,
+        totalCharges: {},
     }
 
     // TODO -- what's the shape of retained.primaryCharges?
+    // note: the type of the key is really a number
     let primaryCharges: Record<string, string> = {}
 
+    console.log('num of cases\n', Object.keys(data).length)
+
     for (let case_ in data) {
+        // This should work since all of the "charges" within a given case were
+        // all scraped from the same record -- although in practice I'm not sure
+        // whether an attorney represents *all* charges for a given client..
+        // or is that ridiculous? Surely they represent them for all charges...
+        if (data[case_][0].attorney === 'Retained') {
+            retained.caseCount += 1
+        }
+
+        if (data[case_][0].attorney === 'Court Appointed') {
+            appointed.caseCount += 1
+        }
+
         data[case_].forEach((c) => {
             if (c.is_primary_charge && !primaryCharges[c.offense_type_code]) {
                 primaryCharges[c.offense_type_code] = c.offense_type_desc
             }
 
-            if (c.attorney === 'Retained') {
-                retained.count += 1
+            if (c.is_primary_charge) {
+                if (c.attorney === 'Retained') {
+                    retained.totalCharges = upsertAtMap(
+                        retained.totalCharges,
+                        c.offense_type_desc,
+                        (a) => a + 1,
+                        1
+                    )
+                }
 
-                retained.charges = upsertAtMap(
-                    retained.charges,
-                    c.offense_type_desc,
-                    (a) => a + 1,
-                    1
-                )
-            }
-
-            if (c.attorney === 'Court Appointed') {
-                appointed.count += 1
-
-                appointed.charges = upsertAtMap(
-                    appointed.charges,
-                    c.offense_type_desc,
-                    (a) => a + 1,
-                    1
-                )
+                if (c.attorney === 'Court Appointed') {
+                    appointed.totalCharges = upsertAtMap(
+                        appointed.totalCharges,
+                        c.offense_type_desc,
+                        (a) => a + 1,
+                        1
+                    )
+                }
             }
         })
     }
@@ -88,6 +101,12 @@ function StackedBarChart({ data }: StackedBarChartProps) {
     if (!data) return <div>Loading...</div>
 
     let tooltip = ''
+
+    const totals: { [key: string]: string } = formattedResults.reduce(
+        (a, v) => ({ ...a, [v.attorney]: v.count }),
+        {}
+    )
+
     const CustomTooltip = ({
         active,
         payload,
@@ -97,12 +116,10 @@ function StackedBarChart({ data }: StackedBarChartProps) {
         active: boolean
         payload: Array<{ dataKey: string; value: number }>
     }) => {
-        const totals: { [key: string]: string } = formattedResults.reduce(
-            (a, v) => ({ ...a, [v.attorney]: v.count }),
-            {}
-        )
         if (!active || !tooltip) return null
+        console.log('payload\n', payload)
         for (const bar of payload) {
+            console.log('bar.value\n', bar.value)
             if (bar.dataKey === tooltip) {
                 return (
                     <div>
