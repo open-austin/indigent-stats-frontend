@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { combinedDataSchema } from '../../models/schemas'
 import { groupBy } from '../../lib/array'
+import axios from 'axios'
 
 export const config = {
     api: {
@@ -15,18 +16,24 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const file = await fetch(COMBINED_CHARGES_URL)
-    const json = await file.json()
+    try {
+        const file = await axios.get(COMBINED_CHARGES_URL)
 
-    const charges = combinedDataSchema.safeParse(json.results)
+        const charges = combinedDataSchema.safeParse(file.data)
 
-    if (charges.success) {
-        const payload = groupBy(charges.data)((a) => a.case_number.toString())
+        if (charges.success) {
+            const payload = groupBy(charges.data)((a) =>
+                a.case_number.toString()
+            )
 
-        res.status(200).json(payload)
-    } else {
-        console.log('Parse Error:\n', charges.error.issues)
-        res.status(203).json(JSON.stringify(charges.error.issues))
+            res.status(200).json(payload)
+        } else {
+            console.log('Parse Error:\n', charges.error.issues)
+            res.status(203).json(charges.error.issues)
+        }
+    } catch (err) {
+        console.log('API Fetch Error', JSON.stringify(err))
+        res.status(500).json(JSON.stringify(err))
     }
 }
 
