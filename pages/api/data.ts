@@ -5,6 +5,9 @@ import { groupBy } from '../../lib/array'
 export const config = {
     api: {
         responseLimit: '20mb',
+        bodyParser: {
+            sizeLimit: '20mb',
+        },
     },
 }
 
