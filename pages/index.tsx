@@ -12,16 +12,25 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Home() {
     const { data, error } = useSWR('/api/data', fetcher)
+
+    if (!data && !error) {
+        return <Loading />
+    }
+
+    if (error) {
+        return <div>Error fetching</div>
+    }
+
     const parsed = groupedChargesSchema.safeParse(data)
 
-    if (data && (error || parsed.error || !parsed.success)) {
+    if (!parsed.success) {
         return (
             <div>
                 <pre>{JSON.stringify(parsed.error.issues, null, 2)}</pre>
             </div>
         )
     }
-    
+
     return (
         <div className={styles.container}>
             <Head>

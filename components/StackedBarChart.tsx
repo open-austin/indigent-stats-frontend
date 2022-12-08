@@ -17,7 +17,7 @@ import { flattenObject } from '../lib/flatten'
 type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
     count: number
-    primaryCharges: Record<string, number>
+    charges: Record<string, number>
 }
 
 interface StackedBarChartProps {
@@ -28,12 +28,12 @@ function StackedBarChart({ data }: StackedBarChartProps) {
     const retained: AttorneySummary = {
         attorney: 'Retained',
         count: 0,
-        primaryCharges: {},
+        charges: {},
     }
     const appointed: AttorneySummary = {
         attorney: 'Court Appointed',
         count: 0,
-        primaryCharges: {},
+        charges: {},
     }
 
     // TODO -- what's the shape of retained.primaryCharges?
@@ -48,27 +48,23 @@ function StackedBarChart({ data }: StackedBarChartProps) {
             if (c.attorney === 'Retained') {
                 retained.count += 1
 
-                if (c.is_primary_charge) {
-                    retained.primaryCharges = upsertAtMap(
-                        retained.primaryCharges,
-                        c.offense_type_desc,
-                        (a) => a + 1,
-                        1
-                    )
-                }
+                retained.charges = upsertAtMap(
+                    retained.charges,
+                    c.offense_type_desc,
+                    (a) => a + 1,
+                    1
+                )
             }
 
             if (c.attorney === 'Court Appointed') {
                 appointed.count += 1
 
-                if (c.is_primary_charge) {
-                    appointed.primaryCharges = upsertAtMap(
-                        appointed.primaryCharges,
-                        c.offense_type_desc,
-                        (a) => a + 1,
-                        1
-                    )
-                }
+                appointed.charges = upsertAtMap(
+                    appointed.charges,
+                    c.offense_type_desc,
+                    (a) => a + 1,
+                    1
+                )
             }
         })
     }
