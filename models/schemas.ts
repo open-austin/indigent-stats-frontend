@@ -29,44 +29,77 @@ const example = {
 }
 
 export const caseSchema = z.object({
-    case_number: z
-        .string()
-        .or(z.number())
-        .transform((a) => a.toString()),
-    event_name_formatted: z.string(),
-    event_date: z.string(),
-    first_event_date: z.string(),
     attorney: z.string(),
+    case_number: z.string().or(z.number()),
+    charge_date: z.string(),
+    charge_desc: z.string(),
+    charge_id: z.number(),
     charge_name: z.string(),
-    statute: z
-        .string()
-        .or(z.number())
-        .transform((a) => a.toString()),
+    earliest_charge_date: z.string(),
+    event_date: z.string(),
+    event_name_formatted: z.string(),
+    first_event_date: z.string(),
+    is_failure_to_appear: z.string(),
+    is_primary_charge: z.string(),
+    latest_charge_date: z.string(),
     level: z.string(),
     num_counts: z.number(),
-    charge_id: z.number(),
-    earliest_charge_date: z.string(),
-    latest_charge_date: z.string(),
-    charge_date: z.string(),
-    is_primary_charge: z.string(),
-    statute_chapter: z.number(),
-    statute_section: z.number(),
-    statute_subsection: z.string(),
-    is_failure_to_appear: z.string(),
-    uccs_code: z.number(),
-    probability: z
-        .number()
-        .or(z.string())
-        .transform((a) => a.toString()),
-    charge_desc: z.string(),
     offense_category_code: z.number(),
     offense_category_desc: z.string(),
     offense_type_code: z.number(),
     offense_type_desc: z.string(),
+    probability: z.number().or(z.string()),
+    statute_chapter: z.number(),
+    statute_section: z.number(),
+    statute_subsection: z.string(),
+    statute: z.string().or(z.number()),
+    uccs_code: z.number(),
+})
+
+// transform into a more convenient data model
+const toInternal = z.object({
+    attorney: z.string(),
+    case_number: z
+        .string()
+        .or(z.number())
+        .transform((a) => a.toString()),
+    charge_date: z.string(),
+    charge_desc: z.string(),
+    charge_id: z.number(),
+    charge_name: z.string(),
+    earliest_charge_date: z.string(),
+    event_date: z.string(),
+    event_name_formatted: z.string(),
+    first_event_date: z.string(),
+    is_failure_to_appear: z
+        .string()
+        .transform((a) => (a === 'TRUE' ? true : false)),
+    is_primary_charge: z
+        .string()
+        .transform((a) => (a === 'TRUE' ? true : false)),
+    latest_charge_date: z.string(),
+    level: z.string(),
+    num_counts: z.number(),
+    offense_category_code: z.number(),
+    offense_category_desc: z.string(),
+    offense_type_code: z.number(),
+    offense_type_desc: z.string(),
+    probability: z
+        .number()
+        .or(z.string())
+        .transform((a) => a.toString()),
+    statute_chapter: z.number(),
+    statute_section: z.number(),
+    statute_subsection: z.string(),
+    statute: z
+        .string()
+        .or(z.number())
+        .transform((a) => a.toString()),
+    uccs_code: z.number(),
 })
 
 export const combinedDataSchema = z.array(caseSchema)
-export const groupedChargesSchema = z.record(combinedDataSchema)
+export const groupedChargesSchema = z.record(z.array(toInternal))
 
 export type CombinedData = z.TypeOf<typeof combinedDataSchema>
 export type CasesGroupedByCaseId = z.TypeOf<typeof groupedChargesSchema>
