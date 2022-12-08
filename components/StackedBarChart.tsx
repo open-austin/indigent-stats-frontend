@@ -10,7 +10,7 @@ import {
     ResponsiveContainer,
     Legend,
 } from 'recharts'
-import { CasesGroupedByCaseId } from '../models/schemas'
+import { CasesGroupedByCaseId, caseSchema } from '../models/schemas'
 import { upsertAt, upsertAtMap } from '../lib/record'
 import { flattenObject } from '../lib/flatten'
 
@@ -43,6 +43,7 @@ function StackedBarChart({ data }: StackedBarChartProps) {
     console.log('num of cases\n', Object.keys(data).length)
 
     for (let case_ in data) {
+        console.log('case ', case_)
         // This should work since all of the "charges" within a given case were
         // all scraped from the same record -- although in practice I'm not sure
         // whether an attorney represents *all* charges for a given client..
@@ -55,31 +56,32 @@ function StackedBarChart({ data }: StackedBarChartProps) {
             appointed.caseCount += 1
         }
 
-        data[case_].forEach((c) => {
-            if (c.is_primary_charge && !primaryCharges[c.offense_type_code]) {
-                primaryCharges[c.offense_type_code] = c.offense_type_desc
+        const primaryCharge = data[case_].find(
+            (charge) => charge.is_primary_charge
+        )
+
+        if (primaryCharge) {
+            primaryCharges[primaryCharge.offense_type_code] =
+                primaryCharge.offense_type_desc
+
+            if (primaryCharge.attorney === 'Retained') {
+                retained.totalCharges = upsertAtMap(
+                    retained.totalCharges,
+                    primaryCharge.offense_type_desc,
+                    (a) => a + 1,
+                    1
+                )
             }
 
-            if (c.is_primary_charge) {
-                if (c.attorney === 'Retained') {
-                    retained.totalCharges = upsertAtMap(
-                        retained.totalCharges,
-                        c.offense_type_desc,
-                        (a) => a + 1,
-                        1
-                    )
-                }
-
-                if (c.attorney === 'Court Appointed') {
-                    appointed.totalCharges = upsertAtMap(
-                        appointed.totalCharges,
-                        c.offense_type_desc,
-                        (a) => a + 1,
-                        1
-                    )
-                }
+            if (primaryCharge.attorney === 'Court Appointed') {
+                appointed.totalCharges = upsertAtMap(
+                    appointed.totalCharges,
+                    primaryCharge.offense_type_desc,
+                    (a) => a + 1,
+                    1
+                )
             }
-        })
+        }
     }
 
     const formattedResults = [flattenObject(retained), flattenObject(appointed)]
