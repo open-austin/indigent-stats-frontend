@@ -14,7 +14,7 @@ export default function Home() {
     const { data, error } = useSWR('/api/data', fetcher)
     const parsed = groupedChargesSchema.safeParse(data)
 
-    if (!parsed.success) {
+    if (data && (error || parsed.error || !parsed.success)) {
         return (
             <div>
                 <pre>{JSON.stringify(parsed.error.issues, null, 2)}</pre>
