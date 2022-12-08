@@ -107,7 +107,6 @@ function StackedBarChart({ data }: StackedBarChartProps) {
         active: boolean
         payload: Array<{ dataKey: string }>
     }) => {
-        console.log('payload\n', payload)
         if (!active || !tooltip) return null
         for (const bar of payload)
             if (bar.dataKey === tooltip)

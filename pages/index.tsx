@@ -12,7 +12,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Home() {
     const { data, error } = useSWR('/api/data', fetcher)
-
     const parsed = groupedChargesSchema.safeParse(data)
 
     if (!parsed.success) {
@@ -22,7 +21,7 @@ export default function Home() {
             </div>
         )
     }
-
+    
     return (
         <div className={styles.container}>
             <Head>
@@ -35,7 +34,7 @@ export default function Home() {
                 {/* <Suspense fallback={<Loading />}> */}
 
                 <div className={styles.charts}>
-                    {/* <BarChart data={data} /> */}
+                    {/* <BarChart data={parsed.data} /> */}
                     <StackedBarChart data={parsed.data} />
                 </div>
                 {/* </Suspense> */}
