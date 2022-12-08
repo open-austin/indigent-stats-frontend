@@ -3,6 +3,9 @@ import { combinedDataSchema } from '../../models/schemas'
 import { groupBy } from '../../lib/array'
 import axios from 'axios'
 
+const COMBINED_CHARGES_URL =
+    'https://github.com/open-austin/indigent-stats-frontend/raw/main/data/combined.json'
+
 export const config = {
     api: {
         responseLimit: '20mb',
@@ -18,9 +21,8 @@ export default async function handler(
 ) {
     try {
         const file = await axios.get(COMBINED_CHARGES_URL)
-
-        const charges = combinedDataSchema.safeParse(file.data)
-
+        const charges = combinedDataSchema.safeParse(file.data.results)
+        
         if (charges.success) {
             const payload = groupBy(charges.data)((a) =>
                 a.case_number.toString()
@@ -37,5 +39,3 @@ export default async function handler(
     }
 }
 
-const COMBINED_CHARGES_URL =
-    'https://github.com/open-austin/indigent-stats-frontend/raw/main/data/combined.json'
