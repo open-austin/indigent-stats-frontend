@@ -42,15 +42,6 @@ function StackedBarChart({ data }: StackedBarChartProps) {
     for (let case_ in data) {
         data[case_].forEach((c) => {
             if (c.is_primary_charge && !primaryCharges[c.offense_type_code]) {
-                // primaryCharges = upsertAtMap(
-                //     primaryCharges,
-                //     c.offense_type_code.toString(),
-                //     (a) => {
-                //         a.push(c.offense_type_desc)
-                //         return a
-                //     },
-                //     [c.offense_type_desc]
-                // )
                 primaryCharges[c.offense_type_code] = c.offense_type_desc
             }
 
@@ -82,11 +73,12 @@ function StackedBarChart({ data }: StackedBarChartProps) {
         })
     }
 
+    const formattedResults = [flattenObject(retained), flattenObject(appointed)]
+
     console.log('primaryCharges\n', primaryCharges)
     console.log('retained\n', retained)
     console.log('appointed\n', appointed)
-
-    const formattedResults = [flattenObject(retained), flattenObject(appointed)]
+    console.log('formattedResults\n', formattedResults)
 
     const colors = [
         '#79b473ff',
