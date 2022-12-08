@@ -36,15 +36,19 @@ function StackedBarChart({ data }: StackedBarChartProps) {
     }
 
     // TODO -- what's the shape of retained.primaryCharges?
-    let primaryCharges: Record<string, string> = {}
+    let primaryCharges: Record<string, string[]> = {}
 
     for (let case_ in data) {
         data[case_].forEach((c) => {
             if (c.is_primary_charge) {
-                primaryCharges = upsertAt(
+                primaryCharges = upsertAtMap(
                     primaryCharges,
                     c.offense_type_code.toString(),
-                    c.offense_type_desc
+                    (a) => {
+                        a.push(c.offense_type_desc)
+                        return a
+                    },
+                    [c.offense_type_desc]
                 )
             }
 
@@ -80,43 +84,6 @@ function StackedBarChart({ data }: StackedBarChartProps) {
     console.log('retained\n', retained)
     console.log('appointed\n', appointed)
 
-    // courtCases.forEach((courtCase: ICharge) => {
-    //     const primaryCharge = courtCase.events.find((e) => e.isPrimaryCharge)
-
-    //     if (courtCase.attorney === 'Retained') {
-    //         retained.count = retained.count + 1
-    //         if (primaryCharge?.offenseTypeCode) {
-    //             retained[primaryCharge?.offenseTypeCode] =
-    //                 (retained[primaryCharge?.offenseTypeCode] || 0) + 1
-    //         }
-    //     } else if (courtCase.attorney === 'Court Appointed') {
-    //         appointed.count = appointed.count + 1
-    //         if (primaryCharge?.offenseTypeCode) {
-    //             appointed[primaryCharge?.offenseTypeCode] =
-    //                 (appointed[primaryCharge?.offenseTypeCode] || 0) + 1
-    //         }
-    //     }
-
-    //     if (
-    //         primaryCharge?.offenseTypeCode &&
-    //         primaryCharge?.offenseTypeDesc &&
-    //         !primaryCharges[primaryCharge?.offenseTypeCode]?.length
-    //     ) {
-    //         primaryCharges[primaryCharge?.offenseTypeCode] = [
-    //             primaryCharge?.offenseTypeDesc,
-    //         ]
-    //     } else if (
-    //         primaryCharge?.offenseTypeCode &&
-    //         !primaryCharges[primaryCharge?.offenseTypeCode]?.includes(
-    //             primaryCharge?.offenseTypeDesc
-    //         )
-    //     ) {
-    //         primaryCharges[primaryCharge?.offenseTypeCode].push(
-    //             primaryCharge?.offenseTypeDesc
-    //         )
-    //     }
-    // })
-
     const formattedResults = [retained, appointed]
 
     const colors = [
@@ -140,8 +107,8 @@ function StackedBarChart({ data }: StackedBarChartProps) {
         active: boolean
         payload: Array<{ dataKey: string }>
     }) => {
-        if (!active || !tooltip) return null
         console.log('payload\n', payload)
+        if (!active || !tooltip) return null
         for (const bar of payload)
             if (bar.dataKey === tooltip)
                 return (
@@ -180,7 +147,7 @@ function StackedBarChart({ data }: StackedBarChartProps) {
                                     ]
                                 }
                                 stackId="a"
-                                name={primaryCharges[charge]}
+                                name={primaryCharges[charge][0]}
                                 onMouseOver={() => {
                                     tooltip = charge
                                 }}
