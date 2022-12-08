@@ -43,7 +43,6 @@ function StackedBarChart({ data }: StackedBarChartProps) {
     console.log('num of cases\n', Object.keys(data).length)
 
     for (let case_ in data) {
-        console.log('case ', case_)
         // This should work since all of the "charges" within a given case were
         // all scraped from the same record -- although in practice I'm not sure
         // whether an attorney represents *all* charges for a given client..
@@ -113,12 +112,12 @@ function StackedBarChart({ data }: StackedBarChartProps) {
         payload: Array<{ dataKey: string; value: number }>
     }) => {
         const totals: { [key: string]: string } = formattedResults.reduce(
-            (a, v) => ({ ...a, [v.attorney]: v.count }),
+            (a, v) => ({ ...a, [v.attorney]: v.caseCount }),
             {}
         )
         if (!active || !tooltip) return null
         for (const bar of payload) {
-            if (bar.dataKey === tooltip) {
+          if (bar.dataKey === tooltip) {
                 return (
                     <div>
                         {bar.dataKey}&nbsp;
