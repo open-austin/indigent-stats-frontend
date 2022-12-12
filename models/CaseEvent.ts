@@ -5,5 +5,5 @@ import { z } from 'zod'
 export type CaseEvent = z.TypeOf<typeof caseEventSchema>
 
 export const caseEventSchema = z.array(
-    z.object({ event_date: z.string(), event_name: z.string().optional() })
+    z.object({ event_date: z.string(), event_name: z.string() })
 )
