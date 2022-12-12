@@ -8,6 +8,8 @@ import {
     Tooltip,
     ResponsiveContainer,
     Legend,
+    LabelList,
+    LabelListProps,
 } from 'recharts'
 import { upsertAtMap } from '../lib/record'
 import { flattenObject } from '../lib/flatten'
@@ -43,7 +45,8 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     cases.forEach((c) => {
         pcSet.add(c.charges[0].offense_type_desc)
-        const primaryCharge = c.charges.find(charge => charge.is_primary_charge) || c.charges[0]
+        const primaryCharge =
+            c.charges.find((charge) => charge.is_primary_charge) || c.charges[0]
 
         // This should work since all of the "charges" within a given case were
         // all scraped from the same record -- although in practice I'm not sure
@@ -96,36 +99,13 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     if (!cases) return <div>Loading...</div>
 
-    let tooltip = ''
-    const CustomTooltip = ({
-        active,
-        payload,
-        label,
-    }: {
-        label: string
-        active: boolean
-        payload: Array<{ dataKey: string; value: number }>
-    }) => {
-        const totals: { [key: string]: string } = formattedResults.reduce(
-            (a, v) => ({ ...a, [v.attorney]: v.caseCount }),
-            {}
-        )
-        if (!active || !tooltip) return null
-        for (const bar of payload) {
-            if (bar.dataKey === tooltip) {
-                return (
-                    <div>
-                        {bar.dataKey}&nbsp;
-                        {((bar.value / parseInt(totals[label])) * 100).toFixed(
-                            1
-                        )}
-                        %
-                        <br />
-                    </div>
-                )
-            }
+    const renderCustomPercentage = (props: any, charge: string) => {
+        const percentage = (props[charge] / props.caseCount) * 100
+        if (typeof percentage !== 'number' || isNaN(percentage)) {
+            return null
         }
-        return null
+
+        return `${percentage.toFixed(1)}%`
     }
 
     return (
@@ -135,29 +115,44 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                 <XAxis dataKey="attorney" />
                 <YAxis />
                 <Tooltip
-                    content={(props: any) => <CustomTooltip {...props} />}
+                    labelStyle={{ fontSize: 11, fontWeight: 'bold' }}
+                    contentStyle={{ fontSize: 11 }}
+                    offset={50}
+                    itemSorter={(item) => {
+                        return item.name as string
+                    }}
                 />
                 <br></br>
                 <Legend />
-                {primaryCharges.sort().map((charge, index) => {
-                    return (
-                        <Bar
-                            maxBarSize={200}
-                            key={`${charge}-${index}`}
-                            dataKey={charge}
-                            fill={
-                                colors[
-                                    index % Object.keys(primaryCharges).length
-                                ]
-                            }
-                            stackId="a"
-                            name={charge}
-                            onMouseOver={() => {
-                                tooltip = charge
-                            }}
-                        />
-                    )
-                })}
+                {primaryCharges
+                    .sort()
+                    .reverse()
+                    .map((charge, index) => {
+                        return (
+                            <Bar
+                                maxBarSize={200}
+                                key={`${charge}-${index}`}
+                                dataKey={charge}
+                                fill={
+                                    colors[
+                                        index %
+                                            Object.keys(primaryCharges).length
+                                    ]
+                                }
+                                stackId="a"
+                                name={charge}
+                            >
+                                <LabelList
+                                    key={`${charge}-${index}-labellist`}
+                                    fontSize={10}
+                                    fill={'#fff'}
+                                    valueAccessor={(
+                                        props: LabelListProps<'valueAccessor'>
+                                    ) => renderCustomPercentage(props, charge)}
+                                />
+                            </Bar>
+                        )
+                    })}
             </BarChart>
         </ResponsiveContainer>
     )
