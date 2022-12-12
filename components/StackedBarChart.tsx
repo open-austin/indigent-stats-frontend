@@ -66,7 +66,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
             c.charges.forEach((charge) => {
                 appointed.totalCharges = upsertAtMap(
-                    retained.totalCharges,
+                    appointed.totalCharges,
                     charge.offense_type_desc,
                     (a) => a + 1,
                     1
