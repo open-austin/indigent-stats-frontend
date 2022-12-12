@@ -9,7 +9,7 @@ import {
     ResponsiveContainer,
     Legend,
     LabelList,
-    RechartsFunction,
+    LabelListProps,
 } from 'recharts'
 import { upsertAtMap } from '../lib/record'
 import { flattenObject } from '../lib/flatten'
@@ -99,10 +99,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     if (!cases) return <div>Loading...</div>
 
-    const renderCustomPercentage = (
-        props: RechartsFunction,
-        charge: string
-    ) => {
+    const renderCustomPercentage = (props: any, charge: string) => {
         const percentage = (props[charge] / props.caseCount) * 100
         if (typeof percentage !== 'number' || isNaN(percentage)) {
             return null
@@ -149,9 +146,9 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                                     key={`${charge}-${index}-labellist`}
                                     fontSize={10}
                                     fill={'#fff'}
-                                    valueAccessor={(props: RechartsFunction) =>
-                                        renderCustomPercentage(props, charge)
-                                    }
+                                    valueAccessor={(
+                                        props: LabelListProps<'valueAccessor'>
+                                    ) => renderCustomPercentage(props, charge)}
                                 />
                             </Bar>
                         )
