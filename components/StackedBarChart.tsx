@@ -43,6 +43,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     cases.forEach((c) => {
         pcSet.add(c.charges[0].offense_type_desc)
+        const primaryCharge = c.charges.find(charge => charge.is_primary_charge) || c.charges[0]
 
         // This should work since all of the "charges" within a given case were
         // all scraped from the same record -- although in practice I'm not sure
@@ -51,27 +52,27 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
         if (c.attorney_type === 'Retained') {
             retained.caseCount += 1
 
-            c.charges.forEach((charge) => {
+            if (primaryCharge) {
                 retained.totalCharges = upsertAtMap(
                     retained.totalCharges,
-                    charge.offense_type_desc,
+                    primaryCharge.offense_type_desc,
                     (a) => a + 1,
                     1
                 )
-            })
+            }
         }
 
         if (c.attorney_type === 'Court Appointed') {
             appointed.caseCount += 1
 
-            c.charges.forEach((charge) => {
+            if (primaryCharge) {
                 appointed.totalCharges = upsertAtMap(
                     appointed.totalCharges,
-                    charge.offense_type_desc,
+                    primaryCharge.offense_type_desc,
                     (a) => a + 1,
                     1
                 )
-            })
+            }
         }
     })
 
