@@ -1,5 +1,4 @@
 import React from 'react'
-import { ICharge } from '../models/Charge'
 import {
     BarChart,
     Bar,
@@ -9,28 +8,28 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts'
+import { Case } from '../models/Case'
 
 interface BarChartProps {
-  data: any
+    data: Array<Case>
 }
 
 function BarGraph({ data }: BarChartProps) {
-    const courtCases = !!data ? JSON.parse(data) : []
     const retained = {
-      attorney: 'Retained',
-      count: 0
+        attorney: 'Retained',
+        count: 0,
     }
     const appointed = {
-      attorney: 'Court Appointed',
-      count: 0
+        attorney: 'Court Appointed',
+        count: 0,
     }
 
-    courtCases.forEach((courtCase: ICharge) => {
-      if (courtCase.attorney === 'Retained') {
-        retained.count = retained.count + 1
-      } else if (courtCase.attorney === 'Court Appointed') {
-        appointed.count = appointed.count + 1
-      }
+    data.forEach((courtCase) => {
+        if (courtCase.attorney_type === 'Retained') {
+            retained.count = retained.count + 1
+        } else if (courtCase.attorney_type === 'Court Appointed') {
+            appointed.count = appointed.count + 1
+        }
     })
 
     const formattedResults = [retained, appointed]

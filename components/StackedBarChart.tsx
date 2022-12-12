@@ -1,5 +1,4 @@
 import React from 'react'
-import { ICharge } from '../models/Charge'
 import {
     BarChart,
     Bar,
@@ -10,9 +9,9 @@ import {
     ResponsiveContainer,
     Legend,
 } from 'recharts'
-import { CasesGroupedByCaseId, caseSchema } from '../models/schemas'
-import { upsertAt, upsertAtMap } from '../lib/record'
+import { upsertAtMap } from '../lib/record'
 import { flattenObject } from '../lib/flatten'
+import { Case } from '../models/Case'
 
 type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
@@ -21,10 +20,10 @@ type AttorneySummary = {
 }
 
 interface StackedBarChartProps {
-    data: CasesGroupedByCaseId
+    cases: Array<Case>
 }
 
-function StackedBarChart({ data }: StackedBarChartProps) {
+function StackedBarChart({ cases }: StackedBarChartProps) {
     const retained: AttorneySummary = {
         attorney: 'Retained',
         caseCount: 0,
@@ -38,32 +37,22 @@ function StackedBarChart({ data }: StackedBarChartProps) {
 
     // TODO -- what's the shape of retained.primaryCharges?
     // note: the type of the key is really a number
-    let primaryCharges: Record<string, string> = {}
+    let pcSet = new Set<string>()
 
-    console.log('num of cases\n', Object.keys(data).length)
+    console.log('num of cases\n', cases.length)
 
-    for (let case_ in data) {
+    cases.forEach((c) => {
+        pcSet.add(c.charges[0].offense_type_desc)
+        const primaryCharge = c.charges.find(charge => charge.is_primary_charge) || c.charges[0]
+
         // This should work since all of the "charges" within a given case were
         // all scraped from the same record -- although in practice I'm not sure
         // whether an attorney represents *all* charges for a given client..
         // or is that ridiculous? Surely they represent them for all charges...
-        if (data[case_][0].attorney === 'Retained') {
+        if (c.attorney_type === 'Retained') {
             retained.caseCount += 1
-        }
 
-        if (data[case_][0].attorney === 'Court Appointed') {
-            appointed.caseCount += 1
-        }
-
-        const primaryCharge = data[case_].find(
-            (charge) => charge.is_primary_charge
-        )
-
-        if (primaryCharge) {
-            primaryCharges[primaryCharge.offense_type_code] =
-                primaryCharge.offense_type_desc
-
-            if (primaryCharge.attorney === 'Retained') {
+            if (primaryCharge) {
                 retained.totalCharges = upsertAtMap(
                     retained.totalCharges,
                     primaryCharge.offense_type_desc,
@@ -71,8 +60,12 @@ function StackedBarChart({ data }: StackedBarChartProps) {
                     1
                 )
             }
+        }
 
-            if (primaryCharge.attorney === 'Court Appointed') {
+        if (c.attorney_type === 'Court Appointed') {
+            appointed.caseCount += 1
+
+            if (primaryCharge) {
                 appointed.totalCharges = upsertAtMap(
                     appointed.totalCharges,
                     primaryCharge.offense_type_desc,
@@ -81,9 +74,11 @@ function StackedBarChart({ data }: StackedBarChartProps) {
                 )
             }
         }
-    }
+    })
 
     const formattedResults = [flattenObject(retained), flattenObject(appointed)]
+
+    const primaryCharges = Array.from(pcSet)
 
     console.log('primaryCharges\n', primaryCharges)
     console.log('retained\n', retained)
@@ -99,7 +94,7 @@ function StackedBarChart({ data }: StackedBarChartProps) {
         '#D295BF',
     ]
 
-    if (!data) return <div>Loading...</div>
+    if (!cases) return <div>Loading...</div>
 
     let tooltip = ''
     const CustomTooltip = ({
@@ -117,7 +112,7 @@ function StackedBarChart({ data }: StackedBarChartProps) {
         )
         if (!active || !tooltip) return null
         for (const bar of payload) {
-          if (bar.dataKey === tooltip) {
+            if (bar.dataKey === tooltip) {
                 return (
                     <div>
                         {bar.dataKey}&nbsp;
@@ -144,28 +139,25 @@ function StackedBarChart({ data }: StackedBarChartProps) {
                 />
                 <br></br>
                 <Legend />
-                {Object.keys(primaryCharges)
-                    .sort()
-                    .map((charge, index) => {
-                        return (
-                            <Bar
-                                maxBarSize={200}
-                                key={`${charge}-${index}`}
-                                dataKey={primaryCharges[charge]}
-                                fill={
-                                    colors[
-                                        index %
-                                            Object.keys(primaryCharges).length
-                                    ]
-                                }
-                                stackId="a"
-                                name={primaryCharges[charge]}
-                                onMouseOver={() => {
-                                    tooltip = primaryCharges[charge]
-                                }}
-                            />
-                        )
-                    })}
+                {primaryCharges.sort().map((charge, index) => {
+                    return (
+                        <Bar
+                            maxBarSize={200}
+                            key={`${charge}-${index}`}
+                            dataKey={charge}
+                            fill={
+                                colors[
+                                    index % Object.keys(primaryCharges).length
+                                ]
+                            }
+                            stackId="a"
+                            name={charge}
+                            onMouseOver={() => {
+                                tooltip = charge
+                            }}
+                        />
+                    )
+                })}
             </BarChart>
         </ResponsiveContainer>
     )
