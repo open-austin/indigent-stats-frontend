@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Head from 'next/head'
 import useSWR from 'swr'
 import { z } from 'zod'
@@ -7,18 +6,11 @@ import { Loading } from '../components/Loading'
 import StackedBarChart from '../components/StackedBarChart'
 import BarChartEventsInteractive from '../components/BarChartEventsInteractive'
 import { caseSchema } from '../models/Case'
-import { IFilters } from '../components/Filter'
 import styles from '../styles/Home.module.css'
 import fetcher from '../lib/fetcher'
 
 export default function Home() {
     const { data, error } = useSWR('/api/cases-subset', fetcher)
-    // const [filters, setFilters] = useState<IFilters>({
-    //     motions: 'All',
-    //     charges: 'All',
-    //     chargeCategories: 'All',
-    //     chargeLevels: 'All',
-    // })
 
     if (!data && !error) {
         return <Loading />
