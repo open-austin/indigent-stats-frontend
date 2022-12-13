@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { caseEventSchema } from './CaseEvent'
 import { chargeSchema } from './Charge'
 import { filtersSchema } from './Filters'
+import { significantMotions } from '../lib/constants'
 
 export type Case = z.TypeOf<typeof caseSchema>
 
@@ -19,14 +20,20 @@ export const caseSchema = z
     .transform((c) => {
         let parsed = c
 
-        c.filters = {
-            motions:
-                c.events
-                    .filter((e) => e.event_name?.startsWith('Motion') && !e.event_name?.includes('Dismiss'))
-                    .map((e) => e.event_name) || [],
-            charges: c.charges.map((e) => e.charge_desc) || [],
-            chargeCategories: c.charges.map((e) => e.offense_category_desc),
-            chargeLevels: c.charges.map((e) => e.level) || [],
+        const motions = c.events
+                            .filter((e) => significantMotions.includes(e.event_name))
+                            .map((e) => e.event_name) || []
+
+        const charges = c.charges.map((e) => e.charge_desc) || []
+        const chargeCategories = c.charges.map((e) => e.offense_category_desc)
+        const chargeLevels = c.charges.map((e) => e.level) || []
+
+        parsed.filters = {
+            motions: [...new Set(motions)],
+            charges: [...new Set(charges)],
+            chargeCategories: [...new Set(chargeCategories)],
+            chargeLevels: [...new Set(chargeLevels)]
         }
+
         return parsed
     })

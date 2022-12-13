@@ -37,7 +37,8 @@ function BarChartEventsInteractive({
         (d) => d.attorney_type === 'Court Appointed'
     )
 
-    // TODO: Clean up these transforms and how we're splitting up retained/appointed data. Could be simpler.
+    // TODO: Create a reusable filter function
+    // Clean up these transforms and how we're splitting up retained/appointed data. Could be simpler.
     const retainedTotalCasesWithMotion =
         filters.motion !== 'All'
             ? retainedData.filter((d) =>
