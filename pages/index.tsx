@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Head from 'next/head'
 import useSWR from 'swr'
 import { z } from 'zod'
@@ -7,12 +8,14 @@ import StackedBarChart from '../components/StackedBarChart'
 import BarChartEventsInteractive from '../components/BarChartEventsInteractive'
 import { caseSchema } from '../models/Case'
 import styles from '../styles/Home.module.css'
-import { useState } from 'react'
+import { significantMotions } from '../lib/constants'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
-export interface Filters {
-    motion: string
+type TSignificantMotion = typeof significantMotions[number]
+
+export interface IFilters {
+    motion: 'All' | TSignificantMotion
     charge: string
     chargeCategory: string
     chargeLevel: string
@@ -20,7 +23,7 @@ export interface Filters {
 
 export default function Home() {
     const { data, error } = useSWR('/api/cases-subset', fetcher)
-    const [filters, setFilters] = useState<Filters>({
+    const [filters, setFilters] = useState<IFilters>({
         motion: 'All',
         charge: 'All',
         chargeCategory: 'All',
