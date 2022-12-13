@@ -7,28 +7,18 @@ import { Loading } from '../components/Loading'
 import StackedBarChart from '../components/StackedBarChart'
 import BarChartEventsInteractive from '../components/BarChartEventsInteractive'
 import { caseSchema } from '../models/Case'
+import { IFilters } from '../components/Filter'
 import styles from '../styles/Home.module.css'
-import { significantMotions } from '../lib/constants'
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-
-type TSignificantMotion = typeof significantMotions[number]
-
-export interface IFilters {
-    motion: 'All' | TSignificantMotion
-    charge: string
-    chargeCategory: string
-    chargeLevel: string
-}
+import fetcher from '../lib/fetcher'
 
 export default function Home() {
     const { data, error } = useSWR('/api/cases-subset', fetcher)
-    const [filters, setFilters] = useState<IFilters>({
-        motion: 'All',
-        charge: 'All',
-        chargeCategory: 'All',
-        chargeLevel: 'All',
-    })
+    // const [filters, setFilters] = useState<IFilters>({
+    //     motions: 'All',
+    //     charges: 'All',
+    //     chargeCategories: 'All',
+    //     chargeLevels: 'All',
+    // })
 
     if (!data && !error) {
         return <Loading />
@@ -58,7 +48,7 @@ export default function Home() {
 
             <main className={styles.main}>
                 <div className={styles.charts}>
-                    <BarChartEventsInteractive filters={filters} data={parsed.data} />
+                    <BarChartEventsInteractive data={parsed.data} />
                     {/* <BarChart data={parsed.data} /> */}
                     <StackedBarChart cases={parsed.data} />
                 </div>
