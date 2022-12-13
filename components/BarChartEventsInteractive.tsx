@@ -60,37 +60,35 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
         chargeLevels: 'All',
     })
 
+    // TODO: Create a reusable function for retained/appointed so we're not duplicating all this logic
     const retainedData = data.filter((d) => d.attorney_type === 'Retained')
     const appointedData = data.filter(
         (d) => d.attorney_type === 'Court Appointed'
     )
 
-    // TODO: Create a reusable filter function
-    // Clean up these transforms and how we're splitting up retained/appointed data. Could be simpler.
-    const retainedTotalCasesWithMotion = multifilter(retainedData, filters)
-    const appointedTotalCasesWithMotion = multifilter(appointedData, filters)
-    
+    const retainedFilteredData = multifilter(retainedData, filters)
+    const appointedFilteredData = multifilter(appointedData, filters)
+
     const retained: AttorneySummary = {
         attorney: 'Retained',
         totalCharges: {},
         data: retainedData,
-        numOfCasesInFilter: retainedTotalCasesWithMotion,
-        numOfCasesNotInFilter:
-            retainedData.length - retainedTotalCasesWithMotion,
+        numOfCasesInFilter: retainedFilteredData,
+        numOfCasesNotInFilter: retainedData.length - retainedFilteredData,
     }
     const appointed: AttorneySummary = {
         attorney: 'Court Appointed',
         totalCharges: {},
         data: appointedData,
-        numOfCasesInFilter: appointedTotalCasesWithMotion,
-        numOfCasesNotInFilter:
-            appointedData.length - appointedTotalCasesWithMotion,
+        numOfCasesInFilter: appointedFilteredData,
+        numOfCasesNotInFilter: appointedData.length - appointedFilteredData,
     }
 
     const formattedResults = [retained, appointed]
 
     console.log('data ', data)
     console.log('filters ', filters)
+    console.log('filtered data ', [retainedData, appointedData])
     console.log('retained\n', retained)
     console.log('appointed\n', appointed)
     console.log('formattedResults\n', formattedResults)
