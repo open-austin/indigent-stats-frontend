@@ -31,20 +31,23 @@ const Filters = styled.form``
 const Layout = styled.section`
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    gap: 2rem;
-    
+    flex: 1 1;
+
     @media (min-width: 1000px) {
+        justify-content: center;
         flex-direction: row;
         gap: 4rem;
     }
 `
 
 const ChartWrapper = styled.div`
-     @media (min-width: 1000px) {
-        max-width: 100%;
-        margin-right: 0;
+    max-width: 50rem;
+    width: 100%;
+    margin-top: 2rem;
+    @media (min-width: 1000px) {
+        flex: 1;
+        margin-top: 0;
     }
 `
 
@@ -147,32 +150,31 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                 />
             </Filters>
             <ChartWrapper>
-
-            <ResponsiveContainer height={500}>
-                <BarChart data={formattedResults} layout="horizontal">
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="attorney" />
-                    <YAxis dataKey="data.length" />
-                    <Tooltip />
-                    <Legend/>
-                    <Bar
-                        maxBarSize={200}
-                        key={'numOfCasesNotInFilter'}
-                        dataKey={'numOfCasesNotInFilter'}
-                        fill={'lightblue'}
-                        stackId="a"
-                    />
-                    <Bar
-                        maxBarSize={200}
-                        key={'numOfCasesInFilter'}
-                        dataKey={'numOfCasesInFilter'}
-                        fill={'#70A37F'}
-                        stackId="a"
-                    >
-                        <Label fill="#fff" value="percentage" />
-                    </Bar>
-                </BarChart>
-            </ResponsiveContainer>
+                <ResponsiveContainer width={'100%'} height={500}>
+                    <BarChart data={formattedResults} layout="horizontal">
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="attorney" />
+                        <YAxis dataKey="data.length" />
+                        <Tooltip />
+                        <Legend />
+                        <Bar
+                            maxBarSize={200}
+                            key={'numOfCasesNotInFilter'}
+                            dataKey={'numOfCasesNotInFilter'}
+                            fill={'lightblue'}
+                            stackId="a"
+                        />
+                        <Bar
+                            maxBarSize={200}
+                            key={'numOfCasesInFilter'}
+                            dataKey={'numOfCasesInFilter'}
+                            fill={'#70A37F'}
+                            stackId="a"
+                        >
+                            <Label fill="#fff" value="percentage" />
+                        </Bar>
+                    </BarChart>
+                </ResponsiveContainer>
             </ChartWrapper>
         </Layout>
     )
