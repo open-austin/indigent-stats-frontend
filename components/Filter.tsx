@@ -1,9 +1,7 @@
-import React, { ChangeEvent, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Case } from '../models/Case'
-import { significantMotions } from '../lib/constants'
-
-type TSignificantMotion = typeof significantMotions[number]
+import { TSignificantMotion } from '../types'
 export interface IFilters {
     motions: 'All' | TSignificantMotion
     charges: string
@@ -78,7 +76,7 @@ const FilterLabel = styled.label`
 
 const Filter = ({ filterField, filters, setFilters, data }: IFilterProps) => {
     // Get all options that exist in the data
-    const options = data.reduce((acc, cur) => {
+    const options = data.reduce((acc: any, cur) => {
         if (cur?.filters && typeof cur?.filters[filterField] !== 'undefined') {
             return [...acc, ...cur.filters[filterField]]
         }
@@ -99,11 +97,13 @@ const Filter = ({ filterField, filters, setFilters, data }: IFilterProps) => {
                 value={filters[filterField]}
                 onChange={onChangeHandler}
             >
-                {[...new Set([...options, 'All'])]?.map((option: string) => (
-                    <option key={`option-${option}`} value={option}>
-                        {option}
-                    </option>
-                ))}
+                {Array.from(new Set([...options, 'All']))?.map(
+                    (option: string) => (
+                        <option key={`option-${option}`} value={option}>
+                            {option}
+                        </option>
+                    )
+                )}
             </FilterSelect>
         </Wrapper>
     )
