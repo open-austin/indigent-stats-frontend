@@ -75,7 +75,7 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                   (a, b) =>
                       a +
                       (b.filters?.motions?.length &&
-                      b.filters?.motions?.length > 1
+                      b.filters?.motions?.length >= 1
                           ? 1
                           : 0),
                   0
@@ -89,7 +89,7 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                   (a, b) =>
                       a +
                       (b.filters?.motions?.length &&
-                      b.filters?.motions?.length > 1
+                      b.filters?.motions?.length >= 1
                           ? 1
                           : 0),
                   0
