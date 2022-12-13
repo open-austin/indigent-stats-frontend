@@ -13,6 +13,7 @@ import {
 } from 'recharts'
 import { Case } from '../models/Case'
 import Filter, { IFilters } from './Filter'
+import multifilter from '../lib/multifilter'
 
 interface BarChartProps {
     data: Array<Case>
@@ -66,34 +67,9 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
 
     // TODO: Create a reusable filter function
     // Clean up these transforms and how we're splitting up retained/appointed data. Could be simpler.
-    const retainedTotalCasesWithMotion =
-        filters.motions !== 'All'
-            ? retainedData.filter((d) =>
-                  d.filters?.motions?.includes(filters.motions)
-              ).length
-            : retainedData.reduce(
-                  (a, b) =>
-                      a +
-                      (b.filters?.motions?.length &&
-                      b.filters?.motions?.length >= 1
-                          ? 1
-                          : 0),
-                  0
-              )
-    const appointedTotalCasesWithMotion =
-        filters.motions !== 'All'
-            ? appointedData.filter((d) =>
-                  d.filters?.motions?.includes(filters.motions)
-              ).length
-            : appointedData.reduce(
-                  (a, b) =>
-                      a +
-                      (b.filters?.motions?.length &&
-                      b.filters?.motions?.length >= 1
-                          ? 1
-                          : 0),
-                  0
-              )
+    const retainedTotalCasesWithMotion = multifilter(retainedData, filters)
+    const appointedTotalCasesWithMotion = multifilter(appointedData, filters)
+    
     const retained: AttorneySummary = {
         attorney: 'Retained',
         totalCharges: {},
