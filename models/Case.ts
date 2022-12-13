@@ -25,7 +25,7 @@ export const caseSchema = z
                             .map((e) => e.event_name) || []
 
         const charges = c.charges.map((e) => e.charge_desc) || []
-        const chargeCategories = c.charges.map((e) => e.offense_category_desc)
+        const chargeCategories = c.charges.map((e) => e.offense_category_desc) || []
         const chargeLevels = c.charges.map((e) => e.level) || []
 
         parsed.filters = {
