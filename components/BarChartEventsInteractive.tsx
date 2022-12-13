@@ -25,7 +25,8 @@ type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
     totalCharges: Record<string, number>
     data: Array<Case>
-    filteredNumberItems: number
+    numOfCasesInFilter: number
+    numOfCasesNotInFilter: number
 }
 
 function BarChartEventsInteractive({
@@ -71,13 +72,15 @@ function BarChartEventsInteractive({
         attorney: 'Retained',
         totalCharges: {},
         data: retainedData,
-        filteredNumberItems: retainedTotalCasesWithMotion
+        numOfCasesInFilter: retainedTotalCasesWithMotion,
+        numOfCasesNotInFilter: retainedData.length - retainedTotalCasesWithMotion
     }
     const appointed: AttorneySummary = {
         attorney: 'Court Appointed',
         totalCharges: {},
         data: appointedData,
-        filteredNumberItems: appointedTotalCasesWithMotion
+        numOfCasesInFilter: appointedTotalCasesWithMotion,
+        numOfCasesNotInFilter: appointedData.length - appointedTotalCasesWithMotion
     }
 
     const formattedResults = [retained, appointed]
@@ -98,17 +101,17 @@ function BarChartEventsInteractive({
                 <Tooltip />
                 <Bar
                     maxBarSize={200}
-                    key={'length'}
-                    dataKey={'data.length'}
+                    key={'numOfCasesNotInFilter'}
+                    dataKey={'numOfCasesNotInFilter'}
                     fill={'lightblue'}
                     stackId="a"
                 />
                 <Bar
                     maxBarSize={200}
-                    key={'filteredNumberItems'}
-                    dataKey={'filteredNumberItems'}
+                    key={'numOfCasesInFilter'}
+                    dataKey={'numOfCasesInFilter'}
                     fill={'#70A37F'}
-                    stackId="b"
+                    stackId="a"
                 >
                     <Label fill="#fff" value="percentage" />
                 </Bar>
