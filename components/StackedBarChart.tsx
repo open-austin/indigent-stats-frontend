@@ -41,7 +41,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
     // note: the type of the key is really a number
     let pcSet = new Set<string>()
 
-    console.log('num of cases\n', cases.length)
+    // console.log('num of cases\n', cases.length)
 
     cases.forEach((c) => {
         pcSet.add(c.charges[0].offense_type_desc)
@@ -83,10 +83,10 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     const primaryCharges = Array.from(pcSet)
 
-    console.log('primaryCharges\n', primaryCharges)
-    console.log('retained\n', retained)
-    console.log('appointed\n', appointed)
-    console.log('formattedResults\n', formattedResults)
+    // console.log('primaryCharges\n', primaryCharges)
+    // console.log('retained\n', retained)
+    // console.log('appointed\n', appointed)
+    // console.log('formattedResults\n', formattedResults)
 
     const colors = [
         '#79b473ff',
