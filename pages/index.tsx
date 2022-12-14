@@ -4,10 +4,10 @@ import { z } from 'zod'
 import BarChart from '../components/BarChart'
 import { Loading } from '../components/Loading'
 import StackedBarChart from '../components/StackedBarChart'
+import BarChartEventsInteractive from '../components/BarChartEventsInteractive'
 import { caseSchema } from '../models/Case'
 import styles from '../styles/Home.module.css'
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+import fetcher from '../lib/fetcher'
 
 export default function Home() {
     const { data, error } = useSWR('/api/cases-subset', fetcher)
@@ -40,6 +40,7 @@ export default function Home() {
 
             <main className={styles.main}>
                 <div className={styles.charts}>
+                    <BarChartEventsInteractive data={parsed.data} />
                     {/* <BarChart data={parsed.data} /> */}
                     <StackedBarChart cases={parsed.data} />
                 </div>
