@@ -14,6 +14,7 @@ import {
     LabelListProps,
 } from 'recharts'
 import { Case } from '../models/Case'
+import { colors } from '../lib/colors'
 import Filter, { IFilters } from './Filter'
 import multifilter from '../lib/multifilter'
 
@@ -148,19 +149,19 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                             maxBarSize={200}
                             key={'numOfCasesNotInFilter'}
                             dataKey={'numOfCasesNotInFilter'}
-                            fill={'lightblue'}
+                            fill={colors.blueNavy}
                             stackId="a"
                         />
                         <Bar
                             maxBarSize={200}
                             key={'numOfCasesInFilter'}
                             dataKey={'numOfCasesInFilter'}
-                            fill={'#70A37F'}
+                            fill={colors.yellow}
                             stackId="a"
                         >
                             <LabelList
                                 fontSize={10}
-                                fill={'#fff'}
+                                fill={colors.text}
                                 valueAccessor={(
                                     props: LabelListProps<'valueAccessor'>
                                 ) => renderCustomPercentage(props)}

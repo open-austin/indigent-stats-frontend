@@ -11,6 +11,7 @@ import {
     LabelList,
     LabelListProps,
 } from 'recharts'
+import { stackedGraphColors } from '../lib/colors'
 import { upsertAtMap } from '../lib/record'
 import { flattenObject } from '../lib/flatten'
 import { Case } from '../models/Case'
@@ -88,15 +89,6 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
     // console.log('appointed\n', appointed)
     // console.log('formattedResults\n', formattedResults)
 
-    const colors = [
-        '#79b473ff',
-        '#414073ff',
-        '#4c3957ff',
-        '#ABC8C0',
-        '#41658aff',
-        '#D295BF',
-    ]
-
     if (!cases) return <div>Loading...</div>
 
     const renderCustomPercentage = (props: any, charge: string) => {
@@ -134,7 +126,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                                 key={`${charge}-${index}`}
                                 dataKey={charge}
                                 fill={
-                                    colors[
+                                    stackedGraphColors[
                                         index %
                                             Object.keys(primaryCharges).length
                                     ]
