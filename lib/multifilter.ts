@@ -22,6 +22,8 @@ const multifilter = (data: Array<Case>, filters: IFilters) => {
             ? data.filter((d) => d.filters?.motions?.includes(filters.motions))
             : data.filter((d) => !!d.filters?.motions?.length)
 
+    console.log('MULTIFILTER ', filteredData)
+
     for (const filter in filters) {
         if (filter !== 'motions') {
             filteredData = filterSingleProperty(
