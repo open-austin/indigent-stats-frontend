@@ -10,8 +10,11 @@ import {
     ResponsiveContainer,
     Label,
     Legend,
+    LabelList,
+    LabelListProps,
 } from 'recharts'
 import { Case } from '../models/Case'
+import { colors } from '../lib/colors'
 import Filter, { IFilters } from './Filter'
 import multifilter from '../lib/multifilter'
 
@@ -66,34 +69,45 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
         (d) => d.attorney_type === 'Court Appointed'
     )
 
-    const retainedFilteredData = multifilter(retainedData, filters)
-    const appointedFilteredData = multifilter(appointedData, filters)
+    const numOfCasesInFilterRetained = multifilter(retainedData, filters)
+    const numOfCasesInFilterAppointed = multifilter(appointedData, filters)
 
     const retained: AttorneySummary = {
         attorney: 'Retained',
         totalCharges: {},
         data: retainedData,
-        numOfCasesInFilter: retainedFilteredData,
-        numOfCasesNotInFilter: retainedData.length - retainedFilteredData,
+        numOfCasesInFilter: numOfCasesInFilterRetained,
+        numOfCasesNotInFilter: retainedData.length - numOfCasesInFilterRetained,
     }
     const appointed: AttorneySummary = {
         attorney: 'Court Appointed',
         totalCharges: {},
         data: appointedData,
-        numOfCasesInFilter: appointedFilteredData,
-        numOfCasesNotInFilter: appointedData.length - appointedFilteredData,
+        numOfCasesInFilter: numOfCasesInFilterAppointed,
+        numOfCasesNotInFilter:
+            appointedData.length - numOfCasesInFilterAppointed,
     }
 
     const formattedResults = [retained, appointed]
 
     console.log('data ', data)
     console.log('filters ', filters)
-    console.log('filtered data ', [retainedData, appointedData])
     console.log('retained\n', retained)
     console.log('appointed\n', appointed)
     console.log('formattedResults\n', formattedResults)
 
     if (!data) return <div>Loading...</div>
+
+    const renderCustomPercentage = (props: any) => {
+        console.log('props ', props)
+        const percentage =
+            (props['numOfCasesInFilter'] / props['data'].length) * 100
+        if (typeof percentage !== 'number' || isNaN(percentage) || percentage === 0) {
+            return null
+        }
+
+        return `${percentage.toFixed(1)}%`
+    }
 
     return (
         <Layout>
@@ -135,17 +149,23 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                             maxBarSize={200}
                             key={'numOfCasesNotInFilter'}
                             dataKey={'numOfCasesNotInFilter'}
-                            fill={'lightblue'}
+                            fill={colors.blueNavy}
                             stackId="a"
                         />
                         <Bar
                             maxBarSize={200}
                             key={'numOfCasesInFilter'}
                             dataKey={'numOfCasesInFilter'}
-                            fill={'#70A37F'}
+                            fill={colors.yellow}
                             stackId="a"
                         >
-                            <Label fill="#fff" value="percentage" />
+                            <LabelList
+                                fontSize={10}
+                                fill={colors.text}
+                                valueAccessor={(
+                                    props: LabelListProps<'valueAccessor'>
+                                ) => renderCustomPercentage(props)}
+                            />
                         </Bar>
                     </BarChart>
                 </ResponsiveContainer>
