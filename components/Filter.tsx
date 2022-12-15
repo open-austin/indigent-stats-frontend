@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { colors } from '../lib/colors'
 import { Case } from '../models/Case'
 import { TSignificantMotion } from '../types'
 export interface IFilters {
@@ -32,7 +33,7 @@ const Arrow = styled.span`
     height: 0.5rem;
     width: 0.5rem;
     border-style: solid;
-    border-color: blue;
+    border-color: ${colors.blueNavy};
     border-width: 0px 1px 1px 0px;
     transform: rotate(45deg);
     transition: border-width 150ms ease-in-out;
@@ -58,20 +59,21 @@ const FilterSelect = styled.select`
     line-height: inherit;
     z-index: 1;
     outline: none;
-    border: 2px solid #70a37f;
+    border: 2px solid ${colors.blueNavy};
     border-radius: 5px;
     padding: 0.5rem;
     position: relative;
 
     &:focus,
     &:focus-visible {
-        border-color: blue;
+        border-color: ${colors.pink};
     }
 `
 
 const FilterLabel = styled.label`
     display: block;
     margin-bottom: 0.25rem;
+    color: ${colors.text};
 `
 
 const Filter = ({ filterField, filters, setFilters, data }: IFilterProps) => {

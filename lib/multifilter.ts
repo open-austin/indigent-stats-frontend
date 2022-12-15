@@ -7,7 +7,7 @@ const filterSingleProperty = (
     filters: IFilters
 ) => {
     if (filters[filter] === 'All') {
-      return data
+        return data
     }
 
     return data.filter(
