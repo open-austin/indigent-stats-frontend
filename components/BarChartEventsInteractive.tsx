@@ -102,7 +102,7 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
         console.log('props ', props)
         const percentage =
             (props['numOfCasesInFilter'] / props['data'].length) * 100
-        if (typeof percentage !== 'number' || isNaN(percentage)) {
+        if (typeof percentage !== 'number' || isNaN(percentage) || percentage === 0) {
             return null
         }
 
