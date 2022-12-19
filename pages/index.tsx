@@ -9,8 +9,20 @@ import { caseSchema } from '../models/Case'
 import styles from '../styles/Home.module.css'
 import fetcher from '../lib/fetcher'
 
+const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
+const COSMOS_QUERY = `
+SELECT * FROM c
+ WHERE c["party information"]["race"] = "White"
+ OFFSET 10 LIMIT 10
+`
+
 export default function Home() {
     const { data, error } = useSWR('/api/cases-subset', fetcher)
+
+    const { data: cosmosData, error: cosmosError } = useSWR(
+        `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
+        fetcher
+    )
 
     if (!data && !error) {
         return <Loading />
