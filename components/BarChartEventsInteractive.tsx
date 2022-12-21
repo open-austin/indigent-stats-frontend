@@ -90,11 +90,11 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
 
     const formattedResults = [retained, appointed]
 
-    console.log('data ', data)
-    console.log('filters ', filters)
-    console.log('retained\n', retained)
-    console.log('appointed\n', appointed)
-    console.log('formattedResults\n', formattedResults)
+    // console.log('data ', data)
+    // console.log('filters ', filters)
+    // console.log('retained\n', retained)
+    // console.log('appointed\n', appointed)
+    // console.log('formattedResults\n', formattedResults)
 
     if (!data) return <div>Loading...</div>
 

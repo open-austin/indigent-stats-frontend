@@ -17,12 +17,13 @@ SELECT * FROM c
 `
 
 export default function Home() {
-    const { data, error } = useSWR('/api/cases-subset', fetcher)
+    const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
 
-    const { data: cosmosData, error: cosmosError } = useSWR(
-        `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
-        fetcher
-    )
+    // TODO: Use CosmosDB for data
+    // const { data: cosmosData, error: cosmosError } = useSWR(
+    //     `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
+    //     fetcher
+    // )
 
     if (!data && !error) {
         return <Loading />
@@ -32,7 +33,8 @@ export default function Home() {
         return <div>Error fetching</div>
     }
 
-    const parsed = z.array(caseSchema).safeParse(data)
+    const d = JSON.parse(data)
+    const parsed = z.array(caseSchema).safeParse(d)
 
     if (!parsed.success) {
         return (
@@ -54,7 +56,7 @@ export default function Home() {
                 <div className={styles.charts}>
                     <BarChartEventsInteractive data={parsed.data} />
                     {/* <BarChart data={parsed.data} /> */}
-                    <StackedBarChart cases={parsed.data} />
+                    {/* <StackedBarChart cases={parsed.data} /> */}
                 </div>
             </main>
 
