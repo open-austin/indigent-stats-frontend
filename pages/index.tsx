@@ -56,7 +56,7 @@ export default function Home() {
                 <div className={styles.charts}>
                     <BarChartEventsInteractive data={parsed.data} />
                     {/* <BarChart data={parsed.data} /> */}
-                    {/* <StackedBarChart cases={parsed.data} /> */}
+                    <StackedBarChart cases={parsed.data} />
                 </div>
             </main>
 
