@@ -4,10 +4,11 @@ import { z } from 'zod'
 import BarChart from '../components/BarChart'
 import { Loading } from '../components/Loading'
 import StackedBarChart from '../components/StackedBarChart'
-import BarChartEventsInteractive from '../components/BarChartEventsInteractive'
+import BarChartInteractive from '../components/BarChartInteractive'
 import { caseSchema } from '../models/Case'
 import styles from '../styles/Home.module.css'
 import fetcher from '../lib/fetcher'
+import { Props } from 'recharts/types/component/Legend'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 const COSMOS_QUERY = `
@@ -17,12 +18,13 @@ SELECT * FROM c
 `
 
 export default function Home() {
-    const { data, error } = useSWR('/api/cases-subset', fetcher)
+    const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
 
-    const { data: cosmosData, error: cosmosError } = useSWR(
-        `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
-        fetcher
-    )
+    // TODO: Use CosmosDB for data
+    // const { data: cosmosData, error: cosmosError } = useSWR(
+    //     `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
+    //     fetcher
+    // )
 
     if (!data && !error) {
         return <Loading />
@@ -32,7 +34,8 @@ export default function Home() {
         return <div>Error fetching</div>
     }
 
-    const parsed = z.array(caseSchema).safeParse(data)
+    const d = JSON.parse(data)
+    const parsed = z.array(caseSchema).safeParse(d)
 
     if (!parsed.success) {
         return (
@@ -52,7 +55,7 @@ export default function Home() {
 
             <main className={styles.main}>
                 <div className={styles.charts}>
-                    <BarChartEventsInteractive data={parsed.data} />
+                    <BarChartInteractive data={parsed.data} />
                     {/* <BarChart data={parsed.data} /> */}
                     <StackedBarChart cases={parsed.data} />
                 </div>

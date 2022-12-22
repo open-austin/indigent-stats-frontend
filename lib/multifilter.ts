@@ -1,7 +1,7 @@
 import { IFilters } from '../components/Filter'
 import { Case } from '../models/Case'
 
-const filterSingleProperty = (
+export const filterSingleProperty = (
     data: Array<Case>,
     filter: keyof IFilters,
     filters: IFilters
@@ -17,22 +17,17 @@ const filterSingleProperty = (
 
 // Filters data with multiple parameters
 const multifilter = (data: Array<Case>, filters: IFilters) => {
-    let filteredData =
-        filters.motions !== 'All'
-            ? data.filter((d) => d.filters?.motions?.includes(filters.motions))
-            : data.filter((d) => !!d.filters?.motions?.length)
-
     for (const filter in filters) {
         if (filter !== 'motions') {
-            filteredData = filterSingleProperty(
-                filteredData,
+            data = filterSingleProperty(
+                data,
                 filter as keyof IFilters,
                 filters
             )
         }
     }
 
-    return filteredData.length
+    return data
 }
 
 export default multifilter
