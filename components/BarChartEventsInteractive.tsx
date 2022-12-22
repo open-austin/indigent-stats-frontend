@@ -215,7 +215,7 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                                 <LabelList
                                     fontSize={10}
                                     fill={colors.text}
-                                    formatter={(value) =>
+                                    formatter={(value: number) =>
                                         value ? toPercent(value) : ''
                                     }
                                 />
@@ -230,7 +230,7 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                                 <LabelList
                                     fontSize={10}
                                     fill={colors.white}
-                                    formatter={(value) => toPercent(value)}
+                                    formatter={(value: number) => toPercent(value)}
                                 />
                             </Bar>
                         </BarChart>
