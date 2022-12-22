@@ -84,8 +84,8 @@ function BarChartInteractive({ data }: BarChartProps) {
 
     const numeratorFilter = (arr: Array<Case>, filters: IFilters) => {
         return filters.motions !== 'All'
-            ? arr.filter((d) => d.filters?.motions?.includes(filters.motions))
-            : arr.filter((d) => !!d.filters?.motions?.length)
+            ? arr?.filter((d) => d.filters?.motions?.includes(filters.motions))
+            : arr?.filter((d) => !!d.filters?.motions?.length)
     }
 
     const getPercentage = (numerator: number, denominator: number) => {
@@ -194,7 +194,7 @@ function BarChartInteractive({ data }: BarChartProps) {
                             margin={{ top: 5, right: 30, left: 20, bottom: 20 }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="attorney" />
+                            <XAxis dataKey="attorney" padding={{ right: 20 }} />
                             <YAxis
                                 dataKey={'percentEvidenceOfRepresentation'}
                                 domain={domain}
