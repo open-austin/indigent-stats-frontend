@@ -74,6 +74,7 @@ const FilterLabel = styled.label`
     display: block;
     margin-bottom: 0.25rem;
     color: ${colors.text};
+    font-size: 0.8rem;
 `
 
 const Filter = ({ filterField, filters, setFilters, data }: IFilterProps) => {

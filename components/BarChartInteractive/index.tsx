@@ -15,6 +15,7 @@ import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
 import Filter, { IFilters } from '../Filter'
+import { Button } from '../Button'
 import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
 
@@ -61,12 +62,16 @@ const ChartWrapper = styled.div`
 `
 
 function BarChartInteractive({ data }: BarChartProps) {
-    const [filters, setFilters] = useState<IFilters>({
+    const defaultFilters = {
         motions: 'All',
         charges: 'All',
         chargeCategories: 'All',
         chargeLevels: 'All',
-    })
+    } as IFilters
+    const [filters, setFilters] = useState<IFilters>(defaultFilters)
+    const resetFilters = () => {
+        setFilters(defaultFilters)
+    }
 
     const denominatorFilter = (
         arr: Array<Case>,
@@ -173,6 +178,9 @@ function BarChartInteractive({ data }: BarChartProps) {
                         setFilters={setFilters}
                         data={data}
                     />
+                    <Button onClick={resetFilters} type="button">
+                        Reset filters
+                    </Button>
                 </Filters>
                 <ChartWrapper>
                     <ResponsiveContainer
@@ -192,6 +200,7 @@ function BarChartInteractive({ data }: BarChartProps) {
                                 domain={domain}
                                 ticks={ticks}
                                 tickFormatter={(tick) => `${tick}%`}
+                                fill={colors.blueNavy}
                             />
                             <Bar
                                 maxBarSize={200}
