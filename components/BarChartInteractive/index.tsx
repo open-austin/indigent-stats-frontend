@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import {
     BarChart,
@@ -8,21 +8,23 @@ import {
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    Label,
     Legend,
     LabelList,
-    LabelListProps,
 } from 'recharts'
-import { Case } from '../models/Case'
-import { colors } from '../lib/colors'
-import Filter, { IFilters } from './Filter'
-import multifilter from '../lib/multifilter'
+import { Case } from '../../models/Case'
+import { colors } from '../../lib/colors'
+import Filter, { IFilters } from '../Filter'
+import multifilter from '../../lib/multifilter'
+import { renderLegend } from './Legend'
+
+// TODO: This should be changed to 50 once we use the larger sample size
+const MIN_SAMPLE_SIZE = 15
 
 interface BarChartProps {
     data: Array<Case>
 }
 
-type AttorneySummary = {
+export type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
     totalCharges: Record<string, number>
     data: Array<Case>
@@ -56,7 +58,7 @@ const ChartWrapper = styled.div`
     }
 `
 
-function BarChartEventsInteractive({ data }: BarChartProps) {
+function BarChartInteractive({ data }: BarChartProps) {
     const [filters, setFilters] = useState<IFilters>({
         motions: 'All',
         charges: 'All',
@@ -80,7 +82,7 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
     }
 
     const getPercentage = (numerator: number, denominator: number) => {
-        if (denominator) {
+        if (denominator !== 0) {
             return (numerator / denominator) * 100
         }
 
@@ -103,15 +105,13 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
         appointedData.length
     )
 
-    console.log('retained filter', numOfCasesInFilterRetained)
-
     const retained: AttorneySummary = {
         attorney: 'Retained',
         totalCharges: {},
         data: retainedData,
         evidenceOfRepresentation: percentEvidenceOfRepRetained,
         noEvidenceOfRepresentation: 100 - percentEvidenceOfRepRetained,
-        notEnoughDataForSample: numOfCasesInFilterRetained.length < 50,
+        notEnoughDataForSample: retainedData.length < MIN_SAMPLE_SIZE,
     }
     const appointed: AttorneySummary = {
         attorney: 'Court Appointed',
@@ -119,30 +119,15 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
         data: appointedData,
         evidenceOfRepresentation: percentEvidenceOfRepAppointed,
         noEvidenceOfRepresentation: 100 - percentEvidenceOfRepAppointed,
-        notEnoughDataForSample: numOfCasesInFilterAppointed.length < 50,
+        notEnoughDataForSample: appointedData.length < MIN_SAMPLE_SIZE,
     }
 
     const formattedResults = [retained, appointed]
-
     const notEnoughDataMessage =
         "Note: There's not enough data in this filter for a good sample size."
-    const [showNotEnoughDataMessage, setShowNotEnoughDataMessage] =
-        useState(false)
-
-    useEffect(() => {
-        if (
-            retained.notEnoughDataForSample ||
-            appointed.notEnoughDataForSample
-        ) {
-            setShowNotEnoughDataMessage(true)
-        } else if (showNotEnoughDataMessage) {
-            setShowNotEnoughDataMessage(false)
-        }
-    }, [
-        retained.notEnoughDataForSample,
-        appointed.notEnoughDataForSample,
-        showNotEnoughDataMessage,
-    ])
+    const notEnoughData =
+        formattedResults[0].notEnoughDataForSample ||
+        formattedResults[1].notEnoughDataForSample
 
     // console.log('data ', data)
     // console.log('filters ', filters)
@@ -155,16 +140,11 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
     const domain = [0, 100]
     const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     const toPercent = (decimal: number) => {
-        return `${Math.round(decimal).toFixed(2)}%`
+        return `${decimal.toFixed(2)}%`
     }
 
     return (
         <>
-            <div>
-                <small>
-                    {showNotEnoughDataMessage ? notEnoughDataMessage : 'jkjkl'}
-                </small>
-            </div>
             <Layout>
                 <Filters>
                     <Filter
@@ -193,24 +173,31 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                     />
                 </Filters>
                 <ChartWrapper>
-                    <ResponsiveContainer width={'100%'} height={600}>
-                        <BarChart data={formattedResults} layout="horizontal">
+                    <ResponsiveContainer
+                        width={'100%'}
+                        minHeight={600}
+                        debounce={10}
+                    >
+                        <BarChart
+                            data={formattedResults}
+                            layout="horizontal"
+                            margin={{ top: 5, right: 30, left: 20, bottom: 20 }}
+                        >
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="attorney" />
                             <YAxis
                                 dataKey={'percentEvidenceOfRepresentation'}
                                 domain={domain}
                                 ticks={ticks}
-                                tickCount={10}
                                 tickFormatter={(tick) => `${tick}%`}
                             />
-                            <Legend />
                             <Bar
                                 maxBarSize={200}
                                 key={'evidenceOfRepresentation'}
                                 dataKey={'evidenceOfRepresentation'}
                                 fill={colors.yellow}
-                                stackId="a"
+                                stackId="representation"
+                                name="Yes"
                             >
                                 <LabelList
                                     fontSize={10}
@@ -225,14 +212,18 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
                                 key={'noEvidenceOfRepresentation'}
                                 dataKey={'noEvidenceOfRepresentation'}
                                 fill={colors.blueNavy}
-                                stackId="a"
-                            >
-                                <LabelList
-                                    fontSize={10}
-                                    fill={colors.white}
-                                    formatter={(value: number) => toPercent(value)}
-                                />
-                            </Bar>
+                                stackId="representation"
+                                name="No"
+                            ></Bar>
+                            <Legend
+                                content={(props) =>
+                                    renderLegend(
+                                        props,
+                                        notEnoughData,
+                                        formattedResults
+                                    )
+                                }
+                            />
                         </BarChart>
                     </ResponsiveContainer>
                 </ChartWrapper>
@@ -241,4 +232,4 @@ function BarChartEventsInteractive({ data }: BarChartProps) {
     )
 }
 
-export default BarChartEventsInteractive
+export default BarChartInteractive
