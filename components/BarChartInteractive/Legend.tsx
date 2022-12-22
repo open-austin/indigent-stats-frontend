@@ -6,8 +6,21 @@ import { colors } from '../../lib/colors'
 
 const LegendWrapper = styled.div`
     display: flex;
-    align-items: flex-start;
-    padding: 0 32px;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+    
+    @media (min-width: 500px) {
+        padding: 0 32px 60px;
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    @media (min-width: 1000px) {
+        padding-left: 80px;
+    }
 `
 
 const LegendBox = styled.aside`
@@ -18,8 +31,12 @@ const LegendBox = styled.aside`
     flex-direction: column;
     gap: 12px;
     justify-content: flex-end;
-    margin: 16px 0 0 auto;
     max-width: 250px;
+    margin-top: 24px;
+
+    @media (min-width: 1000px) {
+        margin: 16px 0 0 auto;
+    }
 `
 
 const LegendSpan = styled.span`
@@ -65,7 +82,7 @@ const LegendTitleTooltip = styled.button`
 const LegendTooltipInfo = styled.span`
     position: absolute;
     bottom: calc(100% - 12px);
-    right: 36px;
+    right: 6px;
     width: 100%;
     max-width: 400px;
     font-size: 10px;
@@ -79,6 +96,10 @@ const LegendTooltipInfo = styled.span`
     color: ${colors.blueNavy};
     filter: drop-shadow(0 1px 0.3rem rgba(0, 0, 0, 0.2));
 
+    @media (min-width: 1000px) {
+        right: 6px;
+    }
+
     &:after {
         content: '';
         width: 0px;
@@ -89,6 +110,10 @@ const LegendTooltipInfo = styled.span`
         position: absolute;
         bottom: -12px;
         right: 0;
+
+        @media (min-width: 1000px) {
+            right: 32px;    
+        }
     }
 `
 
@@ -136,7 +161,8 @@ export const Tooltip = () => {
 export const renderLegend = (
     props: Props,
     notEnoughData: boolean,
-    arr: Array<AttorneySummary>
+    arr: Array<AttorneySummary>,
+    title: string,
 ): ReactNode => {
     return (
         <LegendWrapper>
@@ -149,7 +175,7 @@ export const renderLegend = (
                     </small>
                 </div>
                 {notEnoughData && (
-                    <small>
+                    <small style={{ color: colors.orange }}>
                         <em>
                             <br />
                             *This filtered sample size is not large enough to
@@ -160,7 +186,7 @@ export const renderLegend = (
             </LegendSampleSize>
             <LegendBox>
                 <LegendTitle>
-                    <strong>Evidence of representation</strong>
+                    <strong>{title}</strong>
                     <Tooltip />
                 </LegendTitle>
                 {[...(props.payload || [])].reverse().map((entry, index) => (

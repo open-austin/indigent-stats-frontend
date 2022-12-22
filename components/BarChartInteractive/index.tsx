@@ -43,6 +43,7 @@ const Layout = styled.section`
     flex: 1 1;
 
     @media (min-width: 1000px) {
+        align-items: flex-start;
         justify-content: center;
         flex-direction: row;
         gap: 4rem;
@@ -222,7 +223,8 @@ function BarChartInteractive({ data }: BarChartProps) {
                                     renderLegend(
                                         props,
                                         notEnoughData,
-                                        formattedResults
+                                        formattedResults,
+                                        'Evidence of representation'
                                     )
                                 }
                             />
