@@ -45,9 +45,10 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
     // console.log('num of cases\n', cases.length)
 
     cases.forEach((c) => {
-        pcSet.add(c.charges[0].offense_type_desc)
-        const primaryCharge =
-            c.charges.find((charge) => charge.is_primary_charge) || c.charges[0]
+        if (!c.charge_category?.length) {
+            return
+        }
+        pcSet.add(c.charge_category[0])
 
         // This should work since all of the "charges" within a given case were
         // all scraped from the same record -- although in practice I'm not sure
@@ -56,27 +57,23 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
         if (c.attorney_type === 'Retained') {
             retained.caseCount += 1
 
-            if (primaryCharge) {
-                retained.totalCharges = upsertAtMap(
-                    retained.totalCharges,
-                    primaryCharge.offense_type_desc,
-                    (a) => a + 1,
-                    1
-                )
-            }
+            retained.totalCharges = upsertAtMap(
+                retained.totalCharges,
+                c.charge_category[0],
+                (a) => a + 1,
+                1
+            )
         }
 
         if (c.attorney_type === 'Court Appointed') {
             appointed.caseCount += 1
 
-            if (primaryCharge) {
-                appointed.totalCharges = upsertAtMap(
-                    appointed.totalCharges,
-                    primaryCharge.offense_type_desc,
-                    (a) => a + 1,
-                    1
-                )
-            }
+            appointed.totalCharges = upsertAtMap(
+                appointed.totalCharges,
+                c.charge_category[0],
+                (a) => a + 1,
+                1
+            )
         }
     })
 
@@ -139,6 +136,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                                     fontSize={10}
                                     fill={'#fff'}
                                     valueAccessor={(
+                                        // @ts-ignore: ignore type error
                                         props: LabelListProps<'valueAccessor'>
                                     ) => renderCustomPercentage(props, charge)}
                                 />
