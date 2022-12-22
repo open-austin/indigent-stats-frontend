@@ -136,6 +136,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                                     fontSize={10}
                                     fill={'#fff'}
                                     valueAccessor={(
+                                        // @ts-ignore: ignore type error
                                         props: LabelListProps<'valueAccessor'>
                                     ) => renderCustomPercentage(props, charge)}
                                 />

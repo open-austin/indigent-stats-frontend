@@ -1,5 +1,6 @@
 import React, { useState, ReactNode } from 'react'
 import styled from 'styled-components'
+import { Props } from 'recharts/types/component/Legend'
 import { AttorneySummary } from '.'
 import { colors } from '../../lib/colors'
 
@@ -103,79 +104,76 @@ const LegendSampleSizeTitle = styled.strong`
 `
 
 export const Tooltip = () => {
-  const [showTooltip, setShowTooltip] = useState(false)
-  return (
-      <LegendTitleTooltip
-          aria-label="Learn more about how this is calculated"
-          onClick={() => {
-              setShowTooltip(!showTooltip)
-          }}
-          onMouseEnter={() => {
-              setShowTooltip(true)
-          }}
-          onMouseLeave={() => {
-              setShowTooltip(false)
-          }}
-      >
-          <span>?</span>
-          {showTooltip && (
-              <LegendTooltipInfo role="tooltip">
-                  We&apos;re determining evidence of representation by
-                  measuring if any significant motions were filed by the
-                  defendant&apos;s attorney. These motions include: motion
-                  to suppress, motion to reduce bond, motion for
-                  production, motion for speedy trial, motion for
-                  discovery, and motion in limine.
-              </LegendTooltipInfo>
-          )}
-      </LegendTitleTooltip>
-  )
+    const [showTooltip, setShowTooltip] = useState(false)
+    return (
+        <LegendTitleTooltip
+            aria-label="Learn more about how this is calculated"
+            onClick={() => {
+                setShowTooltip(!showTooltip)
+            }}
+            onMouseEnter={() => {
+                setShowTooltip(true)
+            }}
+            onMouseLeave={() => {
+                setShowTooltip(false)
+            }}
+        >
+            <span>?</span>
+            {showTooltip && (
+                <LegendTooltipInfo role="tooltip">
+                    We&apos;re determining evidence of representation by
+                    measuring if any significant motions were filed by the
+                    defendant&apos;s attorney. These motions include: motion to
+                    suppress, motion to reduce bond, motion for production,
+                    motion for speedy trial, motion for discovery, and motion in
+                    limine.
+                </LegendTooltipInfo>
+            )}
+        </LegendTitleTooltip>
+    )
 }
 
 export const renderLegend = (
-  props: Props,
-  notEnoughData: boolean,
-  arr: Array<AttorneySummary>
+    props: Props,
+    notEnoughData: boolean,
+    arr: Array<AttorneySummary>
 ): ReactNode => {
-  console.log('props ', props)
-  return (
-      <LegendWrapper>
-          <LegendSampleSize>
-              <LegendSampleSizeTitle>Sample size</LegendSampleSizeTitle>
-              <div>
-                  <small>
-                      Retained: {arr[0].data?.length} cases <br />
-                      Court Appointed: {arr[1].data?.length} cases
-                  </small>
-              </div>
-              {notEnoughData && (
-                  <small>
-                      <em>
-                          <br />
-                          *This filtered sample size is not large enough
-                          to make a conclusion.
-                      </em>
-                  </small>
-              )}
-          </LegendSampleSize>
-          <LegendBox>
-              <LegendTitle>
-                  <strong>Evidence of representation</strong>
-                  <Tooltip />
-              </LegendTitle>
-              {[...(props.payload || [])]
-                  .reverse()
-                  .map((entry, index) => (
-                      <LegendSpan key={`item-${index}`}>
-                          <LegendColorBlock
-                              style={{
-                                  backgroundColor: entry.color,
-                              }}
-                          />
-                          {entry.value}
-                      </LegendSpan>
-                  ))}
-          </LegendBox>
-      </LegendWrapper>
-  )
+    return (
+        <LegendWrapper>
+            <LegendSampleSize>
+                <LegendSampleSizeTitle>Sample size</LegendSampleSizeTitle>
+                <div>
+                    <small>
+                        Retained: {arr[0].data?.length} cases <br />
+                        Court Appointed: {arr[1].data?.length} cases
+                    </small>
+                </div>
+                {notEnoughData && (
+                    <small>
+                        <em>
+                            <br />
+                            *This filtered sample size is not large enough to
+                            make a conclusion.
+                        </em>
+                    </small>
+                )}
+            </LegendSampleSize>
+            <LegendBox>
+                <LegendTitle>
+                    <strong>Evidence of representation</strong>
+                    <Tooltip />
+                </LegendTitle>
+                {[...(props.payload || [])].reverse().map((entry, index) => (
+                    <LegendSpan key={`item-${index}`}>
+                        <LegendColorBlock
+                            style={{
+                                backgroundColor: entry.color,
+                            }}
+                        />
+                        {entry.value}
+                    </LegendSpan>
+                ))}
+            </LegendBox>
+        </LegendWrapper>
+    )
 }

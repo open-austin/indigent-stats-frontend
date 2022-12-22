@@ -11,6 +11,7 @@ import {
     Legend,
     LabelList,
 } from 'recharts'
+import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
 import Filter, { IFilters } from '../Filter'
@@ -216,7 +217,8 @@ function BarChartInteractive({ data }: BarChartProps) {
                                 name="No"
                             ></Bar>
                             <Legend
-                                content={(props) =>
+                                // @ts-ignore: Not a relevant props error
+                                content={(props: LegendProps) =>
                                     renderLegend(
                                         props,
                                         notEnoughData,
