@@ -10,6 +10,7 @@ export const colors = {
     pink: '#dd5182',
     orange: '#ff6e54',
     yellow: '#ffa600',
+    gray: '#e7edf7'
 }
 
 export const stackedGraphColors = [
