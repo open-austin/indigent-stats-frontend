@@ -89,6 +89,7 @@ interface IFiltersProps {
     data: Array<Case>
     filters: IFilters
     setFilters: (value: any) => void
+    children: React.ReactNode
 }
 
 const filterNames = {
@@ -100,25 +101,29 @@ const filterNames = {
 
 // TODO: Figure out how to do dynamic filters based on the other filters
 // once data is updated
-const Filters = ({ data, filters, setFilters }: IFiltersProps) => {
+const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
     const options: { [key: string]: Array<string> } = {}
     Object.keys(filters).forEach((filter) => {
         options[filter] = []
     })
 
     data?.forEach((d) => {
-        Object.keys(filters).forEach((filter) => {
+        Object.keys(filters).forEach((f) => {
+            const filter = f as keyof IFilters
+            if (!d?.filters && !Object.hasOwnProperty(filter)) {
+                return
+            }
             options[filter] = Array.from(
-                new Set([...options[filter], ...d.filters[filter]])
+                new Set([...options[filter], ...(d?.filters![filter] || [])])
             )
         })
     })
 
     const onChangeHandler = (
-        event: ChangeEvent,
+        e: ChangeEvent<HTMLSelectElement>,
         filtersKey: keyof IFilters
     ) => {
-        setFilters({ ...filters, [filtersKey]: event.target.value })
+        setFilters({ ...filters, [filtersKey]: e?.target?.value })
     }
 
     return (
@@ -127,7 +132,9 @@ const Filters = ({ data, filters, setFilters }: IFiltersProps) => {
                 const filter = f as keyof IFilters
                 return (
                     <Filter
-                        onChange={(e) => onChangeHandler(e, filter)}
+                        onChange={(e: ChangeEvent<any>) =>
+                            onChangeHandler(e, filter)
+                        }
                         key={filter}
                         label={filterNames[filter]}
                         options={options[filter]}
@@ -136,6 +143,7 @@ const Filters = ({ data, filters, setFilters }: IFiltersProps) => {
                     />
                 )
             })}
+            {children}
         </form>
     )
 }

@@ -160,36 +160,12 @@ function BarChartInteractive({ data }: BarChartProps) {
                     data={data}
                     filters={filters}
                     setFilters={setFilters}
-                />
-                {/* <Filters>
-                    <Filter
-                        filterField={'motions'}
-                        filters={filters}
-                        setFilters={setFilters}
-                        data={data}
-                    />
-                    <Filter
-                        filterField={'chargeCategories'}
-                        filters={filters}
-                        setFilters={setFilters}
-                        data={data}
-                    />
-                    <Filter
-                        filterField={'charges'}
-                        filters={filters}
-                        setFilters={setFilters}
-                        data={data}
-                    />
-                    <Filter
-                        filterField={'chargeLevels'}
-                        filters={filters}
-                        setFilters={setFilters}
-                        data={data}
-                    />
-                    <Button onClick={resetFilters} type="button">
-                        Reset filters
-                    </Button>
-                </Filters> */}
+                >
+
+                <Button onClick={resetFilters} type="button">
+                    Reset filters
+                </Button>
+                </Filters>
                 <ChartWrapper>
                     <ResponsiveContainer
                         width={'100%'}
