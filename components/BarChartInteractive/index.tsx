@@ -15,6 +15,7 @@ import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
 import Filter, { IFilters } from '../Filter'
+import { Button } from '../Button'
 import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
 
@@ -61,12 +62,16 @@ const ChartWrapper = styled.div`
 `
 
 function BarChartInteractive({ data }: BarChartProps) {
-    const [filters, setFilters] = useState<IFilters>({
+    const defaultFilters = {
         motions: 'All',
         charges: 'All',
         chargeCategories: 'All',
         chargeLevels: 'All',
-    })
+    } as IFilters
+    const [filters, setFilters] = useState<IFilters>(defaultFilters)
+    const resetFilters = () => {
+        setFilters(defaultFilters)
+    }
 
     const denominatorFilter = (
         arr: Array<Case>,
@@ -79,8 +84,8 @@ function BarChartInteractive({ data }: BarChartProps) {
 
     const numeratorFilter = (arr: Array<Case>, filters: IFilters) => {
         return filters.motions !== 'All'
-            ? arr.filter((d) => d.filters?.motions?.includes(filters.motions))
-            : arr.filter((d) => !!d.filters?.motions?.length)
+            ? arr?.filter((d) => d.filters?.motions?.includes(filters.motions))
+            : arr?.filter((d) => !!d.filters?.motions?.length)
     }
 
     const getPercentage = (numerator: number, denominator: number) => {
@@ -173,6 +178,9 @@ function BarChartInteractive({ data }: BarChartProps) {
                         setFilters={setFilters}
                         data={data}
                     />
+                    <Button onClick={resetFilters} type="button">
+                        Reset filters
+                    </Button>
                 </Filters>
                 <ChartWrapper>
                     <ResponsiveContainer
@@ -186,12 +194,13 @@ function BarChartInteractive({ data }: BarChartProps) {
                             margin={{ top: 5, right: 30, left: 20, bottom: 20 }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="attorney" />
+                            <XAxis dataKey="attorney" padding={{ right: 20 }} />
                             <YAxis
                                 dataKey={'percentEvidenceOfRepresentation'}
                                 domain={domain}
                                 ticks={ticks}
                                 tickFormatter={(tick) => `${tick}%`}
+                                fill={colors.blueNavy}
                             />
                             <Bar
                                 maxBarSize={200}
