@@ -100,7 +100,7 @@ const Filter = ({ filterField, filters, setFilters, data }: IFilterProps) => {
                 value={filters[filterField]}
                 onChange={onChangeHandler}
             >
-                {Array.from(new Set([...options, 'All']))?.map(
+                {Array.from(new Set(['All', ...options]))?.map(
                     (option: string) => (
                         <option key={`option-${option}`} value={option}>
                             {option}
