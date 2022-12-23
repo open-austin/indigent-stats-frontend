@@ -21,6 +21,6 @@ export default async function handler(
 ) {
     const jsonDirectory = path.join(process.cwd(), 'data');
     // TODO: How to improve filtering performance for larger sample size?
-    const fileContents = await fs.readFile(jsonDirectory + '/nested_cases_sample.json', 'utf8');
+    const fileContents = await fs.readFile(jsonDirectory + '/nested_cases.json', 'utf8');
     res.status(200).json(fileContents);
 }
