@@ -15,6 +15,7 @@ import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
 import Filter, { IFilters } from '../Filter'
+import Filters from '../Filters'
 import { Button } from '../Button'
 import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
@@ -34,8 +35,6 @@ export type AttorneySummary = {
     noEvidenceOfRepresentation: number
     notEnoughDataForSample: boolean
 }
-
-const Filters = styled.form``
 
 const Layout = styled.section`
     display: flex;
@@ -150,10 +149,19 @@ function BarChartInteractive({ data }: BarChartProps) {
         return `${decimal.toFixed(2)}%`
     }
 
+    console.log('formatted ', formattedResults)
+
+    const filteredData = [...retainedData, ...appointedData]
+
     return (
         <>
             <Layout>
-                <Filters>
+                <Filters
+                    data={data}
+                    filters={filters}
+                    setFilters={setFilters}
+                />
+                {/* <Filters>
                     <Filter
                         filterField={'motions'}
                         filters={filters}
@@ -161,13 +169,13 @@ function BarChartInteractive({ data }: BarChartProps) {
                         data={data}
                     />
                     <Filter
-                        filterField={'charges'}
+                        filterField={'chargeCategories'}
                         filters={filters}
                         setFilters={setFilters}
                         data={data}
                     />
                     <Filter
-                        filterField={'chargeCategories'}
+                        filterField={'charges'}
                         filters={filters}
                         setFilters={setFilters}
                         data={data}
@@ -181,18 +189,14 @@ function BarChartInteractive({ data }: BarChartProps) {
                     <Button onClick={resetFilters} type="button">
                         Reset filters
                     </Button>
-                </Filters>
+                </Filters> */}
                 <ChartWrapper>
                     <ResponsiveContainer
                         width={'100%'}
                         minHeight={600}
                         debounce={10}
                     >
-                        <BarChart
-                            data={formattedResults}
-                            layout="horizontal"
-                            margin={{ top: 5, right: 30, left: 20, bottom: 20 }}
-                        >
+                        <BarChart data={formattedResults} layout="horizontal">
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="attorney" padding={{ right: 20 }} />
                             <YAxis
