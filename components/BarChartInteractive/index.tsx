@@ -149,8 +149,6 @@ function BarChartInteractive({ data }: BarChartProps) {
         return `${decimal.toFixed(2)}%`
     }
 
-    console.log('formatted ', formattedResults)
-
     const filteredData = [...retainedData, ...appointedData]
 
     return (

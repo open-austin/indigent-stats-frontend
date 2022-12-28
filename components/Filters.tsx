@@ -76,8 +76,6 @@ const Filter = ({
     filtersKey,
     setFilters,
 }: IFilterProps) => {
-    console.log('filters ', filters)
-
     if (
         !options.includes(filters[filtersKey]) &&
         filters[filtersKey] !== OPTION_ALL
