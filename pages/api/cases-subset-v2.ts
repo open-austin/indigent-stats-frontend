@@ -8,9 +8,9 @@ const COMBINED_CHARGES_URL =
 
 export const config = {
     api: {
-        responseLimit: '20mb',
+        responseLimit: '100mb',
         bodyParser: {
-            sizeLimit: '20mb',
+            sizeLimit: '100mb',
         },
     },
 }
