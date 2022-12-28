@@ -17,7 +17,10 @@ interface IFilterProps {
     options: Array<string>
     onChange: (e: ChangeEvent, filtersKey: keyof IFilters) => void
     filters: IFilters
+    setFilters: (f: IFilters) => void
 }
+
+const OPTION_ALL = 'All'
 
 const FilterForm = styled.form`
     flex-basis: 100%;
@@ -71,16 +74,29 @@ const Filter = ({
     onChange,
     filters,
     filtersKey,
+    setFilters,
 }: IFilterProps) => {
+    console.log('filters ', filters)
+
+    if (
+        !options.includes(filters[filtersKey]) &&
+        filters[filtersKey] !== OPTION_ALL
+    ) {
+        setFilters({
+            ...filters,
+            [filtersKey]: OPTION_ALL,
+        })
+    }
+
     return (
         <Wrapper>
             <FilterLabel htmlFor={`select-${label}`}>{label}</FilterLabel>
             <FilterSelect
                 id={`select-${label}`}
-                value={filters[filtersKey] || 'All'}
+                value={filters[filtersKey]}
                 onChange={(e) => onChange(e, filtersKey)}
             >
-                {Array.from(new Set(['All', ...options]))?.map(
+                {Array.from(new Set([OPTION_ALL, ...options]))?.map(
                     (option: string) => (
                         <option key={`option-${option}`} value={option}>
                             {option}
@@ -116,7 +132,7 @@ const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
 
     // all data is filtered by
     let filteredData =
-        filters['chargeCategories'] === 'All'
+        filters['chargeCategories'] === OPTION_ALL
             ? data
             : filterSingleProperty(
                   data,
@@ -145,7 +161,9 @@ const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
             cur?.filters &&
             typeof cur?.filters['chargeCategories'] !== 'undefined'
         ) {
-            return [...acc, ...cur.filters['chargeCategories']]
+            return Array.from(
+                new Set([...acc, ...cur.filters['chargeCategories']])
+            )
         }
     }, [])
 
@@ -153,7 +171,12 @@ const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
         e: ChangeEvent<HTMLSelectElement>,
         filtersKey: keyof IFilters
     ) => {
-        setFilters({ ...filters, [filtersKey]: e?.target?.value })
+        const val = e?.target?.value
+
+        setFilters({
+            ...filters,
+            [filtersKey]: val,
+        })
     }
 
     return (
@@ -174,6 +197,7 @@ const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
                         options={filterOptions}
                         filtersKey={filter}
                         filters={filters}
+                        setFilters={setFilters}
                     />
                 )
             })}
