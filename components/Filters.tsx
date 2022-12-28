@@ -114,7 +114,7 @@ const Filters = ({ data, filters, setFilters, children, filteredData }: IFilters
         options[filter] = []
     })
 
-    filteredData?.forEach((d) => {
+    data?.forEach((d) => {
         Object.keys(filters).forEach((f) => {
             const filter = f as keyof IFilters
             if (!d?.filters && !Object.hasOwnProperty(filter)) {
