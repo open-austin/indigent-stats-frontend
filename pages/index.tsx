@@ -21,37 +21,37 @@ SELECT * FROM c
 
 export default function Home() {
     // TODO: Remove after switching to CosmosDB
-    // const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
+    const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
 
-    // if (!data && !error) {
-    //     return <Loading />
-    // }
-
-    // if (error) {
-    //     return <div>Error fetching</div>
-    // }
-
-    
-    // const d = JSON.parse(data)
-    // const parsed = z.array(caseSchema).safeParse(d)
-
-
-    // TODO: Figure out why cosmos isn't working when hosted on Vercel
-    const { data: cosmosData, error: cosmosError } = useSWR(
-        `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
-        fetcher
-    )
-
-    if (!cosmosData && !cosmosError) {
+    if (!data && !error) {
         return <Loading />
     }
 
-    if (cosmosError) {
+    if (error) {
         return <div>Error fetching</div>
     }
+
     
-    const d = cosmosData?.data
+    const d = JSON.parse(data)
     const parsed = z.array(caseSchema).safeParse(d)
+
+
+    // TODO: Figure out why cosmos isn't working when hosted on Vercel
+    // const { data: cosmosData, error: cosmosError } = useSWR(
+    //     `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
+    //     fetcher
+    // )
+
+    // if (!cosmosData && !cosmosError) {
+    //     return <Loading />
+    // }
+
+    // if (cosmosError) {
+    //     return <div>Error fetching</div>
+    // }
+    
+    // const d = cosmosData?.data
+    // const parsed = z.array(caseSchema).safeParse(d)
 
     if (!parsed.success) {
         return (
