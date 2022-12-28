@@ -11,9 +11,12 @@ import fetcher from '../lib/fetcher'
 import { Props } from 'recharts/types/component/Legend'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
+// TODO: Update cosmos query later
+// currently getting data with 'null'
 const COSMOS_QUERY = `
 SELECT * FROM c
- OFFSET 10000 LIMIT 8000
+  WHERE NOT ARRAY_CONTAINS(c['charge_category'], null)
+  OFFSET 10 LIMIT 14000
 `
 
 export default function Home() {
