@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 export const config = {
     api: {
-        responseLimit: '50mb',
+        responseLimit: '500mb',
     },
 }
 
