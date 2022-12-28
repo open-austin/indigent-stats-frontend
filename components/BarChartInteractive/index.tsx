@@ -157,6 +157,7 @@ function BarChartInteractive({ data }: BarChartProps) {
         <>
             <Layout>
                 <Filters
+                    filteredData={filteredData}
                     data={data}
                     filters={filters}
                     setFilters={setFilters}
