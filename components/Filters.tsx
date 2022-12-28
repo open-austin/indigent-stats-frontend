@@ -130,6 +130,10 @@ const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
         <form>
             {Object.keys(filters).map((f) => {
                 const filter = f as keyof IFilters
+                const filterOptions =
+                    filter === 'chargeLevels'
+                        ? options[filter].reverse()
+                        : options[filter].sort()
                 return (
                     <Filter
                         onChange={(e: ChangeEvent<any>) =>
@@ -137,7 +141,7 @@ const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
                         }
                         key={filter}
                         label={filterNames[filter]}
-                        options={options[filter]}
+                        options={filterOptions}
                         filtersKey={filter}
                         filters={filters}
                     />
