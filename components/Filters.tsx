@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useEffect } from 'react'
 import styled from 'styled-components'
 import { colors } from '../lib/colors'
 import { filterSingleProperty } from '../lib/multifilter'
@@ -76,15 +76,17 @@ const Filter = ({
     filtersKey,
     setFilters,
 }: IFilterProps) => {
-    if (
-        !options.includes(filters[filtersKey]) &&
-        filters[filtersKey] !== OPTION_ALL
-    ) {
-        setFilters({
-            ...filters,
-            [filtersKey]: OPTION_ALL,
-        })
-    }
+    useEffect(() => {
+        if (
+            !options.includes(filters[filtersKey]) &&
+            filters[filtersKey] !== OPTION_ALL
+        ) {
+            setFilters({
+                ...filters,
+                [filtersKey]: OPTION_ALL,
+            })
+        }
+    }, [options, filtersKey, setFilters, filters])
 
     return (
         <Wrapper>
