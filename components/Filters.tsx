@@ -18,6 +18,14 @@ interface IFilterProps {
     filters: IFilters
 }
 
+const FilterForm = styled.form`
+  flex-basis: 100%;
+
+  @media (min-width: 1000px) {
+    flex-basis: calc(100% / 3);
+  }
+`
+
 const Wrapper = styled.div`
     margin-bottom: 1rem;
     position: relative;
@@ -25,7 +33,6 @@ const Wrapper = styled.div`
 
 const FilterSelect = styled.select`
     width: 100%;
-    max-width: 20rem;
 
     // Resets
     appearance: none;
@@ -33,7 +40,6 @@ const FilterSelect = styled.select`
     border: none;
     padding: 0 1em 0 0;
     margin: 0;
-    width: 100%;
     font-family: inherit;
     font-size: inherit;
     cursor: inherit;
@@ -87,6 +93,7 @@ const Filter = ({
 
 interface IFiltersProps {
     data: Array<Case>
+    filteredData: Array<Case>
     filters: IFilters
     setFilters: (value: any) => void
     children: React.ReactNode
@@ -101,13 +108,13 @@ const filterNames = {
 
 // TODO: Figure out how to do dynamic filters based on the other filters
 // once data is updated
-const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
+const Filters = ({ data, filters, setFilters, children, filteredData }: IFiltersProps) => {
     const options: { [key: string]: Array<string> } = {}
     Object.keys(filters).forEach((filter) => {
         options[filter] = []
     })
 
-    data?.forEach((d) => {
+    filteredData?.forEach((d) => {
         Object.keys(filters).forEach((f) => {
             const filter = f as keyof IFilters
             if (!d?.filters && !Object.hasOwnProperty(filter)) {
@@ -127,7 +134,7 @@ const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
     }
 
     return (
-        <form>
+        <FilterForm>
             {Object.keys(filters).map((f) => {
                 const filter = f as keyof IFilters
                 const filterOptions =
@@ -148,7 +155,7 @@ const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
                 )
             })}
             {children}
-        </form>
+        </FilterForm>
     )
 }
 
