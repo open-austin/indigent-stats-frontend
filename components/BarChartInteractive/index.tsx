@@ -73,6 +73,8 @@ function BarChartInteractive({ data }: BarChartProps) {
         setFilters(defaultFilters)
     }
 
+    console.log('data' , data)
+
     const denominatorFilter = (
         arr: Array<Case>,
         filters: IFilters,
