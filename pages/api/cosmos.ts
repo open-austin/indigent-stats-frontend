@@ -42,8 +42,8 @@ export default async function handler(
 
 async function doQuery(query: string) {
     return client
-        .database('cases-json-db')
-        .container('case-json')
+        .database('nested-cases-db')
+        .container('nested-cases')
         .items.query(query)
         .fetchAll()
 }
