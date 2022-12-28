@@ -14,8 +14,7 @@ import {
 import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
-import Filter, { IFilters } from '../Filter'
-import Filters from '../Filters'
+import Filters, { IFilters } from '../Filters'
 import { Button } from '../Button'
 import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
@@ -154,15 +153,10 @@ function BarChartInteractive({ data }: BarChartProps) {
     return (
         <>
             <Layout>
-                <Filters
-                    data={data}
-                    filters={filters}
-                    setFilters={setFilters}
-                >
-
-                <Button onClick={resetFilters} type="button">
-                    Reset filters
-                </Button>
+                <Filters data={data} filters={filters} setFilters={setFilters}>
+                    <Button onClick={resetFilters} type="button">
+                        Reset filters
+                    </Button>
                 </Filters>
                 <ChartWrapper>
                     <ResponsiveContainer
