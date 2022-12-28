@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react'
 import styled from 'styled-components'
 import { colors } from '../lib/colors'
+import { filterSingleProperty } from '../lib/multifilter'
 import { Case } from '../models/Case'
 
 export interface IFilters {
@@ -19,11 +20,11 @@ interface IFilterProps {
 }
 
 const FilterForm = styled.form`
-  flex-basis: 100%;
+    flex-basis: 100%;
 
-  @media (min-width: 1000px) {
-    flex-basis: calc(100% / 3);
-  }
+    @media (min-width: 1000px) {
+        flex-basis: calc(100% / 3);
+    }
 `
 
 const Wrapper = styled.div`
@@ -93,7 +94,6 @@ const Filter = ({
 
 interface IFiltersProps {
     data: Array<Case>
-    filteredData: Array<Case>
     filters: IFilters
     setFilters: (value: any) => void
     children: React.ReactNode
@@ -108,16 +108,29 @@ const filterNames = {
 
 // TODO: Figure out how to do dynamic filters based on the other filters
 // once data is updated
-const Filters = ({ data, filters, setFilters, children, filteredData }: IFiltersProps) => {
+const Filters = ({ data, filters, setFilters, children }: IFiltersProps) => {
     const options: { [key: string]: Array<string> } = {}
     Object.keys(filters).forEach((filter) => {
         options[filter] = []
     })
 
-    data?.forEach((d) => {
+    // all data is filtered by
+    let filteredData =
+        filters['chargeCategories'] === 'All'
+            ? data
+            : filterSingleProperty(
+                  data,
+                  'chargeCategories',
+                  filters as IFilters
+              )
+
+    filteredData?.forEach((d) => {
         Object.keys(filters).forEach((f) => {
             const filter = f as keyof IFilters
-            if (!d?.filters && !Object.hasOwnProperty(filter)) {
+            if (
+                (!d?.filters && !Object.hasOwnProperty(filter)) ||
+                filter === 'chargeCategories'
+            ) {
                 return
             }
             options[filter] = Array.from(
@@ -125,6 +138,16 @@ const Filters = ({ data, filters, setFilters, children, filteredData }: IFilters
             )
         })
     })
+
+    // Charge categories stay consistent, everythinge else is filtered by it
+    options['chargeCategories'] = data.reduce((acc: any, cur) => {
+        if (
+            cur?.filters &&
+            typeof cur?.filters['chargeCategories'] !== 'undefined'
+        ) {
+            return [...acc, ...cur.filters['chargeCategories']]
+        }
+    }, [])
 
     const onChangeHandler = (
         e: ChangeEvent<HTMLSelectElement>,
