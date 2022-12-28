@@ -13,7 +13,6 @@ import { Props } from 'recharts/types/component/Legend'
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 const COSMOS_QUERY = `
 SELECT * FROM c
- OFFSET 0 LIMIT 8000
 `
 
 export default function Home() {
