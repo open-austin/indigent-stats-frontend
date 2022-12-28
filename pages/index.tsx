@@ -13,28 +13,28 @@ import { Props } from 'recharts/types/component/Legend'
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 const COSMOS_QUERY = `
 SELECT * FROM c
- WHERE c["party information"]["race"] = "White"
- OFFSET 10 LIMIT 10
+ OFFSET 0 LIMIT 8000
 `
 
 export default function Home() {
-    const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
+    // TODO: Remove after switching to CosmosDB
+    // const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
 
-    // TODO: Use CosmosDB for data
-    // const { data: cosmosData, error: cosmosError } = useSWR(
-    //     `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
-    //     fetcher
-    // )
+    const { data: cosmosData, error: cosmosError } = useSWR(
+        `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
+        fetcher
+    )
 
-    if (!data && !error) {
+    if (!cosmosData && !cosmosError) {
         return <Loading />
     }
 
-    if (error) {
+    if (cosmosError) {
         return <div>Error fetching</div>
     }
 
-    const d = JSON.parse(data)
+    
+    const d = cosmosData?.data
     const parsed = z.array(caseSchema).safeParse(d)
 
     if (!parsed.success) {
