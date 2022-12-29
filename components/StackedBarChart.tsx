@@ -20,6 +20,7 @@ type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
     caseCount: number
     totalCharges: Record<string, number>
+    percentageCharges: Record<string, number>
 }
 
 interface StackedBarChartProps {
@@ -31,11 +32,13 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
         attorney: 'Retained',
         caseCount: 0,
         totalCharges: {},
+        percentageCharges: {},
     }
     const appointed: AttorneySummary = {
         attorney: 'Court Appointed',
         caseCount: 0,
         totalCharges: {},
+        percentageCharges: {},
     }
 
     // TODO -- what's the shape of retained.primaryCharges?
@@ -77,6 +80,22 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
         }
     })
 
+    const toPercent = (num: number, denom: number) => {
+        return (num / denom) * 100
+    }
+    Object.keys(retained.totalCharges).forEach((charge) => {
+        retained.percentageCharges[charge] = toPercent(
+            retained.totalCharges[charge],
+            retained.caseCount
+        )
+    })
+    Object.keys(appointed.totalCharges).forEach((charge) => {
+        appointed.percentageCharges[charge] = toPercent(
+            appointed.totalCharges[charge],
+            appointed.caseCount
+        )
+    })
+
     const formattedResults = [flattenObject(retained), flattenObject(appointed)]
 
     const primaryCharges = Array.from(pcSet)
@@ -84,25 +103,33 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
     // console.log('primaryCharges\n', primaryCharges)
     // console.log('retained\n', retained)
     // console.log('appointed\n', appointed)
-    // console.log('formattedResults\n', formattedResults)
+    console.log('formattedResults\n', formattedResults)
 
     if (!cases) return <div>Loading...</div>
 
     const renderCustomPercentage = (props: any, charge: string) => {
-        const percentage = (props[charge] / props.caseCount) * 100
+        const percentage = props[charge]
         if (typeof percentage !== 'number' || isNaN(percentage)) {
             return null
         }
 
-        return `${percentage.toFixed(1)}%`
+        return `${percentage.toFixed(2)}%`
     }
+
+    const domain = [0, 100]
+    const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
     return (
         <ResponsiveContainer width="100%" height={500}>
-            <BarChart data={formattedResults} layout="horizontal">
+            <BarChart data={formattedResults} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="attorney" />
-                <YAxis />
+                <XAxis
+                    type="number"
+                    domain={domain}
+                    ticks={ticks}
+                    tickFormatter={(tick) => `${tick}%`}
+                />
+                <YAxis dataKey="attorney" type="category" />
                 <Tooltip
                     labelStyle={{ fontSize: 11, fontWeight: 'bold' }}
                     contentStyle={{ fontSize: 11 }}
@@ -113,36 +140,32 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                 />
                 <br></br>
                 <Legend />
-                {primaryCharges
-                    .sort()
-                    .reverse()
-                    .map((charge, index) => {
-                        return (
-                            <Bar
-                                maxBarSize={200}
-                                key={`${charge}-${index}`}
-                                dataKey={charge}
-                                fill={
-                                    stackedGraphColors[
-                                        index %
-                                            Object.keys(primaryCharges).length
-                                    ]
-                                }
-                                stackId="a"
-                                name={charge}
-                            >
-                                <LabelList
-                                    key={`${charge}-${index}-labellist`}
-                                    fontSize={10}
-                                    fill={'#fff'}
-                                    valueAccessor={(
-                                        // @ts-ignore: ignore type error
-                                        props: LabelListProps<'valueAccessor'>
-                                    ) => renderCustomPercentage(props, charge)}
-                                />
-                            </Bar>
-                        )
-                    })}
+                {primaryCharges.map((charge, index) => {
+                    return (
+                        <Bar
+                            maxBarSize={200}
+                            key={`${charge}-${index}`}
+                            dataKey={charge}
+                            fill={
+                                stackedGraphColors[
+                                    index % Object.keys(primaryCharges).length
+                                ]
+                            }
+                            stackId="a"
+                            name={charge}
+                        >
+                            <LabelList
+                                key={`${charge}-${index}-labellist`}
+                                fontSize={10}
+                                fill={'#fff'}
+                                valueAccessor={(
+                                    // @ts-ignore: ignore type error
+                                    props: LabelListProps<'valueAccessor'>
+                                ) => renderCustomPercentage(props, charge)}
+                            />
+                        </Bar>
+                    )
+                })}
             </BarChart>
         </ResponsiveContainer>
     )

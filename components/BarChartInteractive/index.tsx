@@ -59,6 +59,10 @@ const ChartWrapper = styled.div`
     }
 `
 
+const ChartTitle = styled.h2`
+    text-align: center;
+`
+
 function BarChartInteractive({ data }: BarChartProps) {
     const defaultFilters = {
         motions: 'All',
@@ -159,6 +163,9 @@ function BarChartInteractive({ data }: BarChartProps) {
                     </Button>
                 </Filters>
                 <ChartWrapper>
+                    <ChartTitle>
+                        Evidence of Representation
+                    </ChartTitle>
                     <ResponsiveContainer
                         width={'100%'}
                         minHeight={600}
