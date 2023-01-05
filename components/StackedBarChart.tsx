@@ -9,8 +9,13 @@ import {
     ResponsiveContainer,
     Legend,
     LabelList,
+    Label,
     LabelListProps,
+    CartesianAxisProps,
+    Text,
 } from 'recharts'
+import styled from 'styled-components'
+import { BaseAxisProps } from 'recharts/types/util/types'
 import { stackedGraphColors } from '../lib/colors'
 import { upsertAtMap } from '../lib/record'
 import { flattenObject } from '../lib/flatten'
@@ -20,22 +25,29 @@ type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
     caseCount: number
     totalCharges: Record<string, number>
+    percentageCharges: Record<string, number>
 }
 
 interface StackedBarChartProps {
     cases: Array<Case>
 }
 
+const Heading = styled.h2`
+    text-align: center;
+`
+
 function StackedBarChart({ cases }: StackedBarChartProps) {
     const retained: AttorneySummary = {
         attorney: 'Retained',
         caseCount: 0,
         totalCharges: {},
+        percentageCharges: {},
     }
     const appointed: AttorneySummary = {
         attorney: 'Court Appointed',
         caseCount: 0,
         totalCharges: {},
+        percentageCharges: {},
     }
 
     // TODO -- what's the shape of retained.primaryCharges?
@@ -77,49 +89,84 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
         }
     })
 
+    const toPercent = (num: number, denom: number) => {
+        return (num / denom) * 100
+    }
+    Object.keys(retained.totalCharges).forEach((charge) => {
+        retained.percentageCharges[charge] = toPercent(
+            retained.totalCharges[charge],
+            retained.caseCount
+        )
+    })
+    Object.keys(appointed.totalCharges).forEach((charge) => {
+        appointed.percentageCharges[charge] = toPercent(
+            appointed.totalCharges[charge],
+            appointed.caseCount
+        )
+    })
+
     const formattedResults = [flattenObject(retained), flattenObject(appointed)]
 
     const primaryCharges = Array.from(pcSet)
 
+    const appointedPrimaryCharges = Object.keys(appointed.percentageCharges)
+        .sort()
+        .reduce((obj: any, key) => {
+            obj[key] = appointed.percentageCharges[key]
+            return obj
+        }, {})
+
     // console.log('primaryCharges\n', primaryCharges)
     // console.log('retained\n', retained)
     // console.log('appointed\n', appointed)
-    // console.log('formattedResults\n', formattedResults)
+    console.log('formattedResults\n', formattedResults)
 
     if (!cases) return <div>Loading...</div>
 
     const renderCustomPercentage = (props: any, charge: string) => {
-        const percentage = (props[charge] / props.caseCount) * 100
+        const percentage = props[charge]
         if (typeof percentage !== 'number' || isNaN(percentage)) {
             return null
         }
 
-        return `${percentage.toFixed(1)}%`
+        return `${percentage.toFixed(2)}%`
     }
 
+    const domain = [0, 100]
+    const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
     return (
-        <ResponsiveContainer width="100%" height={500}>
-            <BarChart data={formattedResults} layout="horizontal">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="attorney" />
-                <YAxis />
-                <Tooltip
-                    labelStyle={{ fontSize: 11, fontWeight: 'bold' }}
-                    contentStyle={{ fontSize: 11 }}
-                    offset={50}
-                    itemSorter={(item) => {
-                        return item.name as string
-                    }}
-                />
-                <br></br>
-                <Legend />
-                {primaryCharges
-                    .sort()
-                    .reverse()
-                    .map((charge, index) => {
+        <>
+            <Heading>
+                Cases per Attorney Type Grouped by Charge Category
+            </Heading>
+            <ResponsiveContainer
+                width="100%"
+                height={250}
+                className="stacked-bar-chart stacked-bar-chart-top"
+            >
+                <BarChart data={[flattenObject(retained)]} layout="vertical">
+                    <XAxis
+                        type="number"
+                        domain={domain}
+                        ticks={ticks}
+                        tickFormatter={(tick) => `${tick}%`}
+                        hide
+                    />
+                    <YAxis
+                        dataKey="attorney"
+                        type="category"
+                        label={{
+                            value: 'Retained',
+                            angle: -90,
+                        }}
+                        axisLine={false}
+                        tickLine={false}
+                    />
+                    {primaryCharges.map((charge, index) => {
                         return (
                             <Bar
-                                maxBarSize={200}
+                                maxBarSize={250}
                                 key={`${charge}-${index}`}
                                 dataKey={charge}
                                 fill={
@@ -143,8 +190,72 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                             </Bar>
                         )
                     })}
-            </BarChart>
-        </ResponsiveContainer>
+                </BarChart>
+            </ResponsiveContainer>
+            <ResponsiveContainer
+                width="100%"
+                height={250}
+                className={'stacked-bar-chart stacked-bar-chart-bottom'}
+            >
+                <BarChart data={[flattenObject(appointed)]} layout="vertical">
+                    <XAxis
+                        type="number"
+                        domain={domain}
+                        ticks={ticks}
+                        tickFormatter={(tick) => `${tick}%`}
+                        hide
+                    />
+                    <YAxis
+                        dataKey="attorney"
+                        type="category"
+                        label={{
+                            value: 'Court appointed',
+                            angle: -90,
+                        }}
+                        axisLine={false}
+                        tickLine={false}
+                    />
+                    <Text angle={90}>ello</Text>
+                    <Label
+                        value="Pages of my website"
+                        offset={0}
+                        position="insideBottom"
+                    />
+                    <Legend
+                        iconSize={24}
+                        iconType={'circle'}
+                        chartHeight={400}
+                    />
+                    {primaryCharges.map((charge, index) => {
+                        return (
+                            <Bar
+                                maxBarSize={250}
+                                key={`${charge}-${index}`}
+                                dataKey={charge}
+                                fill={
+                                    stackedGraphColors[
+                                        index %
+                                            Object.keys(primaryCharges).length
+                                    ]
+                                }
+                                stackId="a"
+                                name={charge}
+                            >
+                                <LabelList
+                                    key={`${charge}-${index}-labellist`}
+                                    fontSize={10}
+                                    fill={'#fff'}
+                                    valueAccessor={(
+                                        // @ts-ignore: ignore type error
+                                        props: LabelListProps<'valueAccessor'>
+                                    ) => renderCustomPercentage(props, charge)}
+                                />
+                            </Bar>
+                        )
+                    })}
+                </BarChart>
+            </ResponsiveContainer>
+        </>
     )
 }
 

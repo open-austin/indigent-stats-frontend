@@ -5,36 +5,51 @@ import BarChart from '../components/BarChart'
 import { Loading } from '../components/Loading'
 import StackedBarChart from '../components/StackedBarChart'
 import BarChartInteractive from '../components/BarChartInteractive'
+import BarChartYears from '../components/BarChartYears'
 import { caseSchema } from '../models/Case'
 import styles from '../styles/Home.module.css'
 import fetcher from '../lib/fetcher'
 import { Props } from 'recharts/types/component/Legend'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
+// TODO: Update cosmos query later
+// currently getting data with 'null'
 const COSMOS_QUERY = `
 SELECT * FROM c
- WHERE c["party information"]["race"] = "White"
- OFFSET 10 LIMIT 10
+  WHERE NOT ARRAY_CONTAINS(c['charge_category'], null)
+  OFFSET 1000 LIMIT 10000
 `
 
 export default function Home() {
-    const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
+    // TODO: Remove after switching to CosmosDB
+    // const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
 
-    // TODO: Use CosmosDB for data
-    // const { data: cosmosData, error: cosmosError } = useSWR(
-    //     `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
-    //     fetcher
-    // )
+    // if (!data && !error) {
+    //     return <Loading />
+    // }
 
-    if (!data && !error) {
+    // if (error) {
+    //     return <div>Error fetching</div>
+    // }
+
+    // const d = JSON.parse(data)
+    // const parsed = z.array(caseSchema).safeParse(d)
+
+    // TODO: Figure out why cosmos isn't working when hosted on Vercel
+    const { data: cosmosData, error: cosmosError } = useSWR(
+        `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
+        fetcher
+    )
+
+    if (!cosmosData && !cosmosError) {
         return <Loading />
     }
 
-    if (error) {
+    if (cosmosError) {
         return <div>Error fetching</div>
     }
 
-    const d = JSON.parse(data)
+    const d = cosmosData?.data
     const parsed = z.array(caseSchema).safeParse(d)
 
     if (!parsed.success) {
@@ -56,8 +71,8 @@ export default function Home() {
             <main className={styles.main}>
                 <div className={styles.charts}>
                     <BarChartInteractive data={parsed.data} />
-                    {/* <BarChart data={parsed.data} /> */}
                     <StackedBarChart cases={parsed.data} />
+                    <BarChartYears data={parsed.data} />
                 </div>
             </main>
 

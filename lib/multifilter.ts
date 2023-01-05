@@ -1,4 +1,4 @@
-import { IFilters } from '../components/Filter'
+import { IFilters } from '../components/Filters'
 import { Case } from '../models/Case'
 
 export const filterSingleProperty = (
