@@ -9,6 +9,7 @@ export const caseSchema = z
         case_number: z.string(),
         attorney_type: z.string(),
         earliest_charge_date: z.string(),
+        year: z.number().optional(),
         has_evidence_of_representation: z.boolean(),
         charge_desc: z.array(z.coerce.string()),
         charge_category: z.array(z.coerce.string()),
@@ -25,6 +26,8 @@ export const caseSchema = z
             chargeCategories: Array.from(new Set(c.charge_category)),
             chargeLevels: Array.from(new Set(c.charge_level)),
         }
+
+        parsed.year = parseInt(c.earliest_charge_date.substring(0, 4))
 
         return parsed
     })

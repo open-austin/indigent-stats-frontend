@@ -6,7 +6,10 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 export const config = {
     api: {
-        responseLimit: '50mb',
+        responseLimit: '100mb',
+        bodyParser: {
+            sizeLimit: '100mb',
+        },
     },
 }
 
@@ -42,8 +45,8 @@ export default async function handler(
 
 async function doQuery(query: string) {
     return client
-        .database('cases-json-db')
-        .container('case-json')
+        .database('nested-cases-db')
+        .container('nested-cases')
         .items.query(query)
         .fetchAll()
 }

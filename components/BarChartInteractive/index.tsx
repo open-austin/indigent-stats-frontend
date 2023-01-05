@@ -14,7 +14,7 @@ import {
 import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
-import Filter, { IFilters } from '../Filter'
+import Filters, { IFilters } from '../Filters'
 import { Button } from '../Button'
 import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
@@ -35,8 +35,6 @@ export type AttorneySummary = {
     notEnoughDataForSample: boolean
 }
 
-const Filters = styled.form``
-
 const Layout = styled.section`
     display: flex;
     flex-direction: column;
@@ -44,7 +42,6 @@ const Layout = styled.section`
     flex: 1 1;
 
     @media (min-width: 1000px) {
-        align-items: flex-start;
         justify-content: center;
         flex-direction: row;
         gap: 4rem;
@@ -59,6 +56,14 @@ const ChartWrapper = styled.div`
         flex: 1;
         margin-top: 0;
     }
+`
+
+const ChartTitle = styled.h2`
+    text-align: center;
+`
+
+const FiltersWrapper = styled.div`
+    padding-bottom: 10rem;
 `
 
 function BarChartInteractive({ data }: BarChartProps) {
@@ -153,46 +158,23 @@ function BarChartInteractive({ data }: BarChartProps) {
     return (
         <>
             <Layout>
-                <Filters>
-                    <Filter
-                        filterField={'motions'}
-                        filters={filters}
-                        setFilters={setFilters}
-                        data={data}
-                    />
-                    <Filter
-                        filterField={'charges'}
-                        filters={filters}
-                        setFilters={setFilters}
-                        data={data}
-                    />
-                    <Filter
-                        filterField={'chargeCategories'}
-                        filters={filters}
-                        setFilters={setFilters}
-                        data={data}
-                    />
-                    <Filter
-                        filterField={'chargeLevels'}
-                        filters={filters}
-                        setFilters={setFilters}
-                        data={data}
-                    />
+                <FiltersWrapper>
+                <Filters data={data} filters={filters} setFilters={setFilters}>
                     <Button onClick={resetFilters} type="button">
                         Reset filters
                     </Button>
                 </Filters>
+                </FiltersWrapper>
                 <ChartWrapper>
+                    <ChartTitle>
+                        Evidence of Representation
+                    </ChartTitle>
                     <ResponsiveContainer
                         width={'100%'}
                         minHeight={600}
                         debounce={10}
                     >
-                        <BarChart
-                            data={formattedResults}
-                            layout="horizontal"
-                            margin={{ top: 5, right: 30, left: 20, bottom: 20 }}
-                        >
+                        <BarChart data={formattedResults} layout="horizontal">
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="attorney" padding={{ right: 20 }} />
                             <YAxis
