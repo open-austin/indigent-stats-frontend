@@ -42,7 +42,6 @@ const Layout = styled.section`
     flex: 1 1;
 
     @media (min-width: 1000px) {
-        align-items: flex-start;
         justify-content: center;
         flex-direction: row;
         gap: 4rem;
@@ -61,6 +60,10 @@ const ChartWrapper = styled.div`
 
 const ChartTitle = styled.h2`
     text-align: center;
+`
+
+const FiltersWrapper = styled.div`
+    padding-bottom: 10rem;
 `
 
 function BarChartInteractive({ data }: BarChartProps) {
@@ -152,16 +155,16 @@ function BarChartInteractive({ data }: BarChartProps) {
         return `${decimal.toFixed(2)}%`
     }
 
-    const filteredData = [...retainedData, ...appointedData]
-
     return (
         <>
             <Layout>
+                <FiltersWrapper>
                 <Filters data={data} filters={filters} setFilters={setFilters}>
                     <Button onClick={resetFilters} type="button">
                         Reset filters
                     </Button>
                 </Filters>
+                </FiltersWrapper>
                 <ChartWrapper>
                     <ChartTitle>
                         Evidence of Representation

@@ -9,8 +9,13 @@ import {
     ResponsiveContainer,
     Legend,
     LabelList,
+    Label,
     LabelListProps,
+    CartesianAxisProps,
+    Text,
 } from 'recharts'
+import styled from 'styled-components'
+import { BaseAxisProps } from 'recharts/types/util/types'
 import { stackedGraphColors } from '../lib/colors'
 import { upsertAtMap } from '../lib/record'
 import { flattenObject } from '../lib/flatten'
@@ -26,6 +31,10 @@ type AttorneySummary = {
 interface StackedBarChartProps {
     cases: Array<Case>
 }
+
+const Heading = styled.h2`
+    text-align: center;
+`
 
 function StackedBarChart({ cases }: StackedBarChartProps) {
     const retained: AttorneySummary = {
@@ -100,6 +109,13 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     const primaryCharges = Array.from(pcSet)
 
+    const appointedPrimaryCharges = Object.keys(appointed.percentageCharges)
+        .sort()
+        .reduce((obj, key) => {
+            obj[key] = appointed.percentageCharges[key]
+            return obj
+        }, {})
+
     // console.log('primaryCharges\n', primaryCharges)
     // console.log('retained\n', retained)
     // console.log('appointed\n', appointed)
@@ -120,54 +136,126 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
     const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
     return (
-        <ResponsiveContainer width="100%" height={500}>
-            <BarChart data={formattedResults} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                    type="number"
-                    domain={domain}
-                    ticks={ticks}
-                    tickFormatter={(tick) => `${tick}%`}
-                />
-                <YAxis dataKey="attorney" type="category" />
-                <Tooltip
-                    labelStyle={{ fontSize: 11, fontWeight: 'bold' }}
-                    contentStyle={{ fontSize: 11 }}
-                    offset={50}
-                    itemSorter={(item) => {
-                        return item.name as string
-                    }}
-                />
-                <br></br>
-                <Legend />
-                {primaryCharges.map((charge, index) => {
-                    return (
-                        <Bar
-                            maxBarSize={200}
-                            key={`${charge}-${index}`}
-                            dataKey={charge}
-                            fill={
-                                stackedGraphColors[
-                                    index % Object.keys(primaryCharges).length
-                                ]
-                            }
-                            stackId="a"
-                            name={charge}
-                        >
-                            <LabelList
-                                key={`${charge}-${index}-labellist`}
-                                fontSize={10}
-                                fill={'#fff'}
-                                valueAccessor={(
-                                    // @ts-ignore: ignore type error
-                                    props: LabelListProps<'valueAccessor'>
-                                ) => renderCustomPercentage(props, charge)}
-                            />
-                        </Bar>
-                    )
-                })}
-            </BarChart>
-        </ResponsiveContainer>
+        <>
+            <Heading>
+                Cases per Attorney Type Grouped by Charge Category
+            </Heading>
+            <ResponsiveContainer
+                width="100%"
+                height={250}
+                className="stacked-bar-chart stacked-bar-chart-top"
+            >
+                <BarChart data={[flattenObject(retained)]} layout="vertical">
+                    <XAxis
+                        type="number"
+                        domain={domain}
+                        ticks={ticks}
+                        tickFormatter={(tick) => `${tick}%`}
+                        hide
+                    />
+                    <YAxis
+                        dataKey="attorney"
+                        type="category"
+                        label={{
+                            value: 'Retained',
+                            angle: -90,
+                        }}
+                        axisLine={false}
+                        tickLine={false}
+                    />
+                    {primaryCharges.map((charge, index) => {
+                        return (
+                            <Bar
+                                maxBarSize={250}
+                                key={`${charge}-${index}`}
+                                dataKey={charge}
+                                fill={
+                                    stackedGraphColors[
+                                        index %
+                                            Object.keys(primaryCharges).length
+                                    ]
+                                }
+                                stackId="a"
+                                name={charge}
+                            >
+                                <LabelList
+                                    key={`${charge}-${index}-labellist`}
+                                    fontSize={10}
+                                    fill={'#fff'}
+                                    valueAccessor={(
+                                        // @ts-ignore: ignore type error
+                                        props: LabelListProps<'valueAccessor'>
+                                    ) => renderCustomPercentage(props, charge)}
+                                />
+                            </Bar>
+                        )
+                    })}
+                </BarChart>
+            </ResponsiveContainer>
+            <ResponsiveContainer
+                width="100%"
+                height={250}
+                className={'stacked-bar-chart stacked-bar-chart-bottom'}
+            >
+                <BarChart data={[flattenObject(appointed)]} layout="vertical">
+                    <XAxis
+                        type="number"
+                        domain={domain}
+                        ticks={ticks}
+                        tickFormatter={(tick) => `${tick}%`}
+                        hide
+                    />
+                    <YAxis
+                        dataKey="attorney"
+                        type="category"
+                        label={{
+                            value: 'Court appointed',
+                            angle: -90,
+                        }}
+                        axisLine={false}
+                        tickLine={false}
+                    />
+                    <Text angle={90}>ello</Text>
+                    <Label
+                        value="Pages of my website"
+                        offset={0}
+                        position="insideBottom"
+                    />
+                    <Legend
+                        iconSize={24}
+                        iconType={'circle'}
+                        chartHeight={400}
+                    />
+                    {primaryCharges.map((charge, index) => {
+                        return (
+                            <Bar
+                                maxBarSize={250}
+                                key={`${charge}-${index}`}
+                                dataKey={charge}
+                                fill={
+                                    stackedGraphColors[
+                                        index %
+                                            Object.keys(primaryCharges).length
+                                    ]
+                                }
+                                stackId="a"
+                                name={charge}
+                            >
+                                <LabelList
+                                    key={`${charge}-${index}-labellist`}
+                                    fontSize={10}
+                                    fill={'#fff'}
+                                    valueAccessor={(
+                                        // @ts-ignore: ignore type error
+                                        props: LabelListProps<'valueAccessor'>
+                                    ) => renderCustomPercentage(props, charge)}
+                                />
+                            </Bar>
+                        )
+                    })}
+                </BarChart>
+            </ResponsiveContainer>
+        </>
     )
 }
 
