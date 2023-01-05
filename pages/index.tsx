@@ -5,6 +5,7 @@ import BarChart from '../components/BarChart'
 import { Loading } from '../components/Loading'
 import StackedBarChart from '../components/StackedBarChart'
 import BarChartInteractive from '../components/BarChartInteractive'
+import BarChartYears from '../components/BarChartYears'
 import { caseSchema } from '../models/Case'
 import styles from '../styles/Home.module.css'
 import fetcher from '../lib/fetcher'
@@ -70,8 +71,8 @@ export default function Home() {
             <main className={styles.main}>
                 <div className={styles.charts}>
                     <BarChartInteractive data={parsed.data} />
-                    {/* <BarChart data={parsed.data} /> */}
                     <StackedBarChart cases={parsed.data} />
+                    <BarChartYears data={parsed.data} />
                 </div>
             </main>
 
