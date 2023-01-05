@@ -111,7 +111,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     const appointedPrimaryCharges = Object.keys(appointed.percentageCharges)
         .sort()
-        .reduce((obj, key) => {
+        .reduce((obj: any, key) => {
             obj[key] = appointed.percentageCharges[key]
             return obj
         }, {})
