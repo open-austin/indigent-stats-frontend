@@ -5,7 +5,6 @@ export const colors = {
     secondary: '#444e86',
     tertiary: '#955196',
     blueNavy: '#003f5c',
-    blue: '#416E8E',
     violet: '#444e86',
     lavender: '#955196',
     pink: '#dd5182',

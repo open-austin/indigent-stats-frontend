@@ -159,16 +159,18 @@ function BarChartInteractive({ data }: BarChartProps) {
         <>
             <Layout>
                 <FiltersWrapper>
-                <Filters data={data} filters={filters} setFilters={setFilters}>
-                    <Button onClick={resetFilters} type="button">
-                        Reset filters
-                    </Button>
-                </Filters>
+                    <Filters
+                        data={data}
+                        filters={filters}
+                        setFilters={setFilters}
+                    >
+                        <Button onClick={resetFilters} type="button">
+                            Reset filters
+                        </Button>
+                    </Filters>
                 </FiltersWrapper>
                 <ChartWrapper>
-                    <ChartTitle>
-                        Evidence of Representation
-                    </ChartTitle>
+                    <ChartTitle>Evidence of Representation</ChartTitle>
                     <ResponsiveContainer
                         width={'100%'}
                         minHeight={600}
