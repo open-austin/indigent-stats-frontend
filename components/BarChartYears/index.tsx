@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {
     BarChart,
@@ -6,17 +6,12 @@ import {
     XAxis,
     YAxis,
     CartesianGrid,
-    Tooltip,
     ResponsiveContainer,
     Legend,
     LabelList,
 } from 'recharts'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
-import { Button } from '../Button'
-
-// TODO: This should be changed to 50 once we use the larger sample size
-const MIN_SAMPLE_SIZE = 15
 
 interface BarChartProps {
     data: Array<Case>
@@ -113,8 +108,8 @@ function BarChartYears({ data }: BarChartProps) {
 
     if (!data) return <div>Loading...</div>
 
-    const domain = [0, 20]
-    const ticks = [0, 5, 10, 15, 20]
+    const domain = [0, 15]
+    const ticks = [0, 5, 10, 15]
     const toPercent = (decimal: number) => {
         return `${decimal.toFixed(2)}%`
     }
@@ -150,7 +145,7 @@ function BarChartYears({ data }: BarChartProps) {
                                 name="Retained"
                             >
                                 <LabelList
-                                    fontSize={10}
+                                    fontSize={8}
                                     fill={colors.text}
                                     formatter={(value: number) =>
                                         value ? toPercent(value) : ''
@@ -165,7 +160,7 @@ function BarChartYears({ data }: BarChartProps) {
                                 name="Court appointed"
                             >
                                 <LabelList
-                                    fontSize={10}
+                                    fontSize={8}
                                     fill={colors.white}
                                     formatter={(value: number) =>
                                         value ? toPercent(value) : ''
