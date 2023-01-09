@@ -9,9 +9,12 @@ import {
     ResponsiveContainer,
     Legend,
     LabelList,
+    Label,
 } from 'recharts'
+import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
+import { renderLegend } from './Legend'
 
 interface BarChartProps {
     data: Array<Case>
@@ -123,30 +126,73 @@ function BarChartYears({ data }: BarChartProps) {
                     </ChartTitle>
                     <ResponsiveContainer
                         width={'100%'}
-                        minHeight={300}
+                        minHeight={600}
                         debounce={10}
                     >
-                        <BarChart data={formattedData} layout="horizontal">
+                        <BarChart
+                            data={formattedData}
+                            layout="horizontal"
+                            margin={{
+                                top: 20,
+                                bottom: 20,
+                                right: 20,
+                                left: 20,
+                            }}
+                        >
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="year" padding={{ right: 20 }} />
+                            <XAxis dataKey="year" tick={{ fontSize: 10 }}>
+                                <Label
+                                    value="Years"
+                                    position={'center'}
+                                    style={{
+                                        textAnchor: 'middle',
+                                        paddingBottom: 20,
+                                        transform: 'translateY(1.5rem)',
+                                        fontSize: 12,
+                                        position: 'relative',
+                                        left: '-80px',
+                                        fontWeight: 'bold',
+                                    }}
+                                />
+                            </XAxis>
                             <YAxis
                                 dataKey={'percentEvidenceOfRepresentation'}
                                 domain={domain}
                                 ticks={ticks}
+                                tick={{ fontSize: 10 }}
                                 tickFormatter={(tick) => `${tick}%`}
                                 fill={colors.blueNavy}
+                            >
+                                <Label
+                                    value="Percent of Cases"
+                                    position={'center'}
+                                    angle={-90}
+                                    style={{
+                                        textAnchor: 'middle',
+                                        paddingBottom: 20,
+                                        fontSize: 12,
+                                        position: 'relative',
+                                        left: '-80px',
+                                        fontWeight: 'bold',
+                                    }}
+                                />
+                            </YAxis>
+                            <Legend
+                                // @ts-ignore: Not a relevant props error
+                                content={(props: LegendProps) =>
+                                    renderLegend(props, data, 'Attorney type')
+                                }
                             />
-                            <Legend />
                             <Bar
                                 maxBarSize={200}
                                 key={'retained'}
                                 dataKey={'retained'}
-                                fill={colors.yellow}
+                                fill={colors.violet}
                                 name="Retained"
                             >
                                 <LabelList
                                     fontSize={8}
-                                    fill={colors.text}
+                                    fill={colors.white}
                                     formatter={(value: number) =>
                                         value ? toPercent(value) : ''
                                     }
@@ -156,7 +202,7 @@ function BarChartYears({ data }: BarChartProps) {
                                 maxBarSize={200}
                                 key={'appointed'}
                                 dataKey={'appointed'}
-                                fill={colors.blueNavy}
+                                fill={colors.orange}
                                 name="Court appointed"
                             >
                                 <LabelList

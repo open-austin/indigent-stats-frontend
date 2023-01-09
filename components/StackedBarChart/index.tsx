@@ -15,11 +15,13 @@ import {
     Text,
 } from 'recharts'
 import styled from 'styled-components'
+import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { BaseAxisProps } from 'recharts/types/util/types'
-import { stackedGraphColors } from '../lib/colors'
-import { upsertAtMap } from '../lib/record'
-import { flattenObject } from '../lib/flatten'
-import { Case } from '../models/Case'
+import { stackedGraphColors } from '../../lib/colors'
+import { upsertAtMap } from '../../lib/record'
+import { flattenObject } from '../../lib/flatten'
+import { Case } from '../../models/Case'
+import { renderLegend } from './Legend'
 
 type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
@@ -142,7 +144,8 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
             </Heading>
             <ResponsiveContainer
                 width="100%"
-                height={250}
+                height="100%"
+                minHeight={300}
                 className="stacked-bar-chart stacked-bar-chart-top"
             >
                 <BarChart data={[flattenObject(retained)]} layout="vertical">
@@ -166,7 +169,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                     {primaryCharges.map((charge, index) => {
                         return (
                             <Bar
-                                maxBarSize={250}
+                                maxBarSize={100}
                                 key={`${charge}-${index}`}
                                 dataKey={charge}
                                 fill={
@@ -194,7 +197,8 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
             </ResponsiveContainer>
             <ResponsiveContainer
                 width="100%"
-                height={250}
+                height="100%"
+                minHeight={300}
                 className={'stacked-bar-chart stacked-bar-chart-bottom'}
             >
                 <BarChart data={[flattenObject(appointed)]} layout="vertical">
@@ -222,14 +226,15 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                         position="insideBottom"
                     />
                     <Legend
-                        iconSize={24}
-                        iconType={'circle'}
-                        chartHeight={400}
+                        // @ts-ignore: Not a relevant props error
+                        content={(props: LegendProps) =>
+                            renderLegend(props, 'Evidence of representation')
+                        }
                     />
                     {primaryCharges.map((charge, index) => {
                         return (
                             <Bar
-                                maxBarSize={250}
+                                maxBarSize={100}
                                 key={`${charge}-${index}`}
                                 dataKey={charge}
                                 fill={
