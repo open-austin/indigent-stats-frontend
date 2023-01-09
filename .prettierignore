@@ -1,0 +1,17 @@
+node_modules
+.git
+.next
+.env
+.env.local
+.babelrc
+.gitignore
+.gitattributes
+.nvmrc
+.eslintrc.json
+.next-env.d.ts
+next.config.js
+package.json
+README.md
+tsconfig.json
+yarn.lock
+data

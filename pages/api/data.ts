@@ -22,7 +22,7 @@ export default async function handler(
     try {
         const file = await axios.get(COMBINED_CHARGES_URL)
         const charges = combinedDataSchema.safeParse(file.data.results)
-        
+
         if (charges.success) {
             const payload = groupBy(charges.data)((a) =>
                 a.case_number.toString()
@@ -38,4 +38,3 @@ export default async function handler(
         res.status(500).json(JSON.stringify(err))
     }
 }
-
