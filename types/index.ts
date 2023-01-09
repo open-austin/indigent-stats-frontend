@@ -1,3 +1,3 @@
-import { significantMotions } from "../lib/constants";
+import { significantMotions } from '../lib/constants'
 
-export type TSignificantMotion = typeof significantMotions[number]
+export type TSignificantMotion = (typeof significantMotions)[number]
