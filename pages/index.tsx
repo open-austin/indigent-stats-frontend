@@ -17,7 +17,8 @@ const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 const COSMOS_QUERY = `
 SELECT * FROM c
   WHERE NOT ARRAY_CONTAINS(c['charge_category'], null)
-  OFFSET 1000 LIMIT 10000
+  ORDER BY c['earliest_charge_date'] DESC
+  OFFSET 0 LIMIT 8000
 `
 
 export default function Home() {
