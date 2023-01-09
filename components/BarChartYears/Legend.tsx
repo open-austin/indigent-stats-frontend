@@ -1,8 +1,6 @@
-import React, { useState, ReactNode } from 'react'
-import styled from 'styled-components'
+import React, { ReactNode } from 'react'
 import { Props } from 'recharts/types/component/Legend'
-import { AttorneySummary } from '.'
-import { colors } from '../../lib/colors'
+import { Case } from '../../models/Case'
 import {
     LegendWrapper,
     LegendSampleSize,
@@ -11,13 +9,11 @@ import {
     LegendTitle,
     LegendSpan,
     LegendColorBlock,
-    Tooltip,
 } from '../LegendUI'
 
 export const renderLegend = (
     props: Props,
-    notEnoughData: boolean,
-    arr: Array<AttorneySummary>,
+    arr: Array<Case>,
     title: string
 ): ReactNode => {
     return (
@@ -26,24 +22,25 @@ export const renderLegend = (
                 <LegendSampleSizeTitle>Sample size</LegendSampleSizeTitle>
                 <div>
                     <small>
-                        Retained: {arr[0].data?.length} cases <br />
-                        Court Appointed: {arr[1].data?.length} cases
+                        Retained:{' '}
+                        {
+                            arr?.filter((c) => c.attorney_type === 'Retained')
+                                .length
+                        }{' '}
+                        cases <br />
+                        Court Appointed:{' '}
+                        {
+                            arr?.filter(
+                                (c) => c.attorney_type === 'Court Appointed'
+                            ).length
+                        }{' '}
+                        cases
                     </small>
                 </div>
-                {notEnoughData && (
-                    <small style={{ color: colors.orange }}>
-                        <em>
-                            <br />
-                            *This filtered sample size is not large enough to
-                            make a conclusion.
-                        </em>
-                    </small>
-                )}
             </LegendSampleSize>
             <LegendBox>
                 <LegendTitle>
                     <strong>{title}</strong>
-                    <Tooltip />
                 </LegendTitle>
                 {[...(props.payload || [])].reverse().map((entry, index) => (
                     <LegendSpan key={`item-${index}`}>
