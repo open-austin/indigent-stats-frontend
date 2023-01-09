@@ -19,11 +19,7 @@ export const filterSingleProperty = (
 const multifilter = (data: Array<Case>, filters: IFilters) => {
     for (const filter in filters) {
         if (filter !== 'motions') {
-            data = filterSingleProperty(
-                data,
-                filter as keyof IFilters,
-                filters
-            )
+            data = filterSingleProperty(data, filter as keyof IFilters, filters)
         }
     }
 
