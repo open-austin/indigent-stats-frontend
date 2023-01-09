@@ -18,7 +18,7 @@ const COSMOS_QUERY = `
 SELECT * FROM c
   WHERE NOT ARRAY_CONTAINS(c['charge_category'], null)
   ORDER BY c['earliest_charge_date'] DESC
-  OFFSET 0 LIMIT 10000
+  OFFSET 0 LIMIT 8000
 `
 
 export default function Home() {
