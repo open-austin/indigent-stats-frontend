@@ -9,6 +9,7 @@ export const colors = {
     lavender: '#955196',
     pink: '#dd5182',
     orange: '#ff6e54',
+    openAustinOrange: '#EA6036',
     yellow: '#ffa600',
     gray: '#e7edf7',
 }
