@@ -228,7 +228,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                     <Legend
                         // @ts-ignore: Not a relevant props error
                         content={(props: LegendProps) =>
-                            renderLegend(props, 'Evidence of representation')
+                            renderLegend(props, 'Primary charge category')
                         }
                     />
                     {primaryCharges.map((charge, index) => {
