@@ -14,6 +14,7 @@ import {
 import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
+import { bp } from '../../lib/breakpoints'
 import { renderLegend } from './Legend'
 
 interface BarChartProps {
@@ -33,7 +34,7 @@ const Layout = styled.section`
     flex: 1 1;
     margin-top: 10rem;
 
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         justify-content: center;
         flex-direction: row;
         gap: 4rem;
@@ -44,7 +45,7 @@ const ChartWrapper = styled.div`
     max-width: 50rem;
     width: 100%;
     margin-top: 2rem;
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         flex: 1;
         margin-top: 0;
     }

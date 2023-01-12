@@ -1,5 +1,5 @@
 export const colors = {
-    text: '#373D3F',
+    text: '#2D3748',
     white: '#ffffff',
     primary: '#003f5c',
     secondary: '#444e86',
@@ -10,7 +10,9 @@ export const colors = {
     pink: '#dd5182',
     orange: '#ff6e54',
     openAustinOrange: '#EA6036',
+    openAustinBlue: '#2c5282',
     yellow: '#ffa600',
+    grayGradient: '#ebebeb',
     gray: '#e7edf7',
 }
 

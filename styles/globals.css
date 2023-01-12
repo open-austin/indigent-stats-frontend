@@ -6,13 +6,24 @@ body {
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+    color: #2c5282;
+    /* text-decoration: none; */
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Merriweather', sans-serif;
 }
 
 h1 {
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+h3 {
     font-size: 2rem;
-    line-height: 1.25;
+    line-height: 1.75;
 }
 
 * {
