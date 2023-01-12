@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect } from 'react'
 import styled from 'styled-components'
+import { bp } from '../lib/breakpoints'
 import { colors } from '../lib/colors'
 import { filterSingleProperty } from '../lib/multifilter'
 import { Case } from '../models/Case'
@@ -25,7 +26,7 @@ const OPTION_ALL = 'All'
 const FilterForm = styled.form`
     flex-basis: 100%;
 
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         flex-basis: calc(100% / 3);
     }
 `
