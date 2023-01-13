@@ -41,6 +41,7 @@ const Layout = styled.section`
     flex-direction: column;
     align-items: center;
     flex: 1 1;
+    min-width: 100%;
 
     @media ${bp.lg} {
         justify-content: center;
@@ -53,6 +54,7 @@ const ChartWrapper = styled.div`
     max-width: 50rem;
     width: 100%;
     margin-top: 2rem;
+    flex: 0 1;
     @media ${bp.lg} {
         flex: 1;
         margin-top: 0;
@@ -174,7 +176,7 @@ function BarChartInteractive({ data }: BarChartProps) {
                     <ChartTitle>Evidence of Representation</ChartTitle>
                     <ResponsiveContainer
                         width={'100%'}
-                        minHeight={600}
+                        minHeight={700}
                         debounce={10}
                     >
                         <BarChart data={formattedResults} layout="horizontal">
@@ -191,7 +193,7 @@ function BarChartInteractive({ data }: BarChartProps) {
                                 maxBarSize={200}
                                 key={'evidenceOfRepresentation'}
                                 dataKey={'evidenceOfRepresentation'}
-                                fill={colors.yellow}
+                                fill={colors.yellowLight}
                                 stackId="representation"
                                 name="Yes"
                             >

@@ -21,8 +21,22 @@ export const TextContainer = styled.div<{
     }}
 
     strong {
-      color: ${colors.secondary};
-      font-weight: 600;
-      font-style: italic;
+        color: ${colors.text};
+        font-weight: 600;
+        position: relative;
+        white-space: nowrap;
+        z-index: 0;
+
+        &:after {
+            content: '';
+            background-color: ${colors.yellowLight}CC;
+            position: absolute;
+            height: 72%;
+            left: -3px;
+            width: 101%;
+            right: 3px;
+            bottom: 0;
+            z-index: -1;
+        }
     }
 `

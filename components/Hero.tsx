@@ -5,6 +5,7 @@ import AnimatedBackground from './AnimatedBackground'
 import { Banner } from './Banner'
 import { Container, TextContainer } from './Container'
 import { Section } from './Section'
+import { Highlight } from './Typography/Highlight'
 
 const Wrapper = styled.div`
     position: relative;
@@ -60,7 +61,6 @@ const Description = styled.div`
 `
 
 export const Hero = () => {
-    // const headingText = 'Aggregating criminal court case data in Texas counties';
     const headingText =
         'Visualizing the impact of access to appointed counsel in Texas criminal cases'
 
@@ -95,14 +95,16 @@ export const Hero = () => {
                                     Open Austin
                                 </a>{' '}
                                 began scraping and aggregating data from
-                                criminal court cases in Texas counties in 2022.{' '}&nbsp;
-                                Prior to this, case data was siloed within
-                                individual county&apos;s websites and physical
-                                court records, which made it difficult for
-                                policy-makers and journalists to get a big
+                                criminal court cases in Texas counties in 2022.{' '}
+                                &nbsp; Prior to this, case data was siloed
+                                within individual county&apos;s websites and
+                                physical court records, which made it difficult
+                                for policy-makers and journalists to get a big
                                 picture view of statewide criminal cases.
                             </p>
-                            <p></p>
+                            <br></br>
+                            <br></br>
+                            <br></br>
                         </Description>
                     </Section>
                 </Container>
@@ -115,8 +117,8 @@ export const Hero = () => {
                             Through this research, Open Austin learned that
                             folks who can&apos;t afford appointed counsel are
                             less likely to have adequate{' '}
-                            <strong>evidence of representation</strong> in their
-                            trials.
+                            <Highlight>evidence of representation</Highlight> in
+                            their trials.
                         </TextContainer>
                     </Subheading>
                 </Banner>
