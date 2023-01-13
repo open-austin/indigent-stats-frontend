@@ -1,7 +1,9 @@
 import styled from 'styled-components'
+import Image from 'next/image'
 import { colors } from '../lib/colors'
 import AnimatedBackground from './AnimatedBackground'
 import { Banner } from './Banner'
+import { Container, TextContainer } from './Container'
 import { Section } from './Section'
 
 const Wrapper = styled.div`
@@ -29,24 +31,33 @@ const Background = styled.div`
     z-index: -1;
 `
 
-const TextWrapper = styled.div`
-    margin: 0 auto 12rem;
+const HeaderWrapper = styled.div`
+    margin: 0 auto 6rem;
     line-height: 2;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     gap: 6rem;
     align-items: center;
+    justify-items: center;
 `
 
 const Heading = styled.h1`
     padding: 1rem 0;
     margin: 0 auto 0 2rem;
-    /* text-transform: uppercase; */
-    /* max-width: 40rem; */
     color: ${colors.openAustinOrange};
 `
 
 const Subheading = styled.h3``
+
+const Description = styled.div`
+    max-width: 80%;
+    text-align: left;
+    margin-left: 2rem;
+
+    p {
+        font-size: 1.5rem;
+    }
+`
 
 export const Hero = () => {
     // const headingText = 'Aggregating criminal court case data in Texas counties';
@@ -59,43 +70,54 @@ export const Hero = () => {
                 <Background>
                     <AnimatedBackground />
                 </Background>
-                <TextWrapper>
-                    <div>
-                        <Heading>{headingText}</Heading>
-                    </div>
-                    <div>
-                        <p>
-                            <a
-                                href="https://www.open-austin.org"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Open Austin
-                            </a>{' '}
-                            , a scrappy group of civic technologists, began
-                            scraping and aggregating data from criminal court
-                            cases in Texas counties in 2022. Prior to this, case
-                            data was siloed within individual county&apos;s
-                            websites and physical court records, which made it
-                            difficult for policy-makers and journalists to get a
-                            big picture view of statewide criminal cases.
-                        </p>
-                        <p></p>
-                    </div>
-                </TextWrapper>
+                <Container>
+                    <HeaderWrapper>
+                        <div>
+                            <Heading>{headingText}</Heading>
+                        </div>
+                        <div>
+                            <Image
+                                src="/open-austin-logo.svg"
+                                alt="Open Austin logo"
+                                width={200}
+                                height={200}
+                            />
+                        </div>
+                    </HeaderWrapper>
+                    <Section>
+                        <Description>
+                            <p>
+                                <a
+                                    href="https://www.open-austin.org"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Open Austin
+                                </a>{' '}
+                                began scraping and aggregating data from
+                                criminal court cases in Texas counties in 2022.{' '}&nbsp;
+                                Prior to this, case data was siloed within
+                                individual county&apos;s websites and physical
+                                court records, which made it difficult for
+                                policy-makers and journalists to get a big
+                                picture view of statewide criminal cases.
+                            </p>
+                            <p></p>
+                        </Description>
+                    </Section>
+                </Container>
                 <Banner
-                    bgColor={colors.blueNavy}
+                    bgColor={colors.blueNavyTransparent}
                     color={colors.white}
-                    transparent={true}
                 >
                     <Subheading>
-                        <p>
-                            Through this research, we learned that folks who
-                            can&apos;t afford appointed counsel are less likely
-                            to have adequate{' '}
+                        <TextContainer>
+                            Through this research, Open Austin learned that
+                            folks who can&apos;t afford appointed counsel are
+                            less likely to have adequate{' '}
                             <strong>evidence of representation</strong> in their
                             trials.
-                        </p>
+                        </TextContainer>
                     </Subheading>
                 </Banner>
             </Wrapper>

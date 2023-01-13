@@ -1,7 +1,7 @@
 export const size = {
   sm: 460,
   md: 700,
-  lg: 1000,
+  lg: 1200,
   xl: 1440,
 }
 

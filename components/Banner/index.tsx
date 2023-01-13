@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Container } from '../Container'
 
 interface Props {
     bgColor: string
@@ -20,7 +21,7 @@ const Wrapper = styled.section<Props>`
 
 const InnerWrapper = styled.div<Partial<Props>>`
     text-align: center;
-    max-width: 70%;
+    max-width: 70rem;
     margin: 0 auto;
     color: ${(props) => props.color};
 `
@@ -28,7 +29,9 @@ const InnerWrapper = styled.div<Partial<Props>>`
 export const Banner = ({ bgColor, color, children, transparent }: Props) => {
     return (
         <Wrapper bgColor={bgColor} transparent={transparent}>
-            <InnerWrapper color={color}>{children}</InnerWrapper>
+            <Container>
+                <InnerWrapper color={color}>{children}</InnerWrapper>
+            </Container>
         </Wrapper>
     )
 }

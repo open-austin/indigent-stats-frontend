@@ -6,8 +6,7 @@ body {
 }
 
 a {
-    color: #2c5282;
-    /* text-decoration: none; */
+    color: #444e86;
 }
 
 h1,
@@ -26,13 +25,21 @@ h3 {
     line-height: 1.75;
 }
 
+p {
+    font-size: 1.25rem;
+    line-height: 1.75;
+}
+
 * {
     box-sizing: border-box;
 }
 
+.max-width {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
 /* Recharts overrides */
 .stacked-bar-chart .recharts-cartesian-axis-tick-value {
-    /* transform: rotate(-90deg);
-  transform-origin: 2rem; */
     display: none;
 }

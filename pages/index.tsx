@@ -10,6 +10,9 @@ import styles from '../styles/Home.module.css'
 import fetcher from '../lib/fetcher'
 import { Hero } from '../components/Hero'
 import styled from 'styled-components'
+import { Section } from '../components/Section'
+import { H2 } from '../components/Typography/Headings'
+import { Container, TextContainer } from '../components/Container'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 // TODO: Update cosmos query later
@@ -65,24 +68,44 @@ export default function Home() {
     return (
         <div className={styles.container}>
             <Head>
-                <title>Open Austin | Indigent Defense Stats</title>
+                <title>Open Austin | Indigent Defense Data Visualization</title>
                 <meta name="description" content="Indigent Defense Stats" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <main className={styles.main}>
                 <Hero />
-                <Visualizations>
-                    {isLoading || !parsed.success ? (
-                        <Loading />
-                    ) : (
-                        <div className={styles.charts}>
-                            <BarChartInteractive data={parsed.data} />
-                            <BarChartYears data={parsed?.data} />
-                            <StackedBarChart cases={parsed?.data} />
-                        </div>
-                    )}
-                </Visualizations>
+                <Container>
+                    <Section>
+                        <H2>
+                            How are we determining{' '}
+                            <em>evidence of representation</em> ?
+                        </H2>
+                        <TextContainer align="left">
+                            <p>
+                                As determined by our legal experts, filing
+                                significant motions, such as{' '}
+                                <strong>motion in limine</strong>,{' '}
+                                <strong>motion for speedy trial</strong>, and{' '}
+                                <strong>motion to suppress</strong>, is evidence
+                                of adequate legal representation.
+                            </p>
+                        </TextContainer>
+                    </Section>
+                </Container>
+                <Container>
+                    <Visualizations>
+                        {isLoading || !parsed.success ? (
+                            <Loading />
+                        ) : (
+                            <div className={styles.charts}>
+                                <BarChartInteractive data={parsed.data} />
+                                <BarChartYears data={parsed?.data} />
+                                <StackedBarChart cases={parsed?.data} />
+                            </div>
+                        )}
+                    </Visualizations>
+                </Container>
             </main>
 
             <footer className={styles.footer}>Open Austin 2022</footer>
