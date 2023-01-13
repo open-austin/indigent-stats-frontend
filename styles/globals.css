@@ -6,17 +6,40 @@ body {
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+    color: #444e86;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Merriweather', sans-serif;
+}
+
+h1 {
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+h3 {
+    font-size: 2rem;
+    line-height: 1.75;
+}
+
+p {
+    font-size: 1.25rem;
+    line-height: 1.75;
 }
 
 * {
     box-sizing: border-box;
 }
 
+.max-width {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
 /* Recharts overrides */
 .stacked-bar-chart .recharts-cartesian-axis-tick-value {
-    /* transform: rotate(-90deg);
-  transform-origin: 2rem; */
     display: none;
 }

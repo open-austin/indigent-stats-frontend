@@ -22,6 +22,7 @@ import { upsertAtMap } from '../../lib/record'
 import { flattenObject } from '../../lib/flatten'
 import { Case } from '../../models/Case'
 import { renderLegend } from './Legend'
+import { Container } from '../Container'
 
 type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
@@ -139,127 +140,145 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     return (
         <>
-            <Heading>
-                Cases per Attorney Type Grouped by Charge Category
-            </Heading>
-            <ResponsiveContainer
-                width="100%"
-                height="100%"
-                minHeight={300}
-                className="stacked-bar-chart stacked-bar-chart-top"
-            >
-                <BarChart data={[flattenObject(retained)]} layout="vertical">
-                    <XAxis
-                        type="number"
-                        domain={domain}
-                        ticks={ticks}
-                        tickFormatter={(tick) => `${tick}%`}
-                        hide
-                    />
-                    <YAxis
-                        dataKey="attorney"
-                        type="category"
-                        label={{
-                            value: 'Retained',
-                            angle: -90,
-                        }}
-                        axisLine={false}
-                        tickLine={false}
-                    />
-                    {primaryCharges.map((charge, index) => {
-                        return (
-                            <Bar
-                                maxBarSize={100}
-                                key={`${charge}-${index}`}
-                                dataKey={charge}
-                                fill={
-                                    stackedGraphColors[
-                                        index %
-                                            Object.keys(primaryCharges).length
-                                    ]
-                                }
-                                stackId="a"
-                                name={charge}
-                            >
-                                <LabelList
-                                    key={`${charge}-${index}-labellist`}
-                                    fontSize={10}
-                                    fill={'#fff'}
-                                    valueAccessor={(
-                                        // @ts-ignore: ignore type error
-                                        props: LabelListProps<'valueAccessor'>
-                                    ) => renderCustomPercentage(props, charge)}
-                                />
-                            </Bar>
-                        )
-                    })}
-                </BarChart>
-            </ResponsiveContainer>
-            <ResponsiveContainer
-                width="100%"
-                height="100%"
-                minHeight={300}
-                className={'stacked-bar-chart stacked-bar-chart-bottom'}
-            >
-                <BarChart data={[flattenObject(appointed)]} layout="vertical">
-                    <XAxis
-                        type="number"
-                        domain={domain}
-                        ticks={ticks}
-                        tickFormatter={(tick) => `${tick}%`}
-                        hide
-                    />
-                    <YAxis
-                        dataKey="attorney"
-                        type="category"
-                        label={{
-                            value: 'Court appointed',
-                            angle: -90,
-                        }}
-                        axisLine={false}
-                        tickLine={false}
-                    />
-                    <Text angle={90}>ello</Text>
-                    <Label
-                        value="Pages of my website"
-                        offset={0}
-                        position="insideBottom"
-                    />
-                    <Legend
-                        // @ts-ignore: Not a relevant props error
-                        content={(props: LegendProps) =>
-                            renderLegend(props, 'Evidence of representation')
-                        }
-                    />
-                    {primaryCharges.map((charge, index) => {
-                        return (
-                            <Bar
-                                maxBarSize={100}
-                                key={`${charge}-${index}`}
-                                dataKey={charge}
-                                fill={
-                                    stackedGraphColors[
-                                        index %
-                                            Object.keys(primaryCharges).length
-                                    ]
-                                }
-                                stackId="a"
-                                name={charge}
-                            >
-                                <LabelList
-                                    key={`${charge}-${index}-labellist`}
-                                    fontSize={10}
-                                    fill={'#fff'}
-                                    valueAccessor={(
-                                        // @ts-ignore: ignore type error
-                                        props: LabelListProps<'valueAccessor'>
-                                    ) => renderCustomPercentage(props, charge)}
-                                />
-                            </Bar>
-                        )
-                    })}
-                </BarChart>
-            </ResponsiveContainer>
+                <Heading>
+                    Cases per Attorney Type Grouped by Charge Category
+                </Heading>
+                <ResponsiveContainer
+                    width="100%"
+                    height="100%"
+                    minHeight={200}
+                    className="stacked-bar-chart stacked-bar-chart-top"
+                >
+                    <BarChart
+                        data={[flattenObject(retained)]}
+                        layout="vertical"
+                    >
+                        <XAxis
+                            type="number"
+                            domain={domain}
+                            ticks={ticks}
+                            tickFormatter={(tick) => `${tick}%`}
+                            hide
+                        />
+                        <YAxis
+                            dataKey="attorney"
+                            type="category"
+                            label={{
+                                value: 'Retained',
+                                angle: -90,
+                            }}
+                            axisLine={false}
+                            tickLine={false}
+                        />
+                        {primaryCharges.map((charge, index) => {
+                            return (
+                                <Bar
+                                    maxBarSize={100}
+                                    key={`${charge}-${index}`}
+                                    dataKey={charge}
+                                    fill={
+                                        stackedGraphColors[
+                                            index %
+                                                Object.keys(primaryCharges)
+                                                    .length
+                                        ]
+                                    }
+                                    stackId="a"
+                                    name={charge}
+                                >
+                                    <LabelList
+                                        key={`${charge}-${index}-labellist`}
+                                        fontSize={10}
+                                        fill={'#fff'}
+                                        valueAccessor={(
+                                            // @ts-ignore: ignore type error
+                                            props: LabelListProps<'valueAccessor'>
+                                        ) =>
+                                            renderCustomPercentage(
+                                                props,
+                                                charge
+                                            )
+                                        }
+                                    />
+                                </Bar>
+                            )
+                        })}
+                    </BarChart>
+                </ResponsiveContainer>
+                <ResponsiveContainer
+                    width="100%"
+                    height="100%"
+                    minHeight={300}
+                    className={'stacked-bar-chart stacked-bar-chart-bottom'}
+                >
+                    <BarChart
+                        data={[flattenObject(appointed)]}
+                        layout="vertical"
+                    >
+                        <XAxis
+                            type="number"
+                            domain={domain}
+                            ticks={ticks}
+                            tickFormatter={(tick) => `${tick}%`}
+                            hide
+                        />
+                        <YAxis
+                            dataKey="attorney"
+                            type="category"
+                            label={{
+                                value: 'Court appointed',
+                                angle: -90,
+                            }}
+                            axisLine={false}
+                            tickLine={false}
+                        />
+                        <Text angle={90}>ello</Text>
+                        <Label
+                            value="Pages of my website"
+                            offset={0}
+                            position="insideBottom"
+                        />
+                        <Legend
+                            // @ts-ignore: Not a relevant props error
+                            content={(props: LegendProps) =>
+                                renderLegend(props, 'Primary charge category')
+                            }
+                        />
+                        {primaryCharges.map((charge, index) => {
+                            return (
+                                <Bar
+                                    maxBarSize={100}
+                                    key={`${charge}-${index}`}
+                                    dataKey={charge}
+                                    fill={
+                                        stackedGraphColors[
+                                            index %
+                                                Object.keys(primaryCharges)
+                                                    .length
+                                        ]
+                                    }
+                                    stackId="a"
+                                    name={charge}
+                                >
+                                    <LabelList
+                                        key={`${charge}-${index}-labellist`}
+                                        fontSize={10}
+                                        fill={'#fff'}
+                                        valueAccessor={(
+                                            // @ts-ignore: ignore type error
+                                            props: LabelListProps<'valueAccessor'>
+                                        ) =>
+                                            renderCustomPercentage(
+                                                props,
+                                                charge
+                                            )
+                                        }
+                                    />
+                                </Bar>
+                            )
+                        })}
+                    </BarChart>
+                </ResponsiveContainer>
         </>
     )
 }
