@@ -26,8 +26,6 @@ const Background = styled.div`
     bottom: 0;
     right: 0;
     left: 0;
-    /* Orange animation */
-    /* filter: sepia(0.5) contrast(0.9) hue-rotate(-50deg); */
     z-index: -1;
 `
 
