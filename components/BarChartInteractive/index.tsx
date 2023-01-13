@@ -14,6 +14,7 @@ import {
 import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
+import { bp } from '../../lib/breakpoints'
 import Filters, { IFilters } from '../Filters'
 import { Button } from '../Button'
 import multifilter from '../../lib/multifilter'
@@ -40,8 +41,9 @@ const Layout = styled.section`
     flex-direction: column;
     align-items: center;
     flex: 1 1;
+    min-width: 100%;
 
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         justify-content: center;
         flex-direction: row;
         gap: 4rem;
@@ -52,7 +54,8 @@ const ChartWrapper = styled.div`
     max-width: 50rem;
     width: 100%;
     margin-top: 2rem;
-    @media (min-width: 1000px) {
+    flex: 0 1;
+    @media ${bp.lg} {
         flex: 1;
         margin-top: 0;
     }
@@ -173,7 +176,7 @@ function BarChartInteractive({ data }: BarChartProps) {
                     <ChartTitle>Evidence of Representation</ChartTitle>
                     <ResponsiveContainer
                         width={'100%'}
-                        minHeight={600}
+                        minHeight={700}
                         debounce={10}
                     >
                         <BarChart data={formattedResults} layout="horizontal">
@@ -190,7 +193,7 @@ function BarChartInteractive({ data }: BarChartProps) {
                                 maxBarSize={200}
                                 key={'evidenceOfRepresentation'}
                                 dataKey={'evidenceOfRepresentation'}
-                                fill={colors.yellow}
+                                fill={colors.yellowLight}
                                 stackId="representation"
                                 name="Yes"
                             >

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { colors } from '../../lib/colors'
+import { bp } from '../../lib/breakpoints'
 
 export const LegendWrapper = styled.div`
     display: flex;
@@ -9,14 +10,14 @@ export const LegendWrapper = styled.div`
     align-items: center;
     text-align: center;
 
-    @media (min-width: 500px) {
+    @media ${bp.md} {
         padding: 0 32px 60px;
         flex-direction: row;
         align-items: flex-start;
         text-align: left;
     }
 
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         padding-left: 80px;
     }
 `
@@ -32,7 +33,7 @@ export const LegendBox = styled.aside`
     max-width: 250px;
     margin-top: 24px;
 
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         margin: 16px 0 0 auto;
     }
 `
@@ -94,7 +95,7 @@ export const LegendTooltipInfo = styled.span`
     color: ${colors.blueNavy};
     filter: drop-shadow(0 1px 0.3rem rgba(0, 0, 0, 0.2));
 
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         right: 6px;
     }
 
@@ -109,7 +110,7 @@ export const LegendTooltipInfo = styled.span`
         bottom: -12px;
         right: 0;
 
-        @media (min-width: 1000px) {
+        @media ${bp.lg} {
             right: 32px;
         }
     }

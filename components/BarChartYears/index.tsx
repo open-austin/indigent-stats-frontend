@@ -14,6 +14,7 @@ import {
 import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
+import { bp } from '../../lib/breakpoints'
 import { renderLegend } from './Legend'
 
 interface BarChartProps {
@@ -31,9 +32,8 @@ const Layout = styled.section`
     flex-direction: column;
     align-items: center;
     flex: 1 1;
-    margin-top: 10rem;
 
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         justify-content: center;
         flex-direction: row;
         gap: 4rem;
@@ -41,10 +41,10 @@ const Layout = styled.section`
 `
 
 const ChartWrapper = styled.div`
-    max-width: 50rem;
+    max-width: 80rem;
     width: 100%;
     margin-top: 2rem;
-    @media (min-width: 1000px) {
+    @media ${bp.lg} {
         flex: 1;
         margin-top: 0;
     }
@@ -65,8 +65,6 @@ function BarChartYears({ data }: BarChartProps) {
             0
         )
 
-        console.log('total cases ', year, totalCasesInYear.length)
-
         return (totalCasesWithMotions / totalCasesInYear.length) * 100
     }
 
@@ -86,8 +84,6 @@ function BarChartYears({ data }: BarChartProps) {
         ),
     ]
 
-    console.log('years ', years)
-
     const formattedData = years.map((year?: number) => {
         if (!year) {
             return
@@ -106,8 +102,8 @@ function BarChartYears({ data }: BarChartProps) {
         }
     })
 
-    console.log('data ', data)
-    console.log('formattedData\n', formattedData)
+    // console.log('data ', data)
+    // console.log('formattedData\n', formattedData)
 
     if (!data) return <div>Loading...</div>
 
