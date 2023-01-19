@@ -6,6 +6,9 @@ import { Banner } from './Banner'
 import { Container, TextContainer } from './Container'
 import { Section } from './Section'
 import { Highlight } from './Typography/Highlight'
+import { H1 } from './Typography/Headings'
+import { bp } from '../lib/breakpoints'
+import useMediaQuery from '../lib/hooks/useMediaQuery'
 
 const Wrapper = styled.div`
     position: relative;
@@ -35,14 +38,16 @@ const Background = styled.div`
 const HeaderWrapper = styled.div`
     margin: 0 auto 6rem;
     line-height: 2;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 6rem;
-    align-items: center;
-    justify-items: center;
+    display: flex;
+    gap: 3rem;
+
+    @media ${bp.lg} {
+        grid-template-columns: 2fr 1fr;
+        gap: 6rem;
+    }
 `
 
-const Heading = styled.h1`
+const Heading = styled(H1)`
     padding: 1rem 0;
     margin: 0 auto 0 2rem;
     color: ${colors.openAustinOrange};
@@ -61,6 +66,7 @@ const Description = styled.div`
 `
 
 export const Hero = () => {
+    const isLg = useMediaQuery('lg')
     const headingText =
         'Visualizing the impact of access to appointed counsel in Texas criminal cases'
 
@@ -79,8 +85,8 @@ export const Hero = () => {
                             <Image
                                 src="/open-austin-logo.svg"
                                 alt="Open Austin logo"
-                                width={200}
-                                height={200}
+                                width={isLg ? 200 : 100}
+                                height={isLg ? 200 : 100}
                             />
                         </div>
                     </HeaderWrapper>
