@@ -3,12 +3,13 @@ import { colors } from '../../lib/colors'
 
 export const Highlight = styled.span`
     color: ${colors.text};
+    background-color: ${colors.yellowLight};
     font-weight: 600;
     position: relative;
     white-space: nowrap;
     z-index: 0;
 
-    &:after {
+    /* &:after {
         content: '';
         background-color: ${colors.yellowLight};
         position: absolute;
@@ -18,5 +19,5 @@ export const Highlight = styled.span`
         right: 3px;
         bottom: 0;
         z-index: -1;
-    }
+    } */
 `
