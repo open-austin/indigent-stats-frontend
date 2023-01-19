@@ -138,8 +138,6 @@ function BarChartInteractive({ data }: BarChartProps) {
     }
 
     const formattedResults = [retained, appointed]
-    const notEnoughDataMessage =
-        "Note: There's not enough data in this filter for a good sample size."
     const notEnoughData =
         formattedResults[0].notEnoughDataForSample ||
         formattedResults[1].notEnoughDataForSample
@@ -156,6 +154,45 @@ function BarChartInteractive({ data }: BarChartProps) {
     const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     const toPercent = (decimal: number) => {
         return `${decimal.toFixed(2)}%`
+    }
+
+    // TODO: Issues with using LabelListProps from recharts
+    const renderCustomizedLabel = (props: any) => {
+        const { x, y, width, height, value } = props
+        const radius = 16
+        const xCoord = x + width + width / 10
+        const yCoord = y - radius + 16
+
+        return (
+            <g>
+                <line
+                    strokeWidth={1}
+                    stroke={`${colors.text}DD`}
+                    x1={xCoord - 20}
+                    x2={x + width + 5}
+                    y1={yCoord}
+                    y2={yCoord}
+                ></line>
+                <circle
+                    cx={xCoord}
+                    cy={yCoord}
+                    r={radius}
+                    fill={`${colors.yellowLight}DD`}
+                    stroke={colors.text}
+                />
+                <text
+                    x={xCoord}
+                    y={yCoord}
+                    fill={colors.text}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    fontSize={8}
+                >
+                    {toPercent(value)}
+                </text>
+               
+            </g>
+        )
     }
 
     return (
@@ -197,12 +234,16 @@ function BarChartInteractive({ data }: BarChartProps) {
                                 stackId="representation"
                                 name="Yes"
                             >
-                                <LabelList
+                                {/* <LabelList
                                     fontSize={10}
                                     fill={colors.text}
                                     formatter={(value: number) =>
                                         value ? toPercent(value) : ''
                                     }
+                                /> */}
+                                <LabelList
+                                    dataKey={'evidenceOfRepresentation'}
+                                    content={renderCustomizedLabel}
                                 />
                             </Bar>
                             <Bar
