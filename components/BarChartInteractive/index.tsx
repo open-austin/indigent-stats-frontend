@@ -156,7 +156,8 @@ function BarChartInteractive({ data }: BarChartProps) {
         return `${decimal.toFixed(2)}%`
     }
 
-    const renderCustomizedLabel = (props) => {
+    // TODO: Issues with using LabelListProps from recharts
+    const renderCustomizedLabel = (props: any) => {
         const { x, y, width, height, value } = props
         const radius = 16
         const xCoord = x + width + width / 10
