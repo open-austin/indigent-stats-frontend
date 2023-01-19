@@ -13,7 +13,7 @@ export const colors = {
     openAustinOrange: '#EA6036',
     openAustinBlue: '#2c5282',
     yellow: '#ffa600',
-    yellowLight: '#FFD380',
+    yellowLight: '#ffe1a7',
     grayGradient: '#ebebeb',
     gray: '#e7edf7',
 }

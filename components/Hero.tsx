@@ -87,14 +87,15 @@ export const Hero = () => {
                     <Section>
                         <Description>
                             <p>
+                                Our organization,{' '}
                                 <a
                                     href="https://www.open-austin.org"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
                                     Open Austin
-                                </a>{' '}
-                                began scraping and aggregating data from
+                                </a>
+                                , began scraping and aggregating data from
                                 criminal court cases in Texas counties in 2022.{' '}
                                 &nbsp; Prior to this, case data was siloed
                                 within individual county&apos;s websites and
@@ -114,9 +115,10 @@ export const Hero = () => {
                 >
                     <Subheading>
                         <TextContainer>
-                            Through this research, Open Austin learned that
-                            folks who can&apos;t afford appointed counsel are
-                            less likely to have adequate{' '}
+                            Through this research, we learned that folks who
+                            can&apos;t afford appointed counsel are{' '}
+                            <u>less likely</u>{' '}
+                            to have adequate{' '}
                             <Highlight>evidence of representation</Highlight> in
                             their trials.
                         </TextContainer>
