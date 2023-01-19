@@ -6,7 +6,6 @@ export const Highlight = styled.span`
     background-color: ${colors.yellowLight};
     font-weight: 600;
     position: relative;
-    white-space: nowrap;
     z-index: 0;
 
     /* &:after {
