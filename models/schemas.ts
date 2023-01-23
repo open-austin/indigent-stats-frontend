@@ -59,3 +59,12 @@ export const caseSchema = z.object({
 export const combinedDataSchema = z.array(caseSchema)
 
 export type CombinedData = z.TypeOf<typeof combinedDataSchema>
+
+export const countPerYearSchema = z.array(
+    z.object({
+        attorney_type: z.string(),
+        year: z.number(),
+        case_count: z.number(),
+        has_evidence_of_representation: z.boolean(),
+    })
+)

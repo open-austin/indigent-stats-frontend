@@ -12,20 +12,11 @@ import {
     Label,
 } from 'recharts'
 import { Props as LegendProps } from 'recharts/types/component/Legend'
-import { Case } from '../../models/Case'
 import { colors } from '../../lib/colors'
 import { bp } from '../../lib/breakpoints'
 import { renderLegend } from './Legend'
-
-interface BarChartProps {
-    data: Array<Case>
-}
-
-export type AttorneySummary = {
-    attorney: 'Retained' | 'Court Appointed'
-    data: Array<Case>
-    evidenceOfRepresentation: number
-}
+import { groupBy } from '../../lib/array'
+import { mapWithIndex } from '../../lib/record'
 
 const Layout = styled.section`
     display: flex;
@@ -54,58 +45,31 @@ const ChartTitle = styled.h2`
     text-align: center;
 `
 
+type CasesByYear = Array<{
+    attorney_type: string
+    year: number
+    case_count: number
+    has_evidence_of_representation: boolean
+}>
+
+interface BarChartProps {
+    data: CasesByYear
+}
+
 function BarChartYears({ data }: BarChartProps) {
-    const getPercentOfEvidenceOfRepresentationPerYear = (
-        arr: Array<Case>,
-        year: number
-    ) => {
-        const totalCasesInYear = arr.filter((c) => c.year === year)
-        const totalCasesWithMotions = totalCasesInYear.reduce(
-            (acc, cur) => (cur.has_evidence_of_representation ? ++acc : acc),
-            0
-        )
-
-        return (totalCasesWithMotions / totalCasesInYear.length) * 100
-    }
-
-    const filterByAttorneyType = (
-        arr: Array<Case>,
-        attorneyType: 'Retained' | 'Court Appointed'
-    ) => {
-        return arr.filter((c) => c.attorney_type === attorneyType)
-    }
-
-    const years = [
-        ...new Set(
-            data
-                .map((item) => item.year)
-                .filter((year) => year! >= 2009)
-                .sort((a, b) => a! - b!)
-        ),
-    ]
-
-    const formattedData = years.map((year?: number) => {
-        if (!year) {
-            return
-        }
-
-        return {
-            year: year,
-            retained: getPercentOfEvidenceOfRepresentationPerYear(
-                filterByAttorneyType(data, 'Retained'),
-                year
-            ),
-            appointed: getPercentOfEvidenceOfRepresentationPerYear(
-                filterByAttorneyType(data, 'Court Appointed'),
-                year
-            ),
-        }
-    })
-
-    // console.log('data ', data)
-    // console.log('formattedData\n', formattedData)
-
     if (!data) return <div>Loading...</div>
+
+    // Filter out cases prior than 2007
+    const filtered = data.filter((a) => a.year > 2007)
+    const groupedByYear = groupBy(filtered)((a) => a.year.toString())
+    const totals = getTotals(groupedByYear)
+
+    const retained = filtered
+        .filter((a) => a.attorney_type === 'Retained')
+        .reduce((acc, curr) => acc + curr.case_count, 0)
+    const appointed = filtered
+        .filter((a) => a.attorney_type === 'Court Appointed')
+        .reduce((acc, curr) => acc + curr.case_count, 0)
 
     const domain = [0, 15]
     const ticks = [0, 5, 10, 15]
@@ -126,7 +90,7 @@ function BarChartYears({ data }: BarChartProps) {
                         debounce={10}
                     >
                         <BarChart
-                            data={formattedData}
+                            data={Object.values(totals)}
                             layout="horizontal"
                             margin={{
                                 top: 20,
@@ -176,7 +140,10 @@ function BarChartYears({ data }: BarChartProps) {
                             <Legend
                                 // @ts-ignore: Not a relevant props error
                                 content={(props: LegendProps) =>
-                                    renderLegend(props, data, 'Attorney type')
+                                    renderLegend('Attorney type', props, {
+                                        retained,
+                                        appointed,
+                                    })
                                 }
                             />
                             <Bar
@@ -218,3 +185,41 @@ function BarChartYears({ data }: BarChartProps) {
 }
 
 export default BarChartYears
+
+type GroupedByYear = Record<
+    string,
+    Array<{
+        attorney_type: string
+        year: number
+        case_count: number
+    }>
+>
+
+type TotalsByYear = Record<
+    string,
+    {
+        year: string
+        retained: number
+        appointed: number
+    }
+>
+
+const getTotals = (r: GroupedByYear): TotalsByYear => {
+    return mapWithIndex(r, (year, stats) => {
+        const groupedByAttorneyType = groupBy(stats)((s) => s.attorney_type)
+
+        const r1 = groupedByAttorneyType['Retained'][0].case_count
+        const r2 = groupedByAttorneyType['Retained'][1].case_count
+        const c1 = groupedByAttorneyType['Court Appointed'][0].case_count
+        const c2 = groupedByAttorneyType['Court Appointed'][1].case_count
+
+        const retained = (r1 > r2 ? r2 / r1 : r1 / r2) * 100
+        const appointed = (c1 > c2 ? c2 / c1 : c1 / c2) * 100
+
+        return {
+            year,
+            retained,
+            appointed,
+        }
+    })
+}

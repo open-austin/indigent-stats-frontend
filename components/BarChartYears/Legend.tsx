@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react'
 import { Props } from 'recharts/types/component/Legend'
-import { Case } from '../../models/Case'
 import {
     LegendWrapper,
     LegendSampleSize,
@@ -12,9 +11,12 @@ import {
 } from '../LegendUI'
 
 export const renderLegend = (
+    title: string,
     props: Props,
-    arr: Array<Case>,
-    title: string
+    sums: {
+        retained: number
+        appointed: number
+    }
 ): ReactNode => {
     return (
         <LegendWrapper>
@@ -22,19 +24,9 @@ export const renderLegend = (
                 <LegendSampleSizeTitle>Sample size</LegendSampleSizeTitle>
                 <div>
                     <small>
-                        Retained:{' '}
-                        {
-                            arr?.filter((c) => c.attorney_type === 'Retained')
-                                .length
-                        }{' '}
-                        cases <br />
-                        Court Appointed:{' '}
-                        {
-                            arr?.filter(
-                                (c) => c.attorney_type === 'Court Appointed'
-                            ).length
-                        }{' '}
-                        cases
+                        Retained: {sums.retained} cases
+                        <br />
+                        Court Appointed: {sums.appointed} cases
                     </small>
                 </div>
             </LegendSampleSize>
