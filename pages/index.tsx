@@ -14,6 +14,7 @@ import { Section } from '../components/Section'
 import { H2 } from '../components/Typography/Headings'
 import { Container, TextContainer } from '../components/Container'
 import { Highlight } from '../components/Typography/Highlight'
+import { countPerYearSchema } from '../models/schemas'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 // TODO: Update cosmos query later
@@ -25,6 +26,19 @@ SELECT * FROM c
   OFFSET 0 LIMIT 6000
 `
 
+const REPRESENTATION_BY_YEAR_QUERY = `
+SELECT
+  c.attorney_type,
+  c.has_evidence_of_representation,
+  DateTimePart("year", c.earliest_charge_date) AS year,
+  COUNT(1) AS case_count
+ FROM c
+ GROUP BY
+  DateTimePart("year", c.earliest_charge_date),
+  c.has_evidence_of_representation,
+  c.attorney_type
+`
+
 const Visualizations = styled.section`
     position: relative;
     min-height: 50vh;
@@ -32,40 +46,33 @@ const Visualizations = styled.section`
 `
 
 export default function Home() {
-    // TODO: Remove after switching to CosmosDB
-    // const { data, error } = useSWR('/api/cases-subset-v2', fetcher)
-
-    // if (!data && !error) {
-    //     return <Loading />
-    // }
-
-    // if (error) {
-    //     return <div>Error fetching</div>
-    // }
-
-    // const d = JSON.parse(data)
-    // const parsed = z.array(caseSchema).safeParse(d)
-
-    // TODO: Figure out why cosmos isn't working when hosted on Vercel
     const { data: cosmosData, error: cosmosError } = useSWR(
         `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
         fetcher
     )
 
-    if (cosmosError) {
+    const { data: repByYearsRaw, error: repByYearsErr } = useSWR(
+        `/api/cosmos?secret=${SECRET}&sql=${REPRESENTATION_BY_YEAR_QUERY}`,
+        fetcher
+    )
+
+    if (cosmosError || repByYearsErr) {
         console.error('Error loading cosmos data: ', cosmosError)
+        return <div>Error fetching</div>
     }
 
-    const d = cosmosData?.data
-    const parsed = z.array(caseSchema).safeParse(d)
-    const isLoading = !cosmosData && !cosmosError && !parsed.success
+    const parsed = z.array(caseSchema).safeParse(cosmosData?.data)
+    const repByYears = countPerYearSchema.safeParse(repByYearsRaw?.data)
 
-    if (!parsed.success && !!cosmosData?.data) {
+    if (!parsed.success && !!cosmosData) {
         console.error(
             'Error parsing data: ',
             JSON.stringify(parsed.error.issues, null, 2)
         )
     }
+
+    const isLoading =
+        !cosmosData && !cosmosError && !repByYearsRaw && !repByYearsErr
 
     return (
         <div className={styles.container}>
@@ -126,11 +133,11 @@ export default function Home() {
                         </TextContainer>
                     </Section>
                     <Visualizations>
-                        {isLoading || !parsed.success ? (
+                        {isLoading || !repByYears.success ? (
                             <Loading />
                         ) : (
                             <div className={styles.charts}>
-                                <BarChartYears data={parsed?.data} />
+                                <BarChartYears data={repByYears.data} />
                             </div>
                         )}
                     </Visualizations>
