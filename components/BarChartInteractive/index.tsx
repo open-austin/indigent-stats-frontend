@@ -66,7 +66,11 @@ const ChartTitle = styled.h2`
 `
 
 const FiltersWrapper = styled.div`
-    padding-bottom: 10rem;
+    padding-bottom: 2rem;
+
+    @media ${bp.lg} {
+        padding-bottom: 10rem;
+    }
 `
 
 function BarChartInteractive({ data }: BarChartProps) {
