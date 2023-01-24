@@ -14,6 +14,8 @@ import { Section } from '../components/Section'
 import { H2 } from '../components/Typography/Headings'
 import { Container, TextContainer } from '../components/Container'
 import { Highlight } from '../components/Typography/Highlight'
+import { Paragraph } from '../components/Typography/Body'
+import { bp } from '../lib/breakpoints'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 // TODO: Update cosmos query later
@@ -28,7 +30,11 @@ SELECT * FROM c
 const Visualizations = styled.section`
     position: relative;
     min-height: 50vh;
-    margin: 8rem 0;
+    margin: 2rem 0 6rem;
+
+    @media ${bp.lg} {
+        margin: 8rem 0;
+    }
 `
 
 export default function Home() {
@@ -80,10 +86,10 @@ export default function Home() {
                     <Section>
                         <H2>
                             How are we determining{' '}
-                            <em>evidence of representation</em> ?
+                            <em>evidence of representation</em>?
                         </H2>
                         <TextContainer align="left">
-                            <p>
+                            <Paragraph>
                                 As determined by our legal experts, filing
                                 significant motions, such as{' '}
                                 <Highlight>motion in limine</Highlight>, &nbsp;
@@ -95,7 +101,7 @@ export default function Home() {
                                 ,&nbsp; and{' '}
                                 <Highlight>motion to reduce bond</Highlight> is
                                 evidence of adequate legal representation.
-                            </p>
+                            </Paragraph>
                         </TextContainer>
                     </Section>
                 </Container>
@@ -112,7 +118,7 @@ export default function Home() {
                     <Section>
                         <H2>Evidence of representation over the years</H2>
                         <TextContainer align="left">
-                            <p>
+                            <Paragraph>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit. Nullam vel mi arcu. In
                                 molestie, ex quis venenatis viverra, nulla justo
@@ -122,7 +128,7 @@ export default function Home() {
                                 malesuada, mollis massa et, fringilla magna.
                                 Integer tellus nibh, mattis in elit eget,
                                 aliquet pulvinar quam.
-                            </p>
+                            </Paragraph>
                         </TextContainer>
                     </Section>
                     <Visualizations>
@@ -140,11 +146,11 @@ export default function Home() {
                             type
                         </H2>
                         <TextContainer align="left">
-                            <p>
+                            <Paragraph>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit.
-                            </p>
-                            <p>
+                            </Paragraph>
+                            <Paragraph>
                                 Nullam vel mi arcu. In molestie, ex quis
                                 venenatis viverra, nulla justo consectetur
                                 metus, sit amet iaculis sem arcu vitae erat.
@@ -153,7 +159,7 @@ export default function Home() {
                                 mollis massa et, fringilla magna. Integer tellus
                                 nibh, mattis in elit eget, aliquet pulvinar
                                 quam.
-                            </p>
+                            </Paragraph>
                         </TextContainer>
                     </Section>
                     <Visualizations>

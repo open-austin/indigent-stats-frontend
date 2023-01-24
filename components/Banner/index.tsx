@@ -24,6 +24,7 @@ const InnerWrapper = styled.div<Partial<Props>>`
     max-width: 70rem;
     margin: 0 auto;
     color: ${(props) => props.color};
+    padding: 0 2rem;
 `
 
 export const Banner = ({ bgColor, color, children, transparent }: Props) => {
