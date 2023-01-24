@@ -135,7 +135,7 @@ function BarChartYears({ data }: BarChartProps) {
                                     fill={colors.blueNavy}
                                 >
                                     <Label
-                                        value="Percent of Cases"
+                                        value="Percent of Cases with Evidence of Representation"
                                         position={'center'}
                                         style={{
                                             textAnchor: 'middle',
