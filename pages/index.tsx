@@ -123,7 +123,7 @@ export default function Home() {
                         )}
                     </Visualizations>
                     <Section>
-                        <H2>Evidence of representation over the years</H2>
+                        <H2>How does this disparity look like over time?</H2>
                         <TextContainer align="left">
                             <Paragraph>
                                 Lorem ipsum dolor sit amet, consectetur

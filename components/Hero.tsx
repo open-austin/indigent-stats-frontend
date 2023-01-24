@@ -133,12 +133,14 @@ export const Hero = () => {
                                     Open Austin
                                 </a>
                                 , began scraping and aggregating data from
-                                criminal court cases in Texas counties in 2022.{' '}
+                                criminal court cases in Hayes County in 2022.{' '}
                                 &nbsp; Prior to this, case data was siloed
                                 within individual county&apos;s websites and
                                 physical court records, which made it difficult
                                 for policy-makers and journalists to get a big
-                                picture view of statewide criminal cases.
+                                picture view of statewide criminal cases. &nbsp;
+                                Our goal is to visualize this data to gain
+                                insight into how our local justice systems work.
                             </Paragraph>
                             <br></br>
                             <br></br>
