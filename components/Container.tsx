@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { size } from '../lib/breakpoints'
+import { bp, size } from '../lib/breakpoints'
 import { colors } from '../lib/colors'
 
 export const Container = styled.div`
@@ -9,7 +9,10 @@ export const Container = styled.div`
 export const TextContainer = styled.div<{
     align?: 'center' | 'right' | 'left'
 }>`
-    max-width: 70%;
+    @media ${bp.lg} {
+        max-width: 70%;
+    }
+
     ${(props) => {
         if (props.align === 'left') {
             return `text-align: left;`
