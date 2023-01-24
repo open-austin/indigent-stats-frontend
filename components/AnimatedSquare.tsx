@@ -127,14 +127,6 @@ const AnimatedBackground = () => {
         <WhiteWrapper>
             <SquaresWrapper>
                 <Square />
-                <Square />
-                <Square />
-                <Square />
-                <Square />
-                <Square />
-                <Square />
-                <Square />
-                <Square />
             </SquaresWrapper>
         </WhiteWrapper>
     )

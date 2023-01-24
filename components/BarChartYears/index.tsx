@@ -17,6 +17,8 @@ import { bp } from '../../lib/breakpoints'
 import { renderLegend } from './Legend'
 import { groupBy } from '../../lib/array'
 import { mapWithIndex } from '../../lib/record'
+import { Banner } from '../Banner'
+import { FullWidthContainer } from '../FullWidthContainer'
 
 const Layout = styled.section`
     display: flex;
@@ -84,100 +86,112 @@ function BarChartYears({ data }: BarChartProps) {
                     <ChartTitle>
                         Evidence of Representation Over the Years
                     </ChartTitle>
-                    <ResponsiveContainer
-                        width={'100%'}
-                        minHeight={600}
-                        debounce={10}
-                    >
-                        <BarChart
-                            data={Object.values(totals)}
-                            layout="horizontal"
-                            margin={{
-                                top: 20,
-                                bottom: 20,
-                                right: 20,
-                                left: 20,
-                            }}
+
+                    <FullWidthContainer>
+                        <ResponsiveContainer
+                            width={'100%'}
+                            height={'100%'}
+                            minHeight={'100vh'}
+                            debounce={10}
                         >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="year" tick={{ fontSize: 10 }}>
-                                <Label
-                                    value="Years"
-                                    position={'center'}
-                                    style={{
-                                        textAnchor: 'middle',
-                                        paddingBottom: 20,
-                                        transform: 'translateY(1.5rem)',
-                                        fontSize: 12,
-                                        position: 'relative',
-                                        left: '-80px',
-                                        fontWeight: 'bold',
-                                    }}
-                                />
-                            </XAxis>
-                            <YAxis
-                                dataKey={'percentEvidenceOfRepresentation'}
-                                domain={domain}
-                                ticks={ticks}
-                                tick={{ fontSize: 10 }}
-                                tickFormatter={(tick) => `${tick}%`}
-                                fill={colors.blueNavy}
+                            <BarChart
+                                data={Object.values(totals)}
+                                barGap={25}
+                                layout="vertical"
+                                margin={{
+                                    top: 20,
+                                    bottom: 20,
+                                    right: 20,
+                                    left: 20,
+                                }}
                             >
-                                <Label
-                                    value="Percent of Cases"
-                                    position={'center'}
-                                    angle={-90}
-                                    style={{
-                                        textAnchor: 'middle',
-                                        paddingBottom: 20,
-                                        fontSize: 12,
-                                        position: 'relative',
-                                        left: '-80px',
-                                        fontWeight: 'bold',
-                                    }}
-                                />
-                            </YAxis>
-                            <Legend
-                                // @ts-ignore: Not a relevant props error
-                                content={(props: LegendProps) =>
-                                    renderLegend('Attorney type', props, {
-                                        retained,
-                                        appointed,
-                                    })
-                                }
-                            />
-                            <Bar
-                                maxBarSize={200}
-                                key={'retained'}
-                                dataKey={'retained'}
-                                fill={colors.violet}
-                                name="Retained"
-                            >
-                                <LabelList
-                                    fontSize={8}
-                                    fill={colors.white}
-                                    formatter={(value: number) =>
-                                        value ? toPercent(value) : ''
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <YAxis
+                                    dataKey="year"
+                                    type="category"
+                                    tick={{ fontSize: 10 }}
+                                >
+                                    <Label
+                                        value="Years"
+                                        position={'left'}
+                                        angle={-90}
+                                        style={{
+                                            textAnchor: 'middle',
+                                            paddingBottom: 20,
+                                            fontSize: 12,
+                                            position: 'relative',
+                                            left: '-80px',
+                                            fontWeight: 'bold',
+                                        }}
+                                    />
+                                </YAxis>
+                                <XAxis
+                                    type="number"
+                                    dataKey={'percentEvidenceOfRepresentation'}
+                                    domain={domain}
+                                    ticks={ticks}
+                                    tick={{ fontSize: 10 }}
+                                    tickFormatter={(tick) => `${tick}%`}
+                                    fill={colors.blueNavy}
+                                >
+                                    <Label
+                                        value="Percent of Cases"
+                                        position={'center'}
+                                        style={{
+                                            textAnchor: 'middle',
+                                            paddingBottom: 20,
+                                            transform: 'translateY(1.5rem)',
+                                            fontSize: 12,
+                                            position: 'relative',
+                                            left: '-80px',
+                                            fontWeight: 'bold',
+                                        }}
+                                    />
+                                </XAxis>
+                                <Legend
+                                    // @ts-ignore: Not a relevant props error
+                                    content={(props: LegendProps) =>
+                                        renderLegend('Attorney type', props, {
+                                            retained,
+                                            appointed,
+                                        })
                                     }
                                 />
-                            </Bar>
-                            <Bar
-                                maxBarSize={200}
-                                key={'appointed'}
-                                dataKey={'appointed'}
-                                fill={colors.orange}
-                                name="Court appointed"
-                            >
-                                <LabelList
-                                    fontSize={8}
-                                    fill={colors.white}
-                                    formatter={(value: number) =>
-                                        value ? toPercent(value) : ''
-                                    }
-                                />
-                            </Bar>
-                        </BarChart>
-                    </ResponsiveContainer>
+                                <Bar
+                                    maxBarSize={200}
+                                    barSize={25}
+                                    key={'retained'}
+                                    dataKey={'retained'}
+                                    fill={colors.violet}
+                                    name="Retained"
+                                >
+                                    <LabelList
+                                        fontSize={8}
+                                        fill={colors.white}
+                                        formatter={(value: number) =>
+                                            value ? toPercent(value) : ''
+                                        }
+                                    />
+                                </Bar>
+                                <Bar
+                                    maxBarSize={200}
+                                    barSize={25}
+                                    key={'appointed'}
+                                    dataKey={'appointed'}
+                                    fill={colors.orange}
+                                    name="Court appointed"
+                                >
+                                    <LabelList
+                                        fontSize={8}
+                                        fill={colors.white}
+                                        formatter={(value: number) =>
+                                            value ? toPercent(value) : ''
+                                        }
+                                    />
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </FullWidthContainer>
                 </ChartWrapper>
             </Layout>
         </>

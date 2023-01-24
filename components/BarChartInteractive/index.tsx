@@ -70,6 +70,7 @@ const FiltersWrapper = styled.div`
 
     @media ${bp.lg} {
         padding-bottom: 10rem;
+        width: 25%;
     }
 `
 

@@ -38,6 +38,7 @@ const Background = styled.div`
     right: 0;
     left: 0;
     z-index: -1;
+    transform: rotate(180deg);
 `
 
 const HeaderWrapper = styled.div`
@@ -46,10 +47,11 @@ const HeaderWrapper = styled.div`
     display: flex;
     flex-direction: column-reverse;
     gap: 1rem;
-    align-items: flex-start;
+    align-items: center;
     text-align: center;
 
     @media ${bp.lg} {
+        align-items: flex-start;
         margin-bottom: 6rem;
         flex-direction: row;
         gap: 6rem;
