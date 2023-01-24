@@ -12,22 +12,7 @@ a {
 h1,
 h2,
 h3 {
-    font-family: 'Merriweather', sans-serif;
-}
-
-h1 {
-    font-size: 3rem;
-    line-height: 1.5;
-}
-
-h3 {
-    font-size: 2rem;
-    line-height: 1.75;
-}
-
-p {
-    font-size: 1.25rem;
-    line-height: 1.75;
+    font-family: 'Merriweather', serif;
 }
 
 * {
