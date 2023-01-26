@@ -97,6 +97,7 @@ export default function Home() {
             </Head>
             <main className={styles.main}>
                 <Hero />
+                <br></br>
                 <Container>
                     <Section>
                         <H3>
@@ -146,6 +147,10 @@ export default function Home() {
                         <H3>How does this disparity look like over time?</H3>
                         <TextContainer align="left">
                             <Paragraph>
+                                This description will change once we have more
+                                recent data.
+                            </Paragraph>
+                            <Paragraph>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit. Nullam vel mi arcu. In
                                 molestie, ex quis venenatis viverra, nulla justo
@@ -193,6 +198,36 @@ export default function Home() {
                             </div>
                         )}
                     </Visualizations>
+                    <Section>
+                        <H3>What&apos;s next for this project?</H3>
+                        <TextContainer align="left">
+                            <ul>
+                                <li>
+                                    <Paragraph>
+                                        We currently only have data from Hayes
+                                        County, but intend to expand that to all
+                                        Texas counties.
+                                    </Paragraph>
+                                </li>
+                                <li>
+                                    <Paragraph>
+                                        Because of the difficulty in formatting
+                                        for outcomes among all case records, we
+                                        are still working on scraping final
+                                        verdicts.
+                                    </Paragraph>
+                                </li>
+                                <li>
+                                    <Paragraph>
+                                        Race and gender data is limited in our
+                                        current dataset. In the future, we plan
+                                        to publish this aggregate demographic
+                                        information.
+                                    </Paragraph>
+                                </li>
+                            </ul>
+                        </TextContainer>
+                    </Section>
                 </Container>
             </main>
 
