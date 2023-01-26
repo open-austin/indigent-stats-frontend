@@ -59,15 +59,14 @@ interface BarChartProps {
 function BarChartYears({ data }: BarChartProps) {
     if (!data) return <div>Loading...</div>
 
-    // Filter out cases prior than 2007
-    const filtered = data.filter((a) => a.year > 2007)
-    const groupedByYear = groupBy(filtered)((a) => a.year.toString())
+    const groupedByYear = groupBy(data)((a) => a.year.toString())
     const totals = getTotals(groupedByYear)
 
-    const retained = filtered
+    // Sum the number of cases
+    const retained = data
         .filter((a) => a.attorney_type === 'Retained')
         .reduce((acc, curr) => acc + curr.case_count, 0)
-    const appointed = filtered
+    const appointed = data
         .filter((a) => a.attorney_type === 'Court Appointed')
         .reduce((acc, curr) => acc + curr.case_count, 0)
 
