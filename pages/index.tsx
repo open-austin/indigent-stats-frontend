@@ -8,15 +8,16 @@ import BarChartYears from '../components/BarChartYears'
 import { caseSchema } from '../models/Case'
 import styles from '../styles/Home.module.css'
 import fetcher from '../lib/fetcher'
-import { Hero } from '../components/Hero'
+import { Hero } from '../components/HeroAlt'
 import styled from 'styled-components'
 import { Section } from '../components/Section'
-import { H2 } from '../components/Typography/Headings'
+import { H3 } from '../components/Typography/Headings'
 import { Container, TextContainer } from '../components/Container'
 import { Highlight } from '../components/Typography/Highlight'
 import { countPerYearSchema } from '../models/schemas'
-import { Paragraph } from '../components/Typography/Body'
+import { Paragraph, Small } from '../components/Typography/Body'
 import { bp } from '../lib/breakpoints'
+import { InlineLink } from '../components/Link'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 // TODO: Update cosmos query later
@@ -54,7 +55,7 @@ const Visualizations = styled.section`
     margin: 2rem 0 6rem;
 
     @media ${bp.lg} {
-        margin: 8rem 0;
+        margin: 6rem 0;
     }
 `
 
@@ -96,12 +97,13 @@ export default function Home() {
             </Head>
             <main className={styles.main}>
                 <Hero />
+                <br></br>
                 <Container>
                     <Section>
-                        <H2>
+                        <H3>
                             How are we determining{' '}
                             <em>evidence of representation</em>?
-                        </H2>
+                        </H3>
                         <TextContainer align="left">
                             <Paragraph>
                                 As determined by our legal experts, filing
@@ -117,6 +119,18 @@ export default function Home() {
                                 evidence of adequate legal representation.
                             </Paragraph>
                         </TextContainer>
+                        <br></br>
+                        <br></br>
+                        <TextContainer align="left">
+                            <Small>
+                                <b>Note:</b> We are in the process of scraping
+                                case outcomes, but we do not have this data
+                                available yet.
+                                <br></br>
+                                In the future, we intend to compare outcomes
+                                with attorney type.
+                            </Small>
+                        </TextContainer>
                     </Section>
                 </Container>
                 <Container>
@@ -130,8 +144,12 @@ export default function Home() {
                         )}
                     </Visualizations>
                     <Section>
-                        <H2>Evidence of representation over the years</H2>
+                        <H3>How does this disparity look like over time?</H3>
                         <TextContainer align="left">
+                            <Paragraph>
+                                This description will change once we have more
+                                recent data.
+                            </Paragraph>
                             <Paragraph>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit. Nullam vel mi arcu. In
@@ -155,24 +173,19 @@ export default function Home() {
                         )}
                     </Visualizations>
                     <Section>
-                        <H2>
+                        <H3>
                             Differences in charge category based on attorney
                             type
-                        </H2>
+                        </H3>
                         <TextContainer align="left">
                             <Paragraph>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit.
-                            </Paragraph>
-                            <Paragraph>
-                                Nullam vel mi arcu. In molestie, ex quis
-                                venenatis viverra, nulla justo consectetur
-                                metus, sit amet iaculis sem arcu vitae erat.
-                                Quisque viverra neque at leo posuere posuere. In
-                                ut efficitur nulla. Nullam et massa malesuada,
-                                mollis massa et, fringilla magna. Integer tellus
-                                nibh, mattis in elit eget, aliquet pulvinar
-                                quam.
+                                We noticed that with all the cases grouped by
+                                their charge category, there is a higher
+                                representation of DUI offenses in cases with
+                                retained attorneys compared to those with
+                                court-appointed attorneys. Similarly, there is a
+                                higher representation of property charges within
+                                cases with court-appointed attorneys.
                             </Paragraph>
                         </TextContainer>
                     </Section>
@@ -185,10 +198,57 @@ export default function Home() {
                             </div>
                         )}
                     </Visualizations>
+                    <Section>
+                        <H3>What&apos;s next for this project?</H3>
+                        <TextContainer align="left">
+                            <ul>
+                                <li>
+                                    <Paragraph>
+                                        We currently only have data from Hayes
+                                        County, but intend to expand that to all
+                                        Texas counties.
+                                    </Paragraph>
+                                </li>
+                                <li>
+                                    <Paragraph>
+                                        Because of the difficulty in formatting
+                                        for outcomes among all case records, we
+                                        are still working on scraping final
+                                        verdicts.
+                                    </Paragraph>
+                                </li>
+                                <li>
+                                    <Paragraph>
+                                        Race and gender data is limited in our
+                                        current dataset. In the future, we plan
+                                        to publish this aggregate demographic
+                                        information.
+                                    </Paragraph>
+                                </li>
+                            </ul>
+                        </TextContainer>
+                    </Section>
                 </Container>
             </main>
 
-            <footer className={styles.footer}>Open Austin 2022</footer>
+            <footer className={styles.footer}>
+                <span>
+                    <InlineLink
+                        href="https://www.open-austin.org"
+                        isExternal={true}
+                    >
+                        Open Austin
+                    </InlineLink>
+                    &nbsp;+&nbsp;
+                    <InlineLink
+                        href="https://www.fairdefense.org/"
+                        isExternal={true}
+                    >
+                        Texas Fair Defense Project
+                    </InlineLink>
+                    &nbsp;&nbsp; 2023
+                </span>
+            </footer>
         </div>
     )
 }

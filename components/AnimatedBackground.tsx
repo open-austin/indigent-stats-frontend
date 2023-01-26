@@ -4,7 +4,7 @@ import { colors } from '../lib/colors'
 const gradientColor = colors.grayGradient
 
 const WhiteWrapper = styled.div`
-    height: 100vh;
+    height: 100%;
     &:before {
         z-index: 1000;
         content: '';
@@ -29,7 +29,7 @@ const WhiteWrapper = styled.div`
         height: 20vh;
         background-image: linear-gradient(
             0deg,
-            ${gradientColor} 0%,
+            ${colors.white} 0%,
             rgba(235, 235, 235, 0) 100%
         );
     }
@@ -42,12 +42,14 @@ const SquaresWrapper = styled.div`
     overflow: hidden;
 `
 
+const startingPosition = `100%`
+
 const Square = styled.div`
     animation: squares 9.5s linear infinite;
     align-self: flex-end;
     width: 1em;
     height: 1em;
-    transform: translateY(100%);
+    transform: translateY(${startingPosition});
     background: ${gradientColor};
     transform: skew(15deg);
     &:nth-child(2) {
@@ -114,10 +116,10 @@ const Square = styled.div`
 
     @keyframes squares {
         from {
-            transform: translateY(100%) rotate(-50deg);
+            transform: translateY(${startingPosition}) rotate(-50deg);
         }
         to {
-            transform: translateY(calc(-100vh + -100%)) rotate(20deg);
+            transform: translateY(calc(-100vh - ${startingPosition})) rotate(20deg);
         }
     }
 `

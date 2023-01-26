@@ -10,12 +10,13 @@ import {
 } from '../LegendUI'
 
 const LegendBoxRow = styled(LegendBox)`
-    max-width: none;
+    max-width: 100%;
 `
 
 const LegendItems = styled.div`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 1rem;
 `
 

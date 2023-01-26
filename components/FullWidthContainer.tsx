@@ -1,17 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Container } from '../Container'
+import { Container } from './Container'
 
 interface Props {
-    bgColor: string
-    color?: string
+    bgColor?: string
     transparent?: boolean
     children: React.ReactNode
+    hasPadding?: boolean
 }
 
 const Wrapper = styled.section<Props>`
     padding: 2rem;
-    margin: 0 -4rem 0 -4rem;
+    margin: -2rem -4rem 0 -4rem;
     width: calc(100% + 8rem);
     background-color: ${(props) =>
         props.bgColor && props.transparent
@@ -19,19 +19,11 @@ const Wrapper = styled.section<Props>`
             : props.bgColor};
 `
 
-const InnerWrapper = styled.div<Partial<Props>>`
-    text-align: center;
-    max-width: 70rem;
-    margin: 0 auto;
-    color: ${(props) => props.color};
-    padding: 0 2rem;
-`
-
-export const Banner = ({ bgColor, color, children, transparent }: Props) => {
+export const FullWidthContainer = ({ bgColor, children, transparent, hasPadding }: Props) => {
     return (
         <Wrapper bgColor={bgColor} transparent={transparent}>
-            <Container>
-                <InnerWrapper color={color}>{children}</InnerWrapper>
+            <Container hasPadding={hasPadding}>
+                {children}
             </Container>
         </Wrapper>
     )

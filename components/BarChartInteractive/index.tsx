@@ -6,7 +6,6 @@ import {
     XAxis,
     YAxis,
     CartesianGrid,
-    Tooltip,
     ResponsiveContainer,
     Legend,
     LabelList,
@@ -19,6 +18,8 @@ import Filters, { IFilters } from '../Filters'
 import { Button } from '../Button'
 import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
+import { H3, H4 } from '../Typography/Headings'
+import useMediaQuery from '../../lib/hooks/useMediaQuery'
 
 // TODO: This should be changed to 50 once we use the larger sample size
 const MIN_SAMPLE_SIZE = 15
@@ -26,6 +27,11 @@ const MIN_SAMPLE_SIZE = 15
 interface BarChartProps {
     data: Array<Case>
 }
+
+const toPercent = (decimal: number) => {
+    return `${decimal.toFixed(2)}%`
+}
+
 
 export type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
@@ -61,7 +67,7 @@ const ChartWrapper = styled.div`
     }
 `
 
-const ChartTitle = styled.h2`
+const ChartTitle = styled(H4)`
     text-align: center;
 `
 
@@ -70,10 +76,13 @@ const FiltersWrapper = styled.div`
 
     @media ${bp.lg} {
         padding-bottom: 10rem;
+        width: 25%;
     }
 `
 
 function BarChartInteractive({ data }: BarChartProps) {
+    const isMd = useMediaQuery('md')
+    const barSize = isMd ? undefined : 50
     const defaultFilters = {
         motions: 'All',
         charges: 'All',
@@ -156,32 +165,29 @@ function BarChartInteractive({ data }: BarChartProps) {
 
     const domain = [0, 100]
     const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-    const toPercent = (decimal: number) => {
-        return `${decimal.toFixed(2)}%`
-    }
 
     // TODO: Issues with using LabelListProps from recharts
     const renderCustomizedLabel = (props: any) => {
         const { x, y, width, height, value } = props
-        const radius = 16
-        const xCoord = x + width + width / 10
-        const yCoord = y - radius + 16
+        const radius = isMd ? 20 : 16
+        const xCoord = x + width + (isMd ? width / 6 : width / 2)
+        const yCoord = y - radius * 1.05
 
         return (
             <g>
                 <line
                     strokeWidth={1}
                     stroke={`${colors.text}DD`}
-                    x1={xCoord - 20}
-                    x2={x + width + 5}
+                    x1={xCoord}
+                    x2={xCoord - 25}
                     y1={yCoord}
-                    y2={yCoord}
+                    y2={yCoord * 1.05}
                 ></line>
                 <circle
                     cx={xCoord}
                     cy={yCoord}
                     r={radius}
-                    fill={`${colors.yellowLight}DD`}
+                    fill={colors.yellowLight}
                     stroke={colors.text}
                 />
                 <text
@@ -190,11 +196,10 @@ function BarChartInteractive({ data }: BarChartProps) {
                     fill={colors.text}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize={8}
+                    fontSize={isMd ? 11 : 8}
                 >
                     {toPercent(value)}
                 </text>
-               
             </g>
         )
     }
@@ -222,7 +227,7 @@ function BarChartInteractive({ data }: BarChartProps) {
                     >
                         <BarChart data={formattedResults} layout="horizontal">
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="attorney" padding={{ right: 20 }} />
+                            <XAxis dataKey="attorney" dy={5} />
                             <YAxis
                                 dataKey={'percentEvidenceOfRepresentation'}
                                 domain={domain}
@@ -231,27 +236,22 @@ function BarChartInteractive({ data }: BarChartProps) {
                                 fill={colors.blueNavy}
                             />
                             <Bar
-                                maxBarSize={200}
+                                maxBarSize={150}
+                                barSize={barSize}
                                 key={'evidenceOfRepresentation'}
                                 dataKey={'evidenceOfRepresentation'}
                                 fill={colors.yellowLight}
                                 stackId="representation"
                                 name="Yes"
                             >
-                                {/* <LabelList
-                                    fontSize={10}
-                                    fill={colors.text}
-                                    formatter={(value: number) =>
-                                        value ? toPercent(value) : ''
-                                    }
-                                /> */}
                                 <LabelList
                                     dataKey={'evidenceOfRepresentation'}
                                     content={renderCustomizedLabel}
                                 />
                             </Bar>
                             <Bar
-                                maxBarSize={200}
+                                maxBarSize={150}
+                                barSize={barSize}
                                 key={'noEvidenceOfRepresentation'}
                                 dataKey={'noEvidenceOfRepresentation'}
                                 fill={colors.blueNavy}
