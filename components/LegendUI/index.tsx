@@ -18,7 +18,7 @@ export const LegendWrapper = styled.div`
     }
 
     @media ${bp.lg} {
-        padding-left: 80px;
+        padding: 2rem 0 0 4rem;
     }
 `
 

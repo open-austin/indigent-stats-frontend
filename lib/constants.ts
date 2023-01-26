@@ -9,10 +9,7 @@ export const significantMotions = [
     'Motion In Limine',
 ] as const
 
-// TODO: Ask about incomplete data:
-/*
-{
-        "event_date": "2009-08-18",
-        "event_name": "Motion"
-      },
-*/
+export const fontFamilies = {
+  serif: `'Merriweather', serif`,
+  sansSerif: `'Lato', sans-serif`
+}

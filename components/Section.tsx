@@ -5,6 +5,6 @@ export const Section = styled.section`
   margin-bottom: 2rem;
 
   @media ${bp.lg} {
-    margin-bottom: 6rem;
+    margin-bottom: 4rem;
   }
 `
