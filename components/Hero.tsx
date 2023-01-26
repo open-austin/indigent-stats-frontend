@@ -145,7 +145,7 @@ export const Hero = () => {
                                 criminal court cases in Hayes County in 2022.{' '}
                                 &nbsp; Prior to this endeavor, case data was
                                 siloed within individual county&apos;s websites
-                                and physical court records, which has made it
+                                and physical court records, which makes it
                                 difficult for policy-makers and journalists to
                                 get a big picture view of statewide criminal
                                 cases. &nbsp; The goal of this work is to enable

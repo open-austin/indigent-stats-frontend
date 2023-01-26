@@ -11,7 +11,7 @@ interface Props {
 
 const Wrapper = styled.section<Props>`
     padding: 2rem;
-    margin: -2rem -4rem 0 -4rem;
+    margin: 0 -4rem 0 -4rem;
     width: calc(100% + 8rem);
     background-color: ${(props) =>
         props.bgColor && props.transparent

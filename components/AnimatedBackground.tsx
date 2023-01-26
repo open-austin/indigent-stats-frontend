@@ -42,12 +42,14 @@ const SquaresWrapper = styled.div`
     overflow: hidden;
 `
 
+const startingPosition = `100%`
+
 const Square = styled.div`
     animation: squares 9.5s linear infinite;
     align-self: flex-end;
     width: 1em;
     height: 1em;
-    transform: translateY(100%);
+    transform: translateY(${startingPosition});
     background: ${gradientColor};
     transform: skew(15deg);
     &:nth-child(2) {
@@ -114,10 +116,10 @@ const Square = styled.div`
 
     @keyframes squares {
         from {
-            transform: translateY(100%) rotate(-50deg);
+            transform: translateY(${startingPosition}) rotate(-50deg);
         }
         to {
-            transform: translateY(calc(-100vh + -100%)) rotate(20deg);
+            transform: translateY(calc(-100vh - ${startingPosition})) rotate(20deg);
         }
     }
 `
