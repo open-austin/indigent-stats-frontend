@@ -32,7 +32,6 @@ const Wrapper = styled.div`
 `
 
 const BannerWrapper = styled.div`
-    margin-top: 2rem;
 `
 
 const Background = styled.div`
@@ -135,25 +134,23 @@ export const Hero = () => {
                         </Subheading>
                     </HeaderWrapper>
                 </Container>
-                <BannerWrapper>
-                    <Banner
-                        bgColor={colors.blueNavyTransparent}
-                        color={colors.white}
-                    >
-                        <TextContainer>
-                            <H3 color={colors.white}>
-                                Through this research, we learned that folks who
-                                do not have retained counsel are{' '}
-                                <b>less likely</b> to have adequate{' '}
-                                <Highlight>
-                                    evidence of representation
-                                </Highlight>{' '}
-                                in their trials.
-                            </H3>
-                        </TextContainer>
-                    </Banner>
-                </BannerWrapper>
             </Wrapper>
+            <BannerWrapper>
+                <Banner
+                    bgColor={colors.openAustinOrange}
+                    color={colors.white}
+                >
+                    <TextContainer>
+                        <H3 color={colors.white}>
+                            Through this research, we learned that folks who do
+                            not have retained counsel are <b>less likely</b> to
+                            have adequate{' '}
+                            <Highlight>evidence of representation</Highlight> in
+                            their trials.
+                        </H3>
+                    </TextContainer>
+                </Banner>
+            </BannerWrapper>
         </Section>
     )
 }
