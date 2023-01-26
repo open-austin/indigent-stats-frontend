@@ -58,7 +58,7 @@ const FilterSelect = styled.select`
 
     &:focus,
     &:focus-visible {
-        border-color: ${colors.pink};
+        border-color: ${colors.openAustinOrange};
     }
 `
 

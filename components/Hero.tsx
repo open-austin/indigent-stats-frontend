@@ -10,6 +10,7 @@ import { H1, H3 } from './Typography/Headings'
 import { bp } from '../lib/breakpoints'
 import openAustinSvg from '../public/open-austin-logo.svg'
 import { Paragraph } from './Typography/Body'
+import { InlineLink } from './Link'
 
 const Wrapper = styled.div`
     position: relative;
@@ -66,7 +67,7 @@ const Heading = styled(H1)`
     flex-basis: 60%;
 
     @media ${bp.lg} {
-        margin: 0 auto 0 2rem;
+        margin: 0 auto;
         text-align: left;
     }
 `
@@ -91,9 +92,11 @@ const ImageWrapper = styled.div`
 `
 
 const Description = styled.div`
-    max-width: 80%;
     text-align: left;
-    margin-left: 2rem;
+
+    @media ${bp.lg} {
+        max-width: 80%;
+    }
 
     p {
         text-align: center;
@@ -125,22 +128,29 @@ export const Hero = () => {
                         <Description>
                             <Paragraph>
                                 Our organization,{' '}
-                                <a
+                                <InlineLink
                                     href="https://www.open-austin.org"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    isExternal={true}
                                 >
                                     Open Austin
-                                </a>
-                                , began scraping and aggregating data from
+                                </InlineLink>
+                                , in partnership with{' '}
+                                <InlineLink
+                                    href="https://www.fairdefense.org/"
+                                    isExternal={true}
+                                >
+                                    Texas Fair Defense Project
+                                </InlineLink>{' '}
+                                began scraping and aggregating data from
                                 criminal court cases in Hayes County in 2022.{' '}
-                                &nbsp; Prior to this, case data was siloed
-                                within individual county&apos;s websites and
-                                physical court records, which made it difficult
-                                for policy-makers and journalists to get a big
-                                picture view of statewide criminal cases. &nbsp;
-                                Our goal is to visualize this data to gain
-                                insight into how our local justice systems work.
+                                &nbsp; Prior to this endeavor, case data was
+                                siloed within individual county&apos;s websites
+                                and physical court records, which has made it
+                                difficult for policy-makers and journalists to
+                                get a big picture view of statewide criminal
+                                cases. &nbsp; The goal of this work is to enable
+                                the TFDP to advocate for county-by-county policy
+                                changes and encourage judicial accountability.
                             </Paragraph>
                             <br></br>
                             <br></br>

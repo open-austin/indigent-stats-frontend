@@ -16,6 +16,7 @@ export const colors = {
     yellowLight: '#ffe1a7',
     grayGradient: '#ebebeb',
     gray: '#e7edf7',
+    grayText: '#a2acaf',
 }
 
 export const stackedGraphColors = [

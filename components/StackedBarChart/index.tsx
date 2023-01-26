@@ -4,25 +4,21 @@ import {
     Bar,
     XAxis,
     YAxis,
-    CartesianGrid,
-    Tooltip,
     ResponsiveContainer,
     Legend,
     LabelList,
     Label,
     LabelListProps,
-    CartesianAxisProps,
     Text,
 } from 'recharts'
 import styled from 'styled-components'
 import { Props as LegendProps } from 'recharts/types/component/Legend'
-import { BaseAxisProps } from 'recharts/types/util/types'
 import { stackedGraphColors } from '../../lib/colors'
 import { upsertAtMap } from '../../lib/record'
 import { flattenObject } from '../../lib/flatten'
 import { Case } from '../../models/Case'
 import { renderLegend } from './Legend'
-import { Container } from '../Container'
+import { H4 } from '../Typography/Headings'
 
 type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
@@ -35,7 +31,7 @@ interface StackedBarChartProps {
     cases: Array<Case>
 }
 
-const Heading = styled.h2`
+const ChartTitle = styled(H4)`
     text-align: center;
 `
 
@@ -122,7 +118,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
     // console.log('primaryCharges\n', primaryCharges)
     // console.log('retained\n', retained)
     // console.log('appointed\n', appointed)
-    console.log('formattedResults\n', formattedResults)
+    // console.log('formattedResults\n', formattedResults)
 
     if (!cases) return <div>Loading...</div>
 
@@ -140,9 +136,9 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     return (
         <>
-                <Heading>
+                <ChartTitle>
                     Cases per Attorney Type Grouped by Charge Category
-                </Heading>
+                </ChartTitle>
                 <ResponsiveContainer
                     width="100%"
                     height="100%"

@@ -19,6 +19,7 @@ import { groupBy } from '../../lib/array'
 import { mapWithIndex } from '../../lib/record'
 import { FullWidthContainer } from '../FullWidthContainer'
 import useMediaQuery from '../../lib/hooks/useMediaQuery'
+import { H4 } from '../Typography/Headings'
 
 const Layout = styled.section`
     display: flex;
@@ -43,7 +44,7 @@ const ChartWrapper = styled.div`
     }
 `
 
-const ChartTitle = styled.h2`
+const ChartTitle = styled(H4)`
     text-align: center;
 `
 
@@ -89,18 +90,19 @@ const BarChartDesktop = ({
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="year" tick={{ fontSize: 10 }}>
+                <XAxis dataKey="year" tick={{ fontSize: 10 }} >
                     <Label
                         value="Years"
+                        dy="800"
                         position={'bottom'}
-                        style={{
-                            paddingBottom: 20,
-                            transform: 'translateY(1.5rem)',
-                            fontSize: 12,
-                            position: 'relative',
-                            left: '-4rem',
-                            fontWeight: 'bold',
-                        }}
+                        // style={{
+                        //     paddingBottom: 20,
+                        //     transform: 'translateY(1.5rem)',
+                        //     fontSize: 12,
+                        //     position: 'relative',
+                        //     left: '-4rem',
+                        //     fontWeight: 'bold',
+                        // }}
                     />
                 </XAxis>
                 <YAxis
@@ -140,6 +142,7 @@ const BarChartDesktop = ({
                     dataKey={'retained'}
                     fill={colors.violet}
                     name="Retained"
+                    isAnimationActive={false}
                 >
                     <LabelList
                         fontSize={8}
@@ -155,6 +158,7 @@ const BarChartDesktop = ({
                     dataKey={'appointed'}
                     fill={colors.orange}
                     name="Court appointed"
+                    isAnimationActive={false}
                 >
                     <LabelList
                         fontSize={8}
@@ -194,7 +198,7 @@ const BarChartMobile = ({
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <YAxis dataKey="year" type="category" tick={{ fontSize: 10 }}>
-                    <Label
+                    {/* <Label
                         value="Years"
                         position={'left'}
                         angle={-90}
@@ -206,7 +210,7 @@ const BarChartMobile = ({
                             left: '-80px',
                             fontWeight: 'bold',
                         }}
-                    />
+                    /> */}
                 </YAxis>
                 <XAxis
                     type="number"
@@ -231,15 +235,6 @@ const BarChartMobile = ({
                         }}
                     />
                 </XAxis>
-                <Legend
-                    // @ts-ignore: Not a relevant props error
-                    content={(props: LegendProps) =>
-                        renderLegend('Attorney type', props, {
-                            retained,
-                            appointed,
-                        })
-                    }
-                />
                 <Bar
                     maxBarSize={200}
                     barSize={25}
@@ -265,13 +260,22 @@ const BarChartMobile = ({
                     name="Court appointed"
                 >
                     <LabelList
-                    fontSize={8}
+                        fontSize={8}
                         fill={colors.white}
                         formatter={(value: number) =>
                             value ? toPercent(value) : ''
                         }
                     />
-                </Bar>
+                </Bar>{' '}
+                <Legend
+                    // @ts-ignore: Not a relevant props error
+                    content={(props: LegendProps) =>
+                        renderLegend('Attorney type', props, {
+                            retained,
+                            appointed,
+                        })
+                    }
+                />
             </BarChart>
         </ResponsiveContainer>
     )
@@ -279,8 +283,6 @@ const BarChartMobile = ({
 
 function BarChartYears({ data }: BarChartProps) {
     const isLg = useMediaQuery('lg')
-
-    if (!data) return <div>Loading...</div>
 
     // Filter out cases prior than 2007
     const filtered = data.filter((a) => a.year > 2007)
@@ -296,13 +298,13 @@ function BarChartYears({ data }: BarChartProps) {
 
     return (
         <>
-            <Layout>
+            <Layout className='years-bar-chart'>
                 <ChartWrapper>
                     <ChartTitle>
                         Evidence of Representation Over the Years
                     </ChartTitle>
 
-                    <FullWidthContainer>
+                    <FullWidthContainer hasPadding={true}>
                         {isLg ? (
                             <BarChartDesktop
                                 retained={retained}

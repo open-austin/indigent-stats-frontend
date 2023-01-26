@@ -15,8 +15,9 @@ import { H2 } from '../components/Typography/Headings'
 import { Container, TextContainer } from '../components/Container'
 import { Highlight } from '../components/Typography/Highlight'
 import { countPerYearSchema } from '../models/schemas'
-import { Paragraph } from '../components/Typography/Body'
+import { Paragraph, Small } from '../components/Typography/Body'
 import { bp } from '../lib/breakpoints'
+import { InlineLink } from '../components/Link'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 // TODO: Update cosmos query later
@@ -47,7 +48,7 @@ const Visualizations = styled.section`
     margin: 2rem 0 6rem;
 
     @media ${bp.lg} {
-        margin: 8rem 0;
+        margin: 6rem 0;
     }
 `
 
@@ -110,6 +111,18 @@ export default function Home() {
                                 evidence of adequate legal representation.
                             </Paragraph>
                         </TextContainer>
+                        <br></br>
+                        <br></br>
+                        <TextContainer align="left">
+                            <Small>
+                                <b>Note:</b> We are in the process of scraping
+                                case outcomes, but we do not have this data
+                                available yet.
+                                <br></br>
+                                In the future, we intend to compare outcomes
+                                with attorney type.
+                            </Small>
+                        </TextContainer>
                     </Section>
                 </Container>
                 <Container>
@@ -154,18 +167,13 @@ export default function Home() {
                         </H2>
                         <TextContainer align="left">
                             <Paragraph>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit.
-                            </Paragraph>
-                            <Paragraph>
-                                Nullam vel mi arcu. In molestie, ex quis
-                                venenatis viverra, nulla justo consectetur
-                                metus, sit amet iaculis sem arcu vitae erat.
-                                Quisque viverra neque at leo posuere posuere. In
-                                ut efficitur nulla. Nullam et massa malesuada,
-                                mollis massa et, fringilla magna. Integer tellus
-                                nibh, mattis in elit eget, aliquet pulvinar
-                                quam.
+                                We noticed that with all the cases grouped by
+                                their charge category, there is a higher
+                                representation of DUI offenses in cases with
+                                retained attorneys compared to those with
+                                court-appointed attorneys. Similarly, there is a
+                                higher representation of property charges within
+                                cases with court-appointed attorneys.
                             </Paragraph>
                         </TextContainer>
                     </Section>
@@ -181,7 +189,17 @@ export default function Home() {
                 </Container>
             </main>
 
-            <footer className={styles.footer}>Open Austin 2022</footer>
+            <footer className={styles.footer}>
+                <span>
+                    <InlineLink
+                        href="https://www.open-austin.org"
+                        isExternal={true}
+                    >
+                        Open Austin
+                    </InlineLink>
+                    &nbsp;&nbsp;2023
+                </span>
+            </footer>
         </div>
     )
 }

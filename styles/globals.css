@@ -3,15 +3,32 @@ body {
     padding: 0;
     margin: 0;
     font-family: 'Lato', sans-serif;
+    color: #2D3748;
+}
+
+body {
+    overflow-x: hidden;
 }
 
 a {
     color: #444e86;
+    transition: opacity 0.15s ease;
+}
+
+a:hover {
+    opacity: 0.75;
+}
+
+a:focus-visible, button:focus-visible {
+    outline-color: #EA6036;
+    outline-width: 0.2rem;
+    outline-style: solid;
 }
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
     font-family: 'Merriweather', serif;
 }
 
@@ -27,4 +44,12 @@ h3 {
 /* Recharts overrides */
 .stacked-bar-chart .recharts-cartesian-axis-tick-value {
     display: none;
+}
+
+.years-bar-chart .recharts-legend-wrapper {
+    bottom: -20px !important;
+}
+
+.recharts-cartesian-axis .recharts-text.recharts-label tspan {
+    font-size: 1rem;
 }

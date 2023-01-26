@@ -6,6 +6,7 @@ interface Props {
     bgColor?: string
     transparent?: boolean
     children: React.ReactNode
+    hasPadding?: boolean
 }
 
 const Wrapper = styled.section<Props>`
@@ -18,10 +19,10 @@ const Wrapper = styled.section<Props>`
             : props.bgColor};
 `
 
-export const FullWidthContainer = ({ bgColor, children, transparent }: Props) => {
+export const FullWidthContainer = ({ bgColor, children, transparent, hasPadding }: Props) => {
     return (
         <Wrapper bgColor={bgColor} transparent={transparent}>
-            <Container>
+            <Container hasPadding={hasPadding}>
                 {children}
             </Container>
         </Wrapper>
