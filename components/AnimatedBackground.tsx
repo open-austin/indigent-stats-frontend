@@ -29,7 +29,7 @@ const WhiteWrapper = styled.div`
         height: 20vh;
         background-image: linear-gradient(
             0deg,
-            ${gradientColor} 0%,
+            ${colors.white} 0%,
             rgba(235, 235, 235, 0) 100%
         );
     }

@@ -2,9 +2,20 @@ import styled from 'styled-components'
 import { bp, size } from '../lib/breakpoints'
 import { colors } from '../lib/colors'
 
-export const Container = styled.div`
+export const Container = styled.div<{ hasPadding?: boolean }>`
     max-width: ${size.lg}px;
     margin: 0 auto;
+    ${(props) =>
+        props.hasPadding
+            ? `
+      padding: 0 2rem;
+
+      @media ${bp.lg} {
+        padding: 0;
+      }
+    
+    `
+            : ``}
 `
 export const TextContainer = styled.div<{
     align?: 'center' | 'right' | 'left'
