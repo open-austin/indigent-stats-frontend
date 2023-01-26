@@ -36,6 +36,13 @@ SELECT
   DateTimePart("year", c.earliest_charge_date) AS year,
   COUNT(1) AS case_count
  FROM c
+ WHERE
+  IS_DEFINED(c.has_evidence_of_representation)
+  AND DateTimePart("year", c.earliest_charge_date) > 2007
+  AND (
+       c.attorney_type = "Court Appointed"
+    OR c.attorney_type = "Retained"
+  )
  GROUP BY
   DateTimePart("year", c.earliest_charge_date),
   c.has_evidence_of_representation,
