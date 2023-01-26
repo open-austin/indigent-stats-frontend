@@ -8,10 +8,10 @@ import BarChartYears from '../components/BarChartYears'
 import { caseSchema } from '../models/Case'
 import styles from '../styles/Home.module.css'
 import fetcher from '../lib/fetcher'
-import { Hero } from '../components/Hero'
+import { Hero } from '../components/HeroAlt'
 import styled from 'styled-components'
 import { Section } from '../components/Section'
-import { H2 } from '../components/Typography/Headings'
+import { H3 } from '../components/Typography/Headings'
 import { Container, TextContainer } from '../components/Container'
 import { Highlight } from '../components/Typography/Highlight'
 import { countPerYearSchema } from '../models/schemas'
@@ -92,10 +92,10 @@ export default function Home() {
                 <Hero />
                 <Container>
                     <Section>
-                        <H2>
+                        <H3>
                             How are we determining{' '}
                             <em>evidence of representation</em>?
-                        </H2>
+                        </H3>
                         <TextContainer align="left">
                             <Paragraph>
                                 As determined by our legal experts, filing
@@ -136,7 +136,7 @@ export default function Home() {
                         )}
                     </Visualizations>
                     <Section>
-                        <H2>How does this disparity look like over time?</H2>
+                        <H3>How does this disparity look like over time?</H3>
                         <TextContainer align="left">
                             <Paragraph>
                                 Lorem ipsum dolor sit amet, consectetur
@@ -161,10 +161,10 @@ export default function Home() {
                         )}
                     </Visualizations>
                     <Section>
-                        <H2>
+                        <H3>
                             Differences in charge category based on attorney
                             type
-                        </H2>
+                        </H3>
                         <TextContainer align="left">
                             <Paragraph>
                                 We noticed that with all the cases grouped by
@@ -197,7 +197,14 @@ export default function Home() {
                     >
                         Open Austin
                     </InlineLink>
-                    &nbsp;&nbsp;2023
+                    &nbsp;+&nbsp;
+                    <InlineLink
+                        href="https://www.fairdefense.org/"
+                        isExternal={true}
+                    >
+                        Texas Fair Defense Project
+                    </InlineLink>
+                    &nbsp;&nbsp; 2023
                 </span>
             </footer>
         </div>

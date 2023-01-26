@@ -43,7 +43,7 @@ class MyDocument extends Document {
                 <Head>
                     <link
                         rel="stylesheet"
-                        href="https://fonts.googleapis.com/css?family=Lato:wght@200,400,500,600,800&display=swap"
+                        href="http://fonts.googleapis.com/css?family=Lato:400,500,700&display=swap"
                         type="text/css"
                     />
                     <link
