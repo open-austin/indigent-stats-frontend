@@ -43,12 +43,12 @@ class MyDocument extends Document {
                 <Head>
                     <link
                         rel="stylesheet"
-                        href="http://fonts.googleapis.com/css?family=Lato:400,500,700&display=swap"
+                        href="https://fonts.googleapis.com/css?family=Lato:400,500,700&display=block"
                         type="text/css"
                     />
                     <link
                         rel="stylesheet"
-                        href="https://fonts.googleapis.com/css?family=Merriweather:wght@500,800&display=swap"
+                        href="https://fonts.googleapis.com/css?family=Merriweather:400,700&display=block"
                         type="text/css"
                     />
                 </Head>

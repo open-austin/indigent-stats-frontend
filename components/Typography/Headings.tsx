@@ -35,6 +35,7 @@ export const H3 = styled.h3<HeadingProps>`
     color: ${(props) => (props.color ? props.color : colors.openAustinOrange)};
     font-size: 1.5rem;
     line-height: 1.75;
+    font-weight: 400;
 
     @media ${bp.lg} {
         font-size: 2rem;
