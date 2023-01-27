@@ -9,8 +9,9 @@ import { Highlight } from './Typography/Highlight'
 import { H1, H3 } from './Typography/Headings'
 import { bp } from '../lib/breakpoints'
 import openAustinSvg from '../public/open-austin-logo.svg'
-import { Paragraph } from './Typography/Body'
 import { InlineLink } from './Link'
+import FadeInSection from './FadeInSection'
+import usePrefersReducedMotion from '../lib/hooks/usePrefersReducedMotion'
 
 const Wrapper = styled.div`
     position: relative;
@@ -18,8 +19,9 @@ const Wrapper = styled.div`
     left: -2rem;
     right: -2rem;
     top: -2rem;
+    bottom: -2rem;
     width: calc(100% + 4rem);
-    padding: 6rem 2rem 0 2rem;
+    padding: 4rem 2rem 0 2rem;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -30,6 +32,9 @@ const Wrapper = styled.div`
         padding: 10rem 4rem 0 4rem;
     }
 `
+
+const BannerWrapper = styled.div``
+
 const Background = styled.div`
     width: 100%;
     height: 100%;
@@ -43,90 +48,75 @@ const Background = styled.div`
 `
 
 const HeaderWrapper = styled.div`
-    margin: 0 auto;
-    line-height: 2;
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 1rem;
-    align-items: center;
-    text-align: center;
+    min-height: 100vh;
+    height: 100%;
+
+    @media ${bp.md} {
+        min-height: 50vh;
+        margin: 0 auto;
+    }
 
     @media ${bp.lg} {
-        align-items: flex-start;
-        margin-bottom: 6rem;
-        flex-direction: row;
-        gap: 6rem;
-        text-align: left;
+        min-height: 90vh;
+        max-width: 70%;
     }
 `
 
 const Heading = styled(H1)`
-    padding: 1rem 0;
     color: ${colors.openAustinOrange};
     text-align: center;
-    flex-basis: 60%;
+    margin-bottom: 1rem;
+`
+
+const Subheading = styled.p`
+    line-height: 2;
+    color: ${colors.grayText};
+    text-align: center;
+    max-width: 90%;
+    margin: 0 auto;
+    font-weight: 500;
+    font-size: 1.1rem;
 
     @media ${bp.lg} {
-        margin: 0 auto;
-        text-align: left;
+        font-size: 1.3rem;
     }
 `
 
 const ImageWrapper = styled.div`
-    flex-grow: 0;
-    flex-basis: 40%;
     display: flex;
     justify-content: center;
 
     img {
-        width: 100%;
-        max-width: 25%;
-        height: auto;
+        width: auto;
+        max-height: 5rem;
 
         @media ${bp.lg} {
-            max-width: none;
-            max-height: 100%;
-            width: auto;
+            max-height: 8rem;
         }
     }
 `
 
-const Description = styled.div`
-    text-align: left;
-
-    @media ${bp.lg} {
-        max-width: 80%;
-    }
-
-    p {
-        text-align: center;
-
-        @media ${bp.lg} {
-            text-align: left;
-        }
-    }
-`
-
-export const Hero = () => {
-    const headingText =
-        'Visualizing the impact of access to appointed counsel in Texas criminal cases'
+const Hero = () => {
+    const prefersReducedMotion = usePrefersReducedMotion()
+    const headingText = 'Democratizing Criminal Defense Data'
 
     return (
         <Section>
             <Wrapper>
                 <Background>
-                    <AnimatedBackground />
+                    {prefersReducedMotion ? null: <AnimatedBackground />}
                 </Background>
-                <Container>
-                    <HeaderWrapper>
-                        <Heading>{headingText}</Heading>
-                        <ImageWrapper>
-                            <Image src={openAustinSvg} alt="Open Austin logo" />
-                        </ImageWrapper>
-                    </HeaderWrapper>
-                    <Section>
-                        <Description>
-                            <Paragraph>
+                <FadeInSection>
+                    <Container>
+                        <HeaderWrapper className="fade-in-load">
+                            <ImageWrapper>
+                                <Image
+                                    src={openAustinSvg}
+                                    alt="Open Austin logo"
+                                />
+                            </ImageWrapper>
+                            <Heading>{headingText}</Heading>
+                            <Subheading>
                                 Our organization,{' '}
                                 <InlineLink
                                     href="https://www.open-austin.org"
@@ -140,39 +130,41 @@ export const Hero = () => {
                                     isExternal={true}
                                 >
                                     Texas Fair Defense Project
-                                </InlineLink>{' '}
-                                began scraping and aggregating data from
-                                criminal court cases in Hayes County in 2022.{' '}
-                                &nbsp; Prior to this endeavor, case data was
-                                siloed within individual county&apos;s websites
-                                and physical court records, which makes it
-                                difficult for policy-makers and journalists to
-                                get a big picture view of statewide criminal
-                                cases. &nbsp; The goal of this work is to enable
-                                the TFDP to advocate for county-by-county policy
-                                changes and encourage judicial accountability.
-                            </Paragraph>
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                        </Description>
-                    </Section>
-                </Container>
-                <Banner
-                    bgColor={colors.blueNavyTransparent}
-                    color={colors.white}
-                >
-                    <H3>
-                        <TextContainer>
-                            Through this research, we learned that folks who
-                            can&apos;t afford appointed counsel are{' '}
-                            <u>less likely</u> to have adequate{' '}
-                            <Highlight>evidence of representation</Highlight> in
-                            their trials.
-                        </TextContainer>
-                    </H3>
-                </Banner>
+                                </InlineLink>
+                                , began creating a database for criminal court
+                                case records which were previously siloed within
+                                their respective county websites. &nbsp; The
+                                goal of this work is to visualize this data to
+                                enable TFDP to advocate for county-by-county
+                                policy changes and encourage judicial
+                                accountability.
+                            </Subheading>
+                        </HeaderWrapper>
+                    </Container>
+                </FadeInSection>
             </Wrapper>
+            <BannerWrapper>
+                <FadeInSection>
+                    <Banner
+                        bgColor={colors.blueNavy}
+                        color={colors.white}
+                    >
+                        <TextContainer>
+                            <H3 color={colors.white}>
+                                Through this research, we learned that folks who
+                                do not have retained counsel are{' '}
+                                <b>less likely</b> to have adequate{' '}
+                                <Highlight>
+                                    evidence of representation
+                                </Highlight>{' '}
+                                in their trials.
+                            </H3>
+                        </TextContainer>
+                    </Banner>
+                </FadeInSection>
+            </BannerWrapper>
         </Section>
     )
 }
+
+export default Hero
