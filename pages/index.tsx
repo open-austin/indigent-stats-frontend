@@ -99,7 +99,7 @@ export default function Home() {
             </Head>
             <main className={styles.main}>
                 <Hero />
-                <Spacer lgHeight='8rem' />
+                <Spacer lgHeight="8rem" />
                 <FadeInSection>
                     <Container>
                         <Section>
@@ -161,8 +161,10 @@ export default function Home() {
                             </H3>
                             <TextContainer align="left">
                                 <Paragraph>
-                                    This description will change once we have
-                                    more recent data.
+                                    <Highlight>
+                                        This description will change once we
+                                        have more recent data.
+                                    </Highlight>
                                 </Paragraph>
                                 <Paragraph>
                                     Lorem ipsum dolor sit amet, consectetur
@@ -189,7 +191,7 @@ export default function Home() {
                         </Visualizations>
                     </Container>
                 </FadeInSection>
-                <Spacer lgHeight='4rem' />
+                <Spacer lgHeight="4rem" />
                 <FadeInSection>
                     <Container>
                         <Section>
@@ -201,12 +203,13 @@ export default function Home() {
                                 <Paragraph>
                                     We noticed that with all the cases grouped
                                     by their charge category, there is a higher
-                                    representation of DUI offenses in cases with
-                                    retained attorneys compared to those with
-                                    court-appointed attorneys. Similarly, there
-                                    is a higher representation of property
-                                    charges within cases with court-appointed
-                                    attorneys.
+                                    representation of{' '}
+                                    <Highlight>DUI offenses</Highlight> in cases
+                                    with retained attorneys compared to those
+                                    with court-appointed attorneys. Similarly,
+                                    there is a higher representation of{' '}
+                                    <Highlight>property charges</Highlight>{' '}
+                                    within cases with court-appointed attorneys.
                                 </Paragraph>
                             </TextContainer>
                         </Section>
@@ -260,22 +263,22 @@ export default function Home() {
             <Spacer />
 
             <footer className={styles.footer}>
-                    <span>
-                        <InlineLink
-                            href="https://www.open-austin.org"
-                            isExternal={true}
-                        >
-                            Open Austin
-                        </InlineLink>
-                        &nbsp;+&nbsp;
-                        <InlineLink
-                            href="https://www.fairdefense.org/"
-                            isExternal={true}
-                        >
-                            Texas Fair Defense Project
-                        </InlineLink>
-                        &nbsp;&nbsp; 2023
-                    </span>
+                <span>
+                    <InlineLink
+                        href="https://www.open-austin.org"
+                        isExternal={true}
+                    >
+                        Open Austin
+                    </InlineLink>
+                    &nbsp;+&nbsp;
+                    <InlineLink
+                        href="https://www.fairdefense.org/"
+                        isExternal={true}
+                    >
+                        Texas Fair Defense Project
+                    </InlineLink>
+                    &nbsp;&nbsp; 2023
+                </span>
             </footer>
         </div>
     )
