@@ -10,6 +10,8 @@ import { H1, H3 } from './Typography/Headings'
 import { bp } from '../lib/breakpoints'
 import openAustinSvg from '../public/open-austin-logo.svg'
 import { InlineLink } from './Link'
+import FadeInSection from './FadeInSection'
+import usePrefersReducedMotion from '../lib/hooks/usePrefersReducedMotion'
 
 const Wrapper = styled.div`
     position: relative;
@@ -31,8 +33,7 @@ const Wrapper = styled.div`
     }
 `
 
-const BannerWrapper = styled.div`
-`
+const BannerWrapper = styled.div``
 
 const Background = styled.div`
     width: 100%;
@@ -96,60 +97,71 @@ const ImageWrapper = styled.div`
 `
 
 export const Hero = () => {
+    const prefersReducedMotion = usePrefersReducedMotion()
     const headingText = 'Democratizing Criminal Defense Data'
 
     return (
         <Section>
             <Wrapper>
                 <Background>
-                    <AnimatedBackground />
+                    {prefersReducedMotion ? null: <AnimatedBackground />}
                 </Background>
-                <Container>
-                    <HeaderWrapper>
-                        <ImageWrapper>
-                            <Image src={openAustinSvg} alt="Open Austin logo" />
-                        </ImageWrapper>
-                        <Heading>{headingText}</Heading>
-                        <Subheading>
-                            Our organization,{' '}
-                            <InlineLink
-                                href="https://www.open-austin.org"
-                                isExternal={true}
-                            >
-                                Open Austin
-                            </InlineLink>
-                            , in partnership with{' '}
-                            <InlineLink
-                                href="https://www.fairdefense.org/"
-                                isExternal={true}
-                            >
-                                Texas Fair Defense Project
-                            </InlineLink>
-                            , began creating a database for criminal court case
-                            records which were previously siloed within their
-                            respective county websites. &nbsp; The goal of this
-                            work is to visualize this data to enable TFDP to
-                            advocate for county-by-county policy changes and
-                            encourage judicial accountability.
-                        </Subheading>
-                    </HeaderWrapper>
-                </Container>
+                <FadeInSection>
+                    <Container>
+                        <HeaderWrapper className="fade-in-load">
+                            <ImageWrapper>
+                                <Image
+                                    src={openAustinSvg}
+                                    alt="Open Austin logo"
+                                />
+                            </ImageWrapper>
+                            <Heading>{headingText}</Heading>
+                            <Subheading>
+                                Our organization,{' '}
+                                <InlineLink
+                                    href="https://www.open-austin.org"
+                                    isExternal={true}
+                                >
+                                    Open Austin
+                                </InlineLink>
+                                , in partnership with{' '}
+                                <InlineLink
+                                    href="https://www.fairdefense.org/"
+                                    isExternal={true}
+                                >
+                                    Texas Fair Defense Project
+                                </InlineLink>
+                                , began creating a database for criminal court
+                                case records which were previously siloed within
+                                their respective county websites. &nbsp; The
+                                goal of this work is to visualize this data to
+                                enable TFDP to advocate for county-by-county
+                                policy changes and encourage judicial
+                                accountability.
+                            </Subheading>
+                        </HeaderWrapper>
+                    </Container>
+                </FadeInSection>
             </Wrapper>
             <BannerWrapper>
-                <Banner
-                    bgColor={colors.openAustinOrange}
-                    color={colors.white}
-                >
-                    <TextContainer>
-                        <H3 color={colors.white}>
-                            Through this research, we learned that folks who do
-                            not have retained counsel are <b>less likely</b> to
-                            have adequate{' '}
-                            <Highlight>evidence of representation</Highlight> in
-                            their trials.
-                        </H3>
-                    </TextContainer>
-                </Banner>
+                <FadeInSection>
+                    <Banner
+                        bgColor={colors.blueNavy}
+                        color={colors.white}
+                    >
+                        <TextContainer>
+                            <H3 color={colors.white}>
+                                Through this research, we learned that folks who
+                                do not have retained counsel are{' '}
+                                <b>less likely</b> to have adequate{' '}
+                                <Highlight>
+                                    evidence of representation
+                                </Highlight>{' '}
+                                in their trials.
+                            </H3>
+                        </TextContainer>
+                    </Banner>
+                </FadeInSection>
             </BannerWrapper>
         </Section>
     )
