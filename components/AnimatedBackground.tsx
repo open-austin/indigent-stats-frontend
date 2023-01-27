@@ -49,13 +49,20 @@ const Square = styled.div`
     align-self: flex-end;
     width: 1em;
     height: 1em;
-    transform: translateY(${startingPosition});
     background: ${gradientColor};
-    transform: skew(15deg);
+    transform: translateY(${startingPosition}) skew(15deg);
+    border-radius: 1px;
+    &:nth-child(1) {
+        height: 1em;
+        width: 3em;
+        animation-delay: 0s;
+        animation-duration: 12s;
+        filter: blur(2px);
+    }
     &:nth-child(2) {
         height: 1.5em;
         width: 3em;
-        animation-delay: 1s;
+        animation-delay: 0s;
         animation-duration: 17s;
         filter: blur(5px);
     }
@@ -116,10 +123,10 @@ const Square = styled.div`
 
     @keyframes squares {
         from {
-            transform: translateY(${startingPosition}) rotate(-50deg);
+            transform: translateY(${startingPosition}) rotate(-80deg) skew(15deg) scale(1.5);
         }
         to {
-            transform: translateY(calc(-100vh - ${startingPosition})) rotate(20deg);
+            transform: translateY(calc(-100vh - ${startingPosition})) rotate(20deg) skew(0deg) scale(1.6);
         }
     }
 `
