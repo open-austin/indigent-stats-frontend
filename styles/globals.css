@@ -2,7 +2,7 @@ html,
 body {
     padding: 0;
     margin: 0;
-    color: #2D3748;
+    color: #2d3748;
     overflow-x: hidden;
 }
 
@@ -22,8 +22,9 @@ a:hover {
     opacity: 0.75;
 }
 
-a:focus-visible, button:focus-visible {
-    outline-color: #EA6036;
+a:focus-visible,
+button:focus-visible {
+    outline-color: #ea6036;
     outline-width: 0.2rem;
     outline-style: solid;
 }
@@ -37,6 +38,30 @@ h4 {
 * {
     box-sizing: border-box;
 }
+
+.fade-in-load {
+    will-change: opacity, transform;
+    animation: fadeIn 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(2.5vh);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* For accessibiity */
+@media (prefers-reduced-motion) {
+    .fade-in-load {
+        animation: none;
+    }
+}
+
 
 .max-width {
     max-width: 1440px;
