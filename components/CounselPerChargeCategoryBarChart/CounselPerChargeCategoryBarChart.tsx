@@ -1,4 +1,3 @@
-import React, { ReactNode } from 'react'
 import z from 'zod'
 import useSWR from 'swr'
 import styled from 'styled-components'
@@ -14,23 +13,15 @@ import {
     Tooltip,
 } from 'recharts'
 import { Props as LegendProps } from 'recharts/types/component/Legend'
-import { Props } from 'recharts/types/component/Legend'
 
-import {
-    LegendWrapper,
-    LegendBox,
-    LegendTitle,
-    LegendSpan,
-    LegendColorBlock,
-    LegendSampleSize,
-    LegendSampleSizeTitle,
-} from '../LegendUI'
 import { stackedGraphColors } from '../../lib/colors'
 import { H4 } from '../Typography/Headings'
 import { ErrorComponent } from '../ErrorComponent'
 import { mapWithIndex } from '../../lib/record'
 import { groupBy } from '../../lib/array'
 import fetcher from '../../lib/fetcher'
+
+import { renderLegend } from './Legend'
 
 const ChartTitle = styled(H4)`
     text-align: center;
@@ -151,59 +142,5 @@ export function CounselPerChargeCategoryBarChart() {
                 </BarChart>
             </ResponsiveContainer>
         </>
-    )
-}
-
-const LegendBoxRow = styled(LegendBox)`
-    max-width: 100%;
-`
-
-const LegendItems = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-`
-
-const renderLegend = (
-    props: Props,
-    title: string,
-    sums: {
-        appointed: number
-        retained: number
-    }
-): ReactNode => {
-    return (
-        <LegendWrapper>
-            <LegendSampleSize>
-                <LegendSampleSizeTitle>Sample size</LegendSampleSizeTitle>
-                <div>
-                    <small>
-                        Retained: {sums.retained} cases
-                        <br />
-                        Court Appointed: {sums.appointed} cases
-                        <br />
-                        Total: {sums.appointed + sums.retained}
-                    </small>
-                </div>
-            </LegendSampleSize>
-            <LegendBoxRow>
-                <LegendTitle>
-                    <strong>{title}</strong>
-                </LegendTitle>
-                <LegendItems>
-                    {[...(props.payload || [])].map((entry, index) => (
-                        <LegendSpan key={`item-${index}`}>
-                            <LegendColorBlock
-                                style={{
-                                    backgroundColor: entry.color,
-                                }}
-                            />
-                            {entry.value}
-                        </LegendSpan>
-                    ))}
-                </LegendItems>
-            </LegendBoxRow>
-        </LegendWrapper>
     )
 }
