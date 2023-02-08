@@ -20,6 +20,8 @@ import { bp } from '../lib/breakpoints'
 import { InlineLink } from '../components/Link'
 import FadeInSection from '../components/FadeInSection'
 import Spacer from '../components/Spacer'
+import { ErrorComponent } from '../components/ErrorComponent'
+import { CounselPerChargeCategoryBarChart } from '../components/CounselPerChargeCategoryBarChart/CounselPerChargeCategoryBarChart'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 // TODO: Update cosmos query later
@@ -62,12 +64,17 @@ const Visualizations = styled.section`
 `
 
 export default function Home() {
-    const { data: cosmosData, error: cosmosError } = useSWR(
-        `/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`,
-        fetcher
-    )
+    const {
+        data: cosmosData,
+        error: cosmosError,
+        isLoading: isLoadingCosmos,
+    } = useSWR(`/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`, fetcher)
 
-    const { data: repByYearsRaw, error: repByYearsErr } = useSWR(
+    const {
+        data: repByYearsRaw,
+        error: repByYearsErr,
+        isLoading: isLoadingRepsByYear,
+    } = useSWR(
         `/api/cosmos?secret=${SECRET}&sql=${REPRESENTATION_BY_YEAR_QUERY}`,
         fetcher
     )
@@ -86,9 +93,6 @@ export default function Home() {
             JSON.stringify(parsed.error.issues, null, 2)
         )
     }
-
-    const isLoading =
-        !cosmosData && !cosmosError && !repByYearsRaw && !repByYearsErr
 
     return (
         <div className={styles.container}>
@@ -142,8 +146,10 @@ export default function Home() {
                             </TextContainer>
                         </Section>
                         <Visualizations>
-                            {isLoading || !parsed.success ? (
+                            {isLoadingCosmos ? (
                                 <Loading />
+                            ) : !parsed.success ? (
+                                <ErrorComponent />
                             ) : (
                                 <div className={styles.charts}>
                                     <BarChartInteractive data={parsed.data} />
@@ -181,8 +187,10 @@ export default function Home() {
                             </TextContainer>
                         </Section>
                         <Visualizations>
-                            {isLoading || !repByYears.success ? (
+                            {isLoadingRepsByYear ? (
                                 <Loading />
+                            ) : !repByYears.success ? (
+                                <ErrorComponent />
                             ) : (
                                 <div className={styles.charts}>
                                     <BarChartYears data={repByYears.data} />
@@ -214,8 +222,10 @@ export default function Home() {
                             </TextContainer>
                         </Section>
                         <Visualizations>
-                            {isLoading || !parsed.success ? (
+                            {isLoadingCosmos ? (
                                 <Loading />
+                            ) : !parsed.success ? (
+                                <ErrorComponent />
                             ) : (
                                 <div className={styles.charts}>
                                     <StackedBarChart cases={parsed?.data} />
@@ -225,6 +235,14 @@ export default function Home() {
                     </Container>
                 </FadeInSection>
                 <Spacer />
+                <FadeInSection>
+                    <Container>
+                        <Section>
+                            <CounselPerChargeCategoryBarChart />
+                        </Section>
+                    </Container>
+                </FadeInSection>
+
                 <FadeInSection>
                     <Container>
                         <Section>

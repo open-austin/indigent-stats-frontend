@@ -47,7 +47,10 @@ export const upsertAtMap = <A, B>(
  *
  * @example
  * const f = (k: string, n: number) => `${k.toUpperCase()}-${n}`;
- * assert.deepStrictEqual(mapWithIndex(f)({ a: 3, b: 5 }), { a: "A-3", b: "B-5" });
+ * deepStrictEqual(
+ *   mapWithIndex({ a: 3, b: 5 }, f),
+ *   { a: "A-3", b: "B-5" }
+ * );
  */
 export function mapWithIndex<A, B>(
     r: Record<string, A>,
