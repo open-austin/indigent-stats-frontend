@@ -22,7 +22,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { sql, secret } = req.query
+    const { sql, secret, container, db } = req.query
 
     if (secret !== process.env.NEXT_PUBLIC_COSMOSDB_SECRET) {
         return res.status(401).json({ error: 'Secret did not match' })
@@ -32,8 +32,20 @@ export default async function handler(
         return res.status(401).json({ error: 'Query string was empty' })
     }
 
+    if (container === '' || typeof container === 'object') {
+        return res.status(401).json({
+            error: 'Invalid param "container", expected string or undefined',
+        })
+    }
+
+    if (db === '' || typeof db === 'object') {
+        return res.status(401).json({
+            error: 'Invalid param "db", expected string or undefined',
+        })
+    }
+
     try {
-        const { resources: data } = await doQuery(sql)
+        const { resources: data } = await doQuery(sql, container, db)
 
         return res.status(200).json({ data })
     } catch (err) {
@@ -43,10 +55,14 @@ export default async function handler(
     }
 }
 
-async function doQuery(query: string) {
+async function doQuery(
+    query: string,
+    container: string = 'nested-cases',
+    db: string = 'nested-cases-db'
+) {
     return client
-        .database('nested-cases-db')
-        .container('nested-cases')
+        .database(db)
+        .container(container)
         .items.query(query)
         .fetchAll()
 }
