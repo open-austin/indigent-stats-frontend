@@ -95,14 +95,6 @@ const BarChartDesktop = ({
                         value="Years"
                         dy="800"
                         position={'bottom'}
-                        // style={{
-                        //     paddingBottom: 20,
-                        //     transform: 'translateY(1.5rem)',
-                        //     fontSize: 12,
-                        //     position: 'relative',
-                        //     left: '-4rem',
-                        //     fontWeight: 'bold',
-                        // }}
                     />
                 </XAxis>
                 <YAxis
