@@ -21,7 +21,7 @@ import { InlineLink } from '../components/Link'
 import FadeInSection from '../components/FadeInSection'
 import Spacer from '../components/Spacer'
 import { ErrorComponent } from '../components/ErrorComponent'
-import { CounselPerChargeCategoryBarChart } from '../components/CounselPerChargeCategoryBarChart/CounselPerChargeCategoryBarChart'
+import CounselPerChargeCategoryBarChart from '../components/CounselPerChargeCategoryBarChart'
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 // TODO: Update cosmos query later
@@ -238,8 +238,18 @@ export default function Home() {
                 <FadeInSection>
                     <Container>
                         <Section>
-                            <CounselPerChargeCategoryBarChart />
+                            <H3>
+                                What type of attorneys are represented more per charge category?
+                            </H3>
+                            <TextContainer align="left">
+                                <Paragraph>
+                                    Need copy here.
+                                </Paragraph>
+                            </TextContainer>
                         </Section>
+                        <Visualizations>
+                            <CounselPerChargeCategoryBarChart />
+                        </Visualizations>
                     </Container>
                 </FadeInSection>
 
