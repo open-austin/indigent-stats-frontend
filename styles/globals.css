@@ -80,3 +80,7 @@ h4 {
 .recharts-cartesian-axis .recharts-text.recharts-label tspan {
     font-size: 1rem;
 }
+
+.recharts-wrapper {
+    margin: 0 auto;
+}
