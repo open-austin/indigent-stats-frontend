@@ -114,7 +114,7 @@ export default function Home() {
                             <TextContainer align="left">
                                 <Paragraph>
                                     As determined by our legal experts, filing
-                                    significant motions, such as{' '}
+                                    motions, such as{' '}
                                     <Highlight>motion in limine</Highlight>,
                                     &nbsp;
                                     <Highlight>
@@ -128,8 +128,23 @@ export default function Home() {
                                     <Highlight>
                                         motion to reduce bond
                                     </Highlight>{' '}
-                                    is evidence of adequate legal
-                                    representation.
+                                    are forms of legal representation.
+                                </Paragraph>
+                                <br></br>
+                                <Paragraph>
+                                    Keep in mind that we are only looking at
+                                    records from a court file, which will never
+                                    be able to tell the whole story about the
+                                    attorney-client relationship. It is possible
+                                    for a person to get great representation
+                                    without their lawyer filing any of these
+                                    motions, or for a lawyer to neglect their
+                                    client’s case even if one of these motions
+                                    is filed. We are using motions as a proxy
+                                    because most of the time, filing at least
+                                    one of these motions is a good indicator
+                                    that a lawyer is putting effort into their
+                                    client’s case.
                                 </Paragraph>
                             </TextContainer>
                             <br></br>
@@ -143,6 +158,25 @@ export default function Home() {
                                     In the future, we intend to compare outcomes
                                     with attorney type.
                                 </Small>
+                            </TextContainer>
+                        </Section>
+                    </Container>
+                </FadeInSection>
+                <Spacer />
+                <FadeInSection>
+                    <Container>
+                        <Section>
+                            <H3>Try it out yourself</H3>
+                            <TextContainer align="left">
+                                <Paragraph>
+                                    Try out the dashboard and see for yourself
+                                    what the differences are between the
+                                    representation people get from
+                                    court-appointed lawyers and
+                                    privately-retained lawyers. You can compare
+                                    different kinds of cases and different
+                                    specific kinds of motions.
+                                </Paragraph>
                             </TextContainer>
                         </Section>
                         <Visualizations>
@@ -162,9 +196,7 @@ export default function Home() {
                 <FadeInSection>
                     <Container>
                         <Section>
-                            <H3>
-                                How does this disparity look like over time?
-                            </H3>
+                            <H3>How does this disparity look over time?</H3>
                             <TextContainer align="left">
                                 <Paragraph>
                                     <Highlight>
@@ -173,16 +205,12 @@ export default function Home() {
                                     </Highlight>
                                 </Paragraph>
                                 <Paragraph>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Nullam vel mi arcu. In
-                                    molestie, ex quis venenatis viverra, nulla
-                                    justo consectetur metus, sit amet iaculis
-                                    sem arcu vitae erat. Quisque viverra neque
-                                    at leo posuere posuere. In ut efficitur
-                                    nulla. Nullam et massa malesuada, mollis
-                                    massa et, fringilla magna. Integer tellus
-                                    nibh, mattis in elit eget, aliquet pulvinar
-                                    quam.
+                                    A lot has changed over the past ## years. We
+                                    wanted to know whether attorney
+                                    representation has changed over time and, if
+                                    so, what might have caused those changes -
+                                    so we mapped out the data over time. Here we
+                                    see ...
                                 </Paragraph>
                             </TextContainer>
                         </Section>
@@ -208,6 +236,15 @@ export default function Home() {
                                 type
                             </H3>
                             <TextContainer align="left">
+                                <Paragraph>
+                                    We wanted to know whether certain kinds of
+                                    cases are more likely to have retained
+                                    lawyers than court-appointed lawyers. There
+                                    are a lot of similarities between the kinds
+                                    of cases represented by court-appointed and
+                                    retained lawyers.
+                                </Paragraph>
+                                <br></br>
                                 <Paragraph>
                                     We noticed that with all the cases grouped
                                     by their charge category, there is a higher
@@ -239,12 +276,11 @@ export default function Home() {
                     <Container>
                         <Section>
                             <H3>
-                                What type of attorneys are represented more per charge category?
+                                What type of attorneys are represented more per
+                                charge category?
                             </H3>
                             <TextContainer align="left">
-                                <Paragraph>
-                                    Need copy here.
-                                </Paragraph>
+                                <Paragraph>Need copy here.</Paragraph>
                             </TextContainer>
                         </Section>
                         <Visualizations>
@@ -252,7 +288,7 @@ export default function Home() {
                         </Visualizations>
                     </Container>
                 </FadeInSection>
-
+                <Spacer />
                 <FadeInSection>
                     <Container>
                         <Section>

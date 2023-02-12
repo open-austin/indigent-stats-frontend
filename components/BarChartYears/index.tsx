@@ -90,12 +90,8 @@ const BarChartDesktop = ({
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="year" tick={{ fontSize: 10 }} >
-                    <Label
-                        value="Years"
-                        dy="800"
-                        position={'bottom'}
-                    />
+                <XAxis dataKey="year" tick={{ fontSize: 10 }}>
+                    <Label value="Years" dy="800" position={'bottom'} />
                 </XAxis>
                 <YAxis
                     dataKey={'percentEvidenceOfRepresentation'}
@@ -289,7 +285,7 @@ function BarChartYears({ data }: BarChartProps) {
 
     return (
         <>
-            <Layout className='years-bar-chart'>
+            <Layout className="years-bar-chart">
                 <ChartWrapper>
                     <ChartTitle>
                         Evidence of Representation Over the Years
