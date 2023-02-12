@@ -104,15 +104,15 @@ const CounselBarChart = () => {
             </ChartTitle>
 
             <ResponsiveContainer
-                width={'100%'}
+                width={isLg ? 800 : '100%'}
                 height="100%"
-                minHeight={isLg ? 600 : '100vh'}
+                minHeight={isLg ? 800 : '100vh'}
                 className="recharts-wrapper"
             >
                 <BarChart
                     maxBarSize={120}
                     barSize={isLg ? 35 : 30}
-                    barCategoryGap={isLg ? 35 : 10}
+                    barCategoryGap={isLg ? 35 : 30}
                     barGap={0}
                     data={records}
                     margin={{
@@ -138,12 +138,12 @@ const CounselBarChart = () => {
                     />
                     <Bar
                         dataKey="appointed"
-                        stackId="a"
+                        name="Court appointed"
                         fill={colors.openAustinOrange}
                     />
                     <Bar
                         dataKey="retained"
-                        stackId="b"
+                        name="Retained"
                         fill={colors.violet}
                     />
                 </BarChart>
