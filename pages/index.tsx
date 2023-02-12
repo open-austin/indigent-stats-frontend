@@ -288,7 +288,7 @@ export default function Home() {
                         </Visualizations>
                     </Container>
                 </FadeInSection>
-
+                <Spacer />
                 <FadeInSection>
                     <Container>
                         <Section>
