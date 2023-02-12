@@ -7,7 +7,7 @@ const FadeIn = styled.div<{ isVisible: boolean }>`
     transition: opacity 0.5s ${ease}, transform 0.9s ${ease};
     will-change: opacity, transform;
     opacity: 0;
-    transform: translateY(2.5vh);
+    transform: translateY(1.5vh);
 
     ${(props) => {
         if (props.isVisible) {
