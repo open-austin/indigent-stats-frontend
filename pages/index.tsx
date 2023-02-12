@@ -166,6 +166,26 @@ export default function Home() {
                 <FadeInSection>
                     <Container>
                         <Section>
+                            <H3>Why does evidence of representation matter?</H3>
+                            <TextContainer align="left">
+                                <Paragraph>
+                                    Typically, poorer people with
+                                    appointed counsel go through the legal
+                                    system without the zealous advocacy that a
+                                    retained attorney or well-funded
+                                    institutional public defender might provide
+                                    because their appointed attorneys do not
+                                    have the time to investigate a variety of
+                                    legal strategies in each case.
+                                </Paragraph>
+                            </TextContainer>
+                        </Section>
+                    </Container>
+                </FadeInSection>
+                <Spacer />
+                <FadeInSection>
+                    <Container>
+                        <Section>
                             <H3>Try it out yourself</H3>
                             <TextContainer align="left">
                                 <Paragraph>
