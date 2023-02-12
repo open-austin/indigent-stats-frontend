@@ -19,12 +19,15 @@ const Wrapper = styled.section<Props>`
             : props.bgColor};
 `
 
-export const FullWidthContainer = ({ bgColor, children, transparent, hasPadding }: Props) => {
+export const FullWidthContainer = ({
+    bgColor,
+    children,
+    transparent,
+    hasPadding,
+}: Props) => {
     return (
         <Wrapper bgColor={bgColor} transparent={transparent}>
-            <Container hasPadding={hasPadding}>
-                {children}
-            </Container>
+            <Container hasPadding={hasPadding}>{children}</Container>
         </Wrapper>
     )
 }

@@ -32,7 +32,6 @@ const toPercent = (decimal: number) => {
     return `${decimal.toFixed(2)}%`
 }
 
-
 export type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
     totalCharges: Record<string, number>
