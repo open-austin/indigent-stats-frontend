@@ -10,6 +10,6 @@ export const significantMotions = [
 ] as const
 
 export const fontFamilies = {
-  serif: `'Merriweather', serif`,
-  sansSerif: `'Lato', sans-serif`
+    serif: `'Merriweather', serif`,
+    sansSerif: `'Lato', sans-serif`,
 }

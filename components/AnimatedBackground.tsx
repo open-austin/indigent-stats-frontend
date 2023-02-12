@@ -123,10 +123,12 @@ const Square = styled.div`
 
     @keyframes squares {
         from {
-            transform: translateY(${startingPosition}) rotate(-80deg) skew(15deg) scale(1.5);
+            transform: translateY(${startingPosition}) rotate(-80deg)
+                skew(15deg) scale(1.5);
         }
         to {
-            transform: translateY(calc(-100vh - ${startingPosition})) rotate(20deg) skew(0deg) scale(1.6);
+            transform: translateY(calc(-100vh - ${startingPosition}))
+                rotate(20deg) skew(0deg) scale(1.6);
         }
     }
 `

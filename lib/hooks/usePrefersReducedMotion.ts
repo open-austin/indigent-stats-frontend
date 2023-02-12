@@ -12,8 +12,8 @@ function usePrefersReducedMotion() {
         const listener = () => {
             setMatches(media.matches)
         }
-        media.addEventListener("change", listener)
-        return () => media.removeEventListener("change", listener)
+        media.addEventListener('change', listener)
+        return () => media.removeEventListener('change', listener)
     }, [matches])
 
     return matches

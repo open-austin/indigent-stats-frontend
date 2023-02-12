@@ -104,7 +104,7 @@ const Hero = () => {
         <Section>
             <Wrapper>
                 <Background>
-                    {prefersReducedMotion ? null: <AnimatedBackground />}
+                    {prefersReducedMotion ? null : <AnimatedBackground />}
                 </Background>
                 <FadeInSection>
                     <Container>
@@ -132,12 +132,13 @@ const Hero = () => {
                                     Texas Fair Defense Project
                                 </InlineLink>
                                 , began creating a database for criminal court
-                                case records which were previously siloed within
+                                case records that were previously siloed within
                                 their respective county websites. &nbsp; The
                                 goal of this work is to visualize this data to
-                                enable TFDP to advocate for county-by-county
-                                policy changes and encourage judicial
-                                accountability.
+                                help policymakers, advocates, and everyday
+                                people understand the current state of defense
+                                representation in their communities and, where
+                                appropriate, advocate for improvements.
                             </Subheading>
                         </HeaderWrapper>
                     </Container>
@@ -145,19 +146,16 @@ const Hero = () => {
             </Wrapper>
             <BannerWrapper>
                 <FadeInSection>
-                    <Banner
-                        bgColor={colors.blueNavy}
-                        color={colors.white}
-                    >
+                    <Banner bgColor={colors.blueNavy} color={colors.white}>
                         <TextContainer>
                             <H3 color={colors.white}>
                                 Through this research, we learned that folks who
                                 do not have retained counsel are{' '}
-                                <b>less likely</b> to have adequate{' '}
+                                <b>less likely</b> to have affirmative{' '}
                                 <Highlight>
                                     evidence of representation
                                 </Highlight>{' '}
-                                in their trials.
+                                in their case files.
                             </H3>
                         </TextContainer>
                     </Banner>
