@@ -133,6 +133,10 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     const domain = [0, 100]
     const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    const sums = {
+        retained: retained.caseCount,
+        appointed: appointed.caseCount,
+    }
 
     return (
         <>
@@ -216,16 +220,10 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                         axisLine={false}
                         tickLine={false}
                     />
-                    <Text angle={90}>ello</Text>
-                    <Label
-                        value="Pages of my website"
-                        offset={0}
-                        position="insideBottom"
-                    />
                     <Legend
                         // @ts-ignore: Not a relevant props error
                         content={(props: LegendProps) =>
-                            renderLegend(props, 'Primary charge category')
+                            renderLegend(props, 'Primary charge category', sums)
                         }
                     />
                     {primaryCharges.map((charge, index) => {

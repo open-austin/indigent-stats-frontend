@@ -320,8 +320,8 @@ export default function Home() {
                                 <br />
                                 <Paragraph>
                                     The nature of the charge may also be
-                                    associated with someone&apos;s ability to retain
-                                    their own attorney. If someone who is
+                                    associated with someone&apos;s ability to
+                                    retain their own attorney. If someone who is
                                     experiencing homelessness must sleep in a
                                     private place to avoid the elements
                                     (criminal trespass) or must take food in
