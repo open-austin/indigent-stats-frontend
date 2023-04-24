@@ -113,22 +113,28 @@ export default function Home() {
                             </H3>
                             <TextContainer align="left">
                                 <Paragraph>
-                                    As determined by our legal experts, filing
-                                    motions, such as{' '}
-                                    <Highlight>motion in limine</Highlight>,
-                                    &nbsp;
+                                    A defense attorney that is providing good
+                                    representation generally files motions into
+                                    the court case file to advocate for better
+                                    results for their clients. Some of these
+                                    motions include{' '}
                                     <Highlight>
-                                        motion for speedy trial
+                                        motions for production of discovery
                                     </Highlight>
-                                    , &nbsp;
-                                    <Highlight>motion to suppress</Highlight>,
-                                    &nbsp;&nbsp;
-                                    <Highlight>motion for production</Highlight>
-                                    ,&nbsp; and{' '}
+                                    , to{' '}
                                     <Highlight>
-                                        motion to reduce bond
+                                        reduce their client&apos;s bond
+                                    </Highlight>
+                                    , to{' '}
+                                    <Highlight>
+                                        request a speedy trial
+                                    </Highlight>
+                                    , or to{' '}
+                                    <Highlight>
+                                        suppress evidence at trial
                                     </Highlight>{' '}
-                                    are forms of legal representation.
+                                    (sometimes called a motion to suppress or a
+                                    motion in limine).
                                 </Paragraph>
                                 <br></br>
                                 <Paragraph>
@@ -139,12 +145,17 @@ export default function Home() {
                                     for a person to get great representation
                                     without their lawyer filing any of these
                                     motions, or for a lawyer to neglect their
-                                    client’s case even if one of these motions
-                                    is filed. We are using motions as a proxy
-                                    because most of the time, filing at least
-                                    one of these motions is a good indicator
-                                    that a lawyer is putting effort into their
-                                    client’s case.
+                                    client&apos;s case even if one of these
+                                    motions is filed. We are using motions as a
+                                    proxy because most of the time,{' '}
+                                    <Highlight>
+                                        filing at least one of these motions is
+                                        a good indicator that a lawyer is
+                                        putting{' '}
+                                        <strong>at least some effort</strong>{' '}
+                                        into their client&apos;s case
+                                    </Highlight>
+                                    .
                                 </Paragraph>
                             </TextContainer>
                             <br></br>
@@ -169,14 +180,14 @@ export default function Home() {
                             <H3>Why does evidence of representation matter?</H3>
                             <TextContainer align="left">
                                 <Paragraph>
-                                    Typically, poorer people with
-                                    appointed counsel go through the legal
-                                    system without the zealous advocacy that a
-                                    retained attorney or well-funded
-                                    institutional public defender might provide
-                                    because their appointed attorneys do not
-                                    have the time to investigate a variety of
-                                    legal strategies in each case.
+                                    Typically, poorer people with appointed
+                                    counsel go through the legal system without
+                                    the zealous advocacy that a retained
+                                    attorney or well-funded institutional public
+                                    defender might provide because their
+                                    appointed attorneys do not have the time to
+                                    investigate a variety of legal strategies in
+                                    each case.
                                 </Paragraph>
                             </TextContainer>
                         </Section>
@@ -189,13 +200,12 @@ export default function Home() {
                             <H3>Try it out yourself</H3>
                             <TextContainer align="left">
                                 <Paragraph>
-                                    Try out the dashboard and see for yourself
-                                    what the differences are between the
-                                    representation people get from
-                                    court-appointed lawyers and
-                                    privately-retained lawyers. You can compare
-                                    different kinds of cases and different
-                                    specific kinds of motions.
+                                    Try out the dashboard below to compare what
+                                    kind of representation people get from court
+                                    appointed lawyers with that of retained
+                                    lawyers. You can compare different types of
+                                    motions they file across different types of
+                                    cases.
                                 </Paragraph>
                             </TextContainer>
                         </Section>
@@ -219,18 +229,8 @@ export default function Home() {
                             <H3>How does this disparity look over time?</H3>
                             <TextContainer align="left">
                                 <Paragraph>
-                                    <Highlight>
-                                        This description will change once we
-                                        have more recent data.
-                                    </Highlight>
-                                </Paragraph>
-                                <Paragraph>
-                                    A lot has changed over the past ## years. We
-                                    wanted to know whether attorney
-                                    representation has changed over time and, if
-                                    so, what might have caused those changes -
-                                    so we mapped out the data over time. Here we
-                                    see ...
+                                    The graph below also displays the change in
+                                    evidence of representation over time.
                                 </Paragraph>
                             </TextContainer>
                         </Section>
@@ -257,24 +257,27 @@ export default function Home() {
                             </H3>
                             <TextContainer align="left">
                                 <Paragraph>
-                                    We wanted to know whether certain kinds of
-                                    cases are more likely to have retained
-                                    lawyers than court-appointed lawyers. There
-                                    are a lot of similarities between the kinds
-                                    of cases represented by court-appointed and
-                                    retained lawyers.
+                                    We explored whether people who are charged
+                                    with certain types of offenses were more
+                                    likely to have an appointed or a retained
+                                    attorney.
                                 </Paragraph>
                                 <br></br>
                                 <Paragraph>
-                                    We noticed that with all the cases grouped
-                                    by their charge category, there is a higher
-                                    representation of{' '}
-                                    <Highlight>DUI offenses</Highlight> in cases
-                                    with retained attorneys compared to those
-                                    with court-appointed attorneys. Similarly,
-                                    there is a higher representation of{' '}
-                                    <Highlight>property charges</Highlight>{' '}
-                                    within cases with court-appointed attorneys.
+                                    We found that{' '}
+                                    <Highlight>
+                                        people charged with DWIs were more
+                                        likely to have retained attorneys
+                                    </Highlight>{' '}
+                                    and that{' '}
+                                    <Highlight>
+                                        people charged with property offenses
+                                        were more likely to have court-appointed
+                                        attorneys
+                                    </Highlight>
+                                    . Overall, there were lots of similarities
+                                    between people charged with different
+                                    offenses.
                                 </Paragraph>
                             </TextContainer>
                         </Section>
@@ -300,7 +303,33 @@ export default function Home() {
                                 charge category?
                             </H3>
                             <TextContainer align="left">
-                                <Paragraph>Need copy here.</Paragraph>
+                                <Paragraph>
+                                    Whether someone accused of a crime hires an
+                                    attorney or is appointed one depends on a
+                                    lot of factors. The accused may have more
+                                    money and resources to afford an attorney.
+                                    For instance, if more people arrested for
+                                    driving while intoxicated charges tend to
+                                    have a higher income compared to people
+                                    charged with other types of crimes, then we
+                                    would see a higher proportion of folks
+                                    accused of DWIs retaining their own
+                                    attorney.
+                                </Paragraph>
+                                <br />
+                                <br />
+                                <Paragraph>
+                                    The nature of the charge may also be
+                                    associated with someone&apos;s ability to retain
+                                    their own attorney. If someone who is
+                                    experiencing homelessness must sleep in a
+                                    private place to avoid the elements
+                                    (criminal trespass) or must take food in
+                                    order to survive (theft), then people with
+                                    lower incomes or who may be experiencing
+                                    homelessness may be more likely to be
+                                    charged with those types of crimes.
+                                </Paragraph>
                             </TextContainer>
                         </Section>
                         <Visualizations>
@@ -318,7 +347,7 @@ export default function Home() {
                                     <li>
                                         <Paragraph>
                                             We currently only have data from
-                                            Hayes County, but intend to expand
+                                            Hays County, but intend to expand
                                             that to all Texas counties.
                                         </Paragraph>
                                     </li>
