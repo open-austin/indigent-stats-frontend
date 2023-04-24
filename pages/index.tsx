@@ -125,7 +125,7 @@ export default function Home() {
                                     <Highlight>
                                         reduce their client&apos;s bond
                                     </Highlight>
-                                    , to
+                                    , to{' '}
                                     <Highlight>
                                         request a speedy trial
                                     </Highlight>
