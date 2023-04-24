@@ -136,9 +136,9 @@ const Hero = () => {
                                 their respective county websites. &nbsp; The
                                 goal of this work is to visualize this data to
                                 help policymakers, advocates, and everyday
-                                people understand the current state of defense
-                                representation in their communities and, where
-                                appropriate, advocate for improvements.
+                                people understand the current state of public
+                                defense representation in their communities and,
+                                where appropriate, advocate for improvements.
                             </Subheading>
                         </HeaderWrapper>
                     </Container>
@@ -149,13 +149,16 @@ const Hero = () => {
                     <Banner bgColor={colors.blueNavy} color={colors.white}>
                         <TextContainer>
                             <H3 color={colors.white}>
-                                Through this research, we learned that folks who
-                                do not have retained counsel are{' '}
-                                <b>less likely</b> to have affirmative{' '}
                                 <Highlight>
-                                    evidence of representation
+                                    Very few people accused of crimes in Hays
+                                    County have any evidence of defense motions
+                                    being filed in their court case files
                                 </Highlight>{' '}
-                                in their case files.
+                                — things like defense requests for evidence,
+                                motions to suppress that evidence, or other
+                                evidence of effective representation. This is
+                                particularly true of people represented by
+                                court-appointed counsel.
                             </H3>
                         </TextContainer>
                     </Banner>
