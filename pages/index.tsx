@@ -123,7 +123,7 @@ export default function Home() {
                                     </Highlight>
                                     , to{' '}
                                     <Highlight>
-                                        reduce their client's bond
+                                        reduce their client&apos;s bond
                                     </Highlight>
                                     , to
                                     <Highlight>
@@ -145,15 +145,15 @@ export default function Home() {
                                     for a person to get great representation
                                     without their lawyer filing any of these
                                     motions, or for a lawyer to neglect their
-                                    client's case even if one of these motions
-                                    is filed. We are using motions as a proxy
-                                    because most of the time,{' '}
+                                    client&apos;s case even if one of these
+                                    motions is filed. We are using motions as a
+                                    proxy because most of the time,{' '}
                                     <Highlight>
                                         filing at least one of these motions is
                                         a good indicator that a lawyer is
                                         putting{' '}
                                         <strong>at least some effort</strong>{' '}
-                                        into their client's case
+                                        into their client&apos;s case
                                     </Highlight>
                                     .
                                 </Paragraph>
@@ -320,7 +320,7 @@ export default function Home() {
                                 <br />
                                 <Paragraph>
                                     The nature of the charge may also be
-                                    associated with someone's ability to retain
+                                    associated with someone&apos;s ability to retain
                                     their own attorney. If someone who is
                                     experiencing homelessness must sleep in a
                                     private place to avoid the elements
