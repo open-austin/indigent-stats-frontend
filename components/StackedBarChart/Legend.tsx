@@ -7,6 +7,8 @@ import {
     LegendTitle,
     LegendSpan,
     LegendColorBlock,
+    LegendSampleSize,
+    LegendSampleSizeTitle,
 } from '../LegendUI'
 
 const LegendBoxRow = styled(LegendBox)`
@@ -20,9 +22,26 @@ const LegendItems = styled.div`
     gap: 1rem;
 `
 
-export const renderLegend = (props: Props, title: string): ReactNode => {
+export const renderLegend = (
+    props: Props,
+    title: string,
+    sums: {
+        retained: number
+        appointed: number
+    }
+): ReactNode => {
     return (
         <LegendWrapper>
+            <LegendSampleSize>
+                <LegendSampleSizeTitle>Sample size</LegendSampleSizeTitle>
+                <div>
+                    <small>
+                        Retained: {sums?.retained} cases
+                        <br />
+                        Court Appointed: {sums?.appointed} cases
+                    </small>
+                </div>
+            </LegendSampleSize>
             <LegendBoxRow>
                 <LegendTitle>
                     <strong>{title}</strong>
