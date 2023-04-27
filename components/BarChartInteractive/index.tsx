@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import useSWR from 'swr'
+import { z } from 'zod'
 import {
     BarChart,
     Bar,
@@ -11,7 +13,7 @@ import {
     LabelList,
 } from 'recharts'
 import { Props as LegendProps } from 'recharts/types/component/Legend'
-import { Case } from '../../models/Case'
+import { Case, caseSchema } from '../../models/Case'
 import { colors } from '../../lib/colors'
 import { bp } from '../../lib/breakpoints'
 import Filters, { IFilters } from '../Filters'
@@ -20,13 +22,12 @@ import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
 import { H3, H4 } from '../Typography/Headings'
 import useMediaQuery from '../../lib/hooks/useMediaQuery'
+import fetcher from '../../lib/fetcher'
+import { ErrorComponent } from '../ErrorComponent'
+import { Loading } from '../Loading'
 
 // TODO: This should be changed to 50 once we use the larger sample size
 const MIN_SAMPLE_SIZE = 15
-
-interface BarChartProps {
-    data: Array<Case>
-}
 
 const toPercent = (decimal: number) => {
     return `${decimal.toFixed(2)}%`
@@ -79,7 +80,7 @@ const FiltersWrapper = styled.div`
     }
 `
 
-function BarChartInteractive({ data }: BarChartProps) {
+function BarChartInteractive() {
     const isMd = useMediaQuery('md')
     const barSize = isMd ? undefined : 50
     const defaultFilters = {
@@ -91,6 +92,26 @@ function BarChartInteractive({ data }: BarChartProps) {
     const [filters, setFilters] = useState<IFilters>(defaultFilters)
     const resetFilters = () => {
         setFilters(defaultFilters)
+    }
+
+    const { data, error, isLoading } = useSWR(`/api/get-all-cases`, fetcher)
+
+    if (error) {
+        console.error('Error loading cosmos data: ', error)
+        return <div>Error fetching</div>
+    }
+
+    const parsed = z.array(caseSchema).safeParse(data?.data)
+
+    if (isLoading) return <Loading />
+
+    if (!parsed.success) {
+        console.error(
+            'Error parsing data: ',
+            JSON.stringify(parsed.error.issues, null, 2)
+        )
+
+        return <ErrorComponent />
     }
 
     const denominatorFilter = (
