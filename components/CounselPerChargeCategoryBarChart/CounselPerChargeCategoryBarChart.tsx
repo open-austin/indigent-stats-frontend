@@ -29,6 +29,9 @@ const ChartTitle = styled(H4)`
 
 const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
 
+/**
+ * The query string sent to CosmosDB
+ */
 const QUERY = `
 SELECT a.charge_category, a.attorney_type, COUNT(a) AS count
   FROM (
@@ -42,6 +45,9 @@ SELECT a.charge_category, a.attorney_type, COUNT(a) AS count
   GROUP BY a.attorney_type, a.charge_category
 `
 
+/**
+ * Defines the schema of the expected return from the query
+ */
 const schema = z.array(
     z.object({
         charge_category: z.string(),

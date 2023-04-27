@@ -13,3 +13,5 @@ export const fontFamilies = {
     serif: `'Merriweather', serif`,
     sansSerif: `'Lato', sans-serif`,
 }
+
+export const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET

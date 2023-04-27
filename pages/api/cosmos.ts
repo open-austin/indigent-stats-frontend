@@ -1,8 +1,10 @@
 // https://vercel.com/guides/how-to-add-vercel-environment-variables
 // https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/cosmosdb/cosmos/README.md
 
-import { CosmosClient } from '@azure/cosmos'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getCosmosClient } from '../../lib/cosmosClient'
+
+const client = getCosmosClient()
 
 export const config = {
     api: {
@@ -12,11 +14,6 @@ export const config = {
         },
     },
 }
-
-const client = new CosmosClient({
-    endpoint: process.env.COSMOSDB_ENDPOINT ?? 'COSMOSDB_ENDPOINT_MISSING',
-    key: process.env.COSMOSDB_KEY ?? 'COSMOSDB_KEY_MISSING',
-})
 
 export default async function handler(
     req: NextApiRequest,

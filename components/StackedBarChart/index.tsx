@@ -1,4 +1,6 @@
 import React from 'react'
+import useSWR from 'swr'
+import { z } from 'zod'
 import {
     BarChart,
     Bar,
@@ -16,9 +18,13 @@ import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { stackedGraphColors } from '../../lib/colors'
 import { upsertAtMap } from '../../lib/record'
 import { flattenObject } from '../../lib/flatten'
-import { Case } from '../../models/Case'
 import { renderLegend } from './Legend'
 import { H4 } from '../Typography/Headings'
+import fetcher from '../../lib/fetcher'
+import { Loading } from '../Loading'
+import { ErrorComponent } from '../ErrorComponent'
+import { caseSchema } from '../../models/Case'
+import { toPercent } from '../../lib/number'
 
 type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
@@ -27,15 +33,31 @@ type AttorneySummary = {
     percentageCharges: Record<string, number>
 }
 
-interface StackedBarChartProps {
-    cases: Array<Case>
-}
-
 const ChartTitle = styled(H4)`
     text-align: center;
 `
 
-function StackedBarChart({ cases }: StackedBarChartProps) {
+function StackedBarChart() {
+    const { data, error, isLoading } = useSWR(`/api/get-all-cases`, fetcher)
+
+    if (error) {
+        console.error('Error loading cosmos data: ', error)
+        return <div>Error fetching</div>
+    }
+
+    const parsed = z.array(caseSchema).safeParse(data?.data)
+
+    if (isLoading) return <Loading />
+
+    if (!parsed.success) {
+        console.error(
+            'Error parsing data: ',
+            JSON.stringify(parsed.error.issues, null, 2)
+        )
+
+        return <ErrorComponent />
+    }
+
     const retained: AttorneySummary = {
         attorney: 'Retained',
         caseCount: 0,
@@ -49,13 +71,12 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
         percentageCharges: {},
     }
 
-    // TODO -- what's the shape of retained.primaryCharges?
     // note: the type of the key is really a number
     let pcSet = new Set<string>()
 
     // console.log('num of cases\n', cases.length)
 
-    cases.forEach((c) => {
+    parsed.data.forEach((c) => {
         if (!c.charge_category?.length) {
             return
         }
@@ -88,9 +109,6 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
         }
     })
 
-    const toPercent = (num: number, denom: number) => {
-        return (num / denom) * 100
-    }
     Object.keys(retained.totalCharges).forEach((charge) => {
         retained.percentageCharges[charge] = toPercent(
             retained.totalCharges[charge],
@@ -104,23 +122,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
         )
     })
 
-    const formattedResults = [flattenObject(retained), flattenObject(appointed)]
-
     const primaryCharges = Array.from(pcSet)
-
-    const appointedPrimaryCharges = Object.keys(appointed.percentageCharges)
-        .sort()
-        .reduce((obj: any, key) => {
-            obj[key] = appointed.percentageCharges[key]
-            return obj
-        }, {})
-
-    // console.log('primaryCharges\n', primaryCharges)
-    // console.log('retained\n', retained)
-    // console.log('appointed\n', appointed)
-    // console.log('formattedResults\n', formattedResults)
-
-    if (!cases) return <div>Loading...</div>
 
     const renderCustomPercentage = (props: any, charge: string) => {
         const percentage = props[charge]
