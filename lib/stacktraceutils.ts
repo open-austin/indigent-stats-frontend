@@ -1,4 +1,4 @@
-import { isObject, isString } from './objectutils.js'
+import { isObject, isString } from './objectutils'
 
 export function extendStackTrace(err: unknown, stackError: Error): unknown {
   if (isStackHolder(err) && stackError.stack) {

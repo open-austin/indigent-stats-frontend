@@ -17,5 +17,5 @@ interface CaseTable {
 }
 
 interface Database {
-    case: CaseTable
+    c: CaseTable
 }

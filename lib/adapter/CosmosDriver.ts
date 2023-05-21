@@ -8,9 +8,9 @@ import {
   import {
     CosmosCursorConstructor,
     CosmosDialectConfig,
-  } from './CosmosDialectConfig.js'
-import { extendStackTrace } from '../stacktraceutils.js'
-import { freeze, isFunction } from '../objectutils.js'
+  } from './CosmosDialectConfig'
+import { extendStackTrace } from '../stacktraceutils'
+import { freeze, isFunction } from '../objectutils'
 import { CosmosClient, SqlParameter } from '@azure/cosmos'
   
   const PRIVATE_RELEASE_METHOD = Symbol()
@@ -123,7 +123,6 @@ import { CosmosClient, SqlParameter } from '@azure/cosmos'
       if (!Number.isInteger(chunkSize) || chunkSize <= 0) {
         throw new Error('chunkSize must be a positive integer')
       }
-  
       const parameters = compiledQuery.parameters as SqlParameter[]
       const cursor = this.#client.database(this.#options.database).container(this.#options.container).items.query<O>({
         query: compiledQuery.sql,
