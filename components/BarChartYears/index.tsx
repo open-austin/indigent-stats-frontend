@@ -37,38 +37,70 @@ const countPerYearSchema = z.array(
     })
 )
 
-const Layout = styled.section`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1 1;
+export function BarChartYears() {
+    const isLg = useMediaQuery('lg')
 
-    @media ${bp.lg} {
-        justify-content: center;
-        flex-direction: row;
-        gap: 4rem;
+    const { data, error, isLoading } = useSWR(`/api/rep-by-years`, fetcher)
+
+    if (error) {
+        console.error('Error loading cosmos data: ', error)
+        return <div>Error fetching data</div>
     }
-`
 
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-`
-
-const ChartWrapper = styled.div`
-    max-width: 80rem;
-    width: 100%;
-    margin-top: 2rem;
-    @media ${bp.lg} {
-        flex: 1;
-        margin-top: 0;
+    if (isLoading) {
+        return <Loading />
     }
-`
 
-const ChartTitle = styled(H4)`
-    text-align: center;
-`
+    const parsed = countPerYearSchema.safeParse(data)
+
+    if (!parsed.success) {
+        console.error(
+            'Error parsing data: ',
+            JSON.stringify(parsed.error.issues, null, 2)
+        )
+
+        return <ErrorComponent />
+    }
+
+    const groupedByYear = groupBy(parsed.data)((a) => a.year.toString())
+    const totals = getTotals(groupedByYear)
+
+    // Sum the number of cases
+    const retained = parsed.data
+        .filter((a) => a.attorney_type === 'Retained')
+        .reduce((acc, curr) => acc + curr.case_count, 0)
+    const appointed = parsed.data
+        .filter((a) => a.attorney_type === 'Court Appointed')
+        .reduce((acc, curr) => acc + curr.case_count, 0)
+
+    return (
+        <Wrapper>
+            <Layout className="years-bar-chart">
+                <ChartWrapper>
+                    <ChartTitle>
+                        Evidence of Representation Over the Years
+                    </ChartTitle>
+
+                    <FullWidthContainer hasPadding={true}>
+                        {isLg ? (
+                            <BarChartDesktop
+                                retained={retained}
+                                appointed={appointed}
+                                totals={totals}
+                            />
+                        ) : (
+                            <BarChartMobile
+                                retained={retained}
+                                appointed={appointed}
+                                totals={totals}
+                            />
+                        )}
+                    </FullWidthContainer>
+                </ChartWrapper>
+            </Layout>
+        </Wrapper>
+    )
+}
 
 interface BarChartIndividualProps {
     totals: TotalsByYear
@@ -276,73 +308,6 @@ const BarChartMobile = ({
     )
 }
 
-export function BarChartYears() {
-    const isLg = useMediaQuery('lg')
-
-    const { data, error, isLoading } = useSWR(`/api/rep-by-years`, fetcher)
-
-    if (error) {
-        console.error('Error loading cosmos data: ', error)
-        return <div>Error fetching data</div>
-    }
-
-    if (isLoading) {
-        return <Loading />
-    }
-
-    const parsed = countPerYearSchema.safeParse(data)
-
-    if (!parsed.success) {
-        console.error(
-            'Error parsing data: ',
-            JSON.stringify(parsed.error.issues, null, 2)
-        )
-
-        return <ErrorComponent />
-    }
-
-    const groupedByYear = groupBy(parsed.data)((a) => a.year.toString())
-    const totals = getTotals(groupedByYear)
-
-    // Sum the number of cases
-    const retained = parsed.data
-        .filter((a) => a.attorney_type === 'Retained')
-        .reduce((acc, curr) => acc + curr.case_count, 0)
-    const appointed = parsed.data
-        .filter((a) => a.attorney_type === 'Court Appointed')
-        .reduce((acc, curr) => acc + curr.case_count, 0)
-
-    return (
-        <>
-            <Wrapper>
-                <Layout className="years-bar-chart">
-                    <ChartWrapper>
-                        <ChartTitle>
-                            Evidence of Representation Over the Years
-                        </ChartTitle>
-
-                        <FullWidthContainer hasPadding={true}>
-                            {isLg ? (
-                                <BarChartDesktop
-                                    retained={retained}
-                                    appointed={appointed}
-                                    totals={totals}
-                                />
-                            ) : (
-                                <BarChartMobile
-                                    retained={retained}
-                                    appointed={appointed}
-                                    totals={totals}
-                                />
-                            )}
-                        </FullWidthContainer>
-                    </ChartWrapper>
-                </Layout>
-            </Wrapper>
-        </>
-    )
-}
-
 type GroupedByYear = Record<
     string,
     Array<{
@@ -380,3 +345,40 @@ const getTotals = (r: GroupedByYear): TotalsByYear => {
         }
     })
 }
+
+/////////////////////
+// Styled Components
+/////////////////////
+
+const Layout = styled.section`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1;
+
+    @media ${bp.lg} {
+        justify-content: center;
+        flex-direction: row;
+        gap: 4rem;
+    }
+`
+
+const Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+`
+
+const ChartWrapper = styled.div`
+    max-width: 80rem;
+    width: 100%;
+    margin-top: 2rem;
+    @media ${bp.lg} {
+        flex: 1;
+        margin-top: 0;
+    }
+`
+
+const ChartTitle = styled(H4)`
+    text-align: center;
+`
