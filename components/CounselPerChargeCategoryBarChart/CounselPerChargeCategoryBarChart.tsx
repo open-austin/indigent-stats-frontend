@@ -27,26 +27,8 @@ const ChartTitle = styled(H4)`
     text-align: center;
 `
 
-const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
-
 /**
- * The query string sent to CosmosDB
- */
-const QUERY = `
-SELECT a.charge_category, a.attorney_type, COUNT(a) AS count
-  FROM (
-    SELECT c.attorney_type, charge["charge_category"] AS charge_category FROM c
-    JOIN charge IN c["charges"]
-    WHERE
-        charge["charge_category"] != null AND
-        (c.attorney_type = "Retained" OR
-        c.attorney_type = "Court Appointed")
-  ) a
-  GROUP BY a.attorney_type, a.charge_category
-`
-
-/**
- * Defines the schema of the expected return from the query
+ * Defines the schema of the response from /api/counsel-per-charge
  */
 const schema = z.array(
     z.object({
@@ -58,7 +40,7 @@ const schema = z.array(
 
 export function CounselPerChargeCategoryBarChart() {
     const { data, error, isLoading } = useSWR(
-        `/api/cosmos?secret=${SECRET}&sql=${QUERY}&container=clean-cases&db=cases-json-db`,
+        '/api/counsel-per-charge',
         fetcher
     )
 
@@ -94,7 +76,6 @@ export function CounselPerChargeCategoryBarChart() {
         }
     })
 
-    // const categories = Object.keys(grouped)
     const records = Object.values(mapped)
 
     // Sum the number of cases
