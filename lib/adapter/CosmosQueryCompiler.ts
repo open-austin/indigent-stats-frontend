@@ -6,4 +6,10 @@ export class CosmosQueryCompiler extends DefaultQueryCompiler {
   protected override sanitizeIdentifier(identifier: string): string {
     return identifier.replace(ID_WRAP_REGEX, '""')
   }
+  protected override getLeftIdentifierWrapper(): string {
+    return '';
+  }
+  protected override getRightIdentifierWrapper(): string {
+    return '';
+  }
 }
