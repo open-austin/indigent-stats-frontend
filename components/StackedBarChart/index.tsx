@@ -37,7 +37,7 @@ const ChartTitle = styled(H4)`
     text-align: center;
 `
 
-function StackedBarChart() {
+export default function StackedBarChart() {
     const { data, error, isLoading } = useSWR(`/api/get-all-cases`, fetcher)
 
     if (error) {
@@ -260,5 +260,3 @@ function StackedBarChart() {
         </>
     )
 }
-
-export default StackedBarChart

@@ -18,15 +18,6 @@ import { Highlight } from '../components/Typography/Highlight'
 import { bp } from '../lib/breakpoints'
 import styles from '../styles/Home.module.css'
 
-// TODO: Update cosmos query later
-// currently getting data with 'null'
-const COSMOS_QUERY = `
-SELECT * FROM c
-  WHERE NOT ARRAY_CONTAINS(c['charge_category'], null)
-  ORDER BY c['earliest_charge_date'] DESC
-  OFFSET 0 LIMIT 6000
-`
-
 const Visualizations = styled.section`
     position: relative;
     min-height: 50vh;

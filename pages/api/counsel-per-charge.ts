@@ -18,6 +18,7 @@ export default async function handler(
 ) {
     try {
         const { resources: data } = await client
+            // TODO: update this to use production container
             .database('cases-json-db')
             .container('clean-cases')
             .items.query(QUERY)
