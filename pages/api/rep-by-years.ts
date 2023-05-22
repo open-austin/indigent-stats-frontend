@@ -17,13 +17,13 @@ export default async function handler(
     res: NextApiResponse
 ) {
     try {
-        const { resources: data } = await client
+        const { resources } = await client
             .database('nested-cases-db')
             .container('nested-cases')
             .items.query(REPRESENTATION_BY_YEAR_QUERY)
             .fetchAll()
 
-        return res.status(200).json({ data })
+        return res.status(200).json(resources)
     } catch (err) {
         console.log('Failed to query CosmosDB', JSON.stringify(err))
 
