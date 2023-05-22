@@ -181,8 +181,6 @@ function BarChartInteractive() {
     // console.log('appointed\n', appointed)
     // console.log('formattedResults\n', formattedResults)
 
-    if (!data) return <div>Loading...</div>
-
     const domain = [0, 100]
     const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
@@ -229,7 +227,7 @@ function BarChartInteractive() {
             <Layout>
                 <FiltersWrapper>
                     <Filters
-                        data={data}
+                        data={parsed.data}
                         filters={filters}
                         setFilters={setFilters}
                     >
