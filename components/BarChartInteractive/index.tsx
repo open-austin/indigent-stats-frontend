@@ -101,7 +101,7 @@ function BarChartInteractive() {
         return <div>Error fetching</div>
     }
 
-    const parsed = z.array(caseSchema).safeParse(data?.data)
+    const parsed = z.array(caseSchema).safeParse(data)
 
     if (isLoading) return <Loading />
 
