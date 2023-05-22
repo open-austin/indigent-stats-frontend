@@ -28,21 +28,6 @@ const ChartTitle = styled(H4)`
     text-align: center;
 `
 
-const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
-
-const QUERY = `
-SELECT a.charge_category, a.attorney_type, COUNT(a) AS count
-  FROM (
-    SELECT c.attorney_type, charge["charge_category"] AS charge_category FROM c
-    JOIN charge IN c["charges"]
-    WHERE
-        charge["charge_category"] != null AND
-        (c.attorney_type = "Retained" OR
-        c.attorney_type = "Court Appointed")
-  ) a
-  GROUP BY a.attorney_type, a.charge_category
-`
-
 const schema = z.array(
     z.object({
         charge_category: z.string(),
@@ -52,10 +37,7 @@ const schema = z.array(
 )
 
 const CounselBarChart = () => {
-    const { data, error, isLoading } = useSWR(
-        `/api/cosmos?secret=${SECRET}&sql=${QUERY}&container=clean-cases&db=cases-json-db`,
-        fetcher
-    )
+    const { data, error, isLoading } = useSWR(`/api/get-all-cases`, fetcher)
     const isLg = useMediaQuery('lg')
 
     if (isLoading) {
@@ -71,7 +53,9 @@ const CounselBarChart = () => {
     if (!parsed.success) {
         console.error(parsed.error.format())
 
-        return <>There was an parsing the data</>
+        return (
+            <ErrorComponent message="There was an error while parsing the data" />
+        )
     }
 
     const grouped = groupBy(parsed.data)((a) => a.charge_category)
