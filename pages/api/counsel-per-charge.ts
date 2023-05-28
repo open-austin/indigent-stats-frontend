@@ -17,14 +17,14 @@ export default async function handler(
     res: NextApiResponse
 ) {
     try {
-        const { resources: data } = await client
+        const { resources } = await client
             // TODO: update this to use production container
             .database('cases-json-db')
             .container('clean-cases')
             .items.query(QUERY)
             .fetchAll()
 
-        return res.status(200).json({ data })
+        return res.status(200).json(resources)
     } catch (err) {
         console.log('Failed to query CosmosDB', JSON.stringify(err))
 
