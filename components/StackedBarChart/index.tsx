@@ -38,6 +38,7 @@ const ChartTitle = styled(H4)`
 `
 
 export default function StackedBarChart() {
+    // TODO: this should use a more specific query
     const { data, error, isLoading } = useSWR(`/api/get-all-cases`, fetcher)
 
     if (error) {
@@ -50,10 +51,7 @@ export default function StackedBarChart() {
     if (isLoading) return <Loading />
 
     if (!parsed.success) {
-        console.error(
-            'Error parsing data: ',
-            JSON.stringify(parsed.error.issues, null, 2)
-        )
+        console.log(parsed.error.format())
 
         return <ErrorComponent />
     }
