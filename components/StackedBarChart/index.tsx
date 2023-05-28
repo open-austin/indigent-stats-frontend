@@ -9,22 +9,19 @@ import {
     ResponsiveContainer,
     Legend,
     LabelList,
-    Label,
     LabelListProps,
-    Text,
 } from 'recharts'
 import styled from 'styled-components'
 import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { stackedGraphColors } from '../../lib/colors'
-import { upsertAtMap } from '../../lib/record'
 import { flattenObject } from '../../lib/flatten'
 import { renderLegend } from './Legend'
 import { H4 } from '../Typography/Headings'
 import fetcher from '../../lib/fetcher'
 import { Loading } from '../Loading'
 import { ErrorComponent } from '../ErrorComponent'
-import { caseSchema } from '../../models/Case'
 import { toPercent } from '../../lib/number'
+import { groupBy } from '../../lib/array'
 
 type AttorneySummary = {
     attorney: 'Retained' | 'Court Appointed'
@@ -37,16 +34,26 @@ const ChartTitle = styled(H4)`
     text-align: center;
 `
 
+const schema = z.array(
+    z.object({
+        charge_category: z.string(),
+        attorney_type: z.string(),
+        count: z.number(),
+    })
+)
+
 export default function StackedBarChart() {
-    // TODO: this should use a more specific query
-    const { data, error, isLoading } = useSWR(`/api/get-all-cases`, fetcher)
+    const { data, error, isLoading } = useSWR(
+        `/api/counsel-per-charge`,
+        fetcher
+    )
 
     if (error) {
         console.error('Error loading cosmos data: ', error)
         return <div>Error fetching</div>
     }
 
-    const parsed = z.array(caseSchema).safeParse(data)
+    const parsed = schema.safeParse(data)
 
     if (isLoading) return <Loading />
 
@@ -69,42 +76,16 @@ export default function StackedBarChart() {
         percentageCharges: {},
     }
 
-    // note: the type of the key is really a number
-    let pcSet = new Set<string>()
+    const grouped = groupBy(parsed.data)((a) => a.attorney_type)
 
-    // console.log('num of cases\n', cases.length)
+    grouped['Retained'].forEach((r) => {
+        retained.caseCount += r.count
+        retained['totalCharges'][r.charge_category] = r.count
+    })
 
-    parsed.data.forEach((c) => {
-        if (!c.charge_category?.length) {
-            return
-        }
-        pcSet.add(c.charge_category[0])
-
-        // This should work since all of the "charges" within a given case were
-        // all scraped from the same record -- although in practice I'm not sure
-        // whether an attorney represents *all* charges for a given client..
-        // or is that ridiculous? Surely they represent them for all charges...
-        if (c.attorney_type === 'Retained') {
-            retained.caseCount += 1
-
-            retained.totalCharges = upsertAtMap(
-                retained.totalCharges,
-                c.charge_category[0],
-                (a) => a + 1,
-                1
-            )
-        }
-
-        if (c.attorney_type === 'Court Appointed') {
-            appointed.caseCount += 1
-
-            appointed.totalCharges = upsertAtMap(
-                appointed.totalCharges,
-                c.charge_category[0],
-                (a) => a + 1,
-                1
-            )
-        }
+    grouped['Court Appointed'].forEach((r) => {
+        appointed.caseCount += r.count
+        appointed['totalCharges'][r.charge_category] = r.count
     })
 
     Object.keys(retained.totalCharges).forEach((charge) => {
@@ -113,6 +94,7 @@ export default function StackedBarChart() {
             retained.caseCount
         )
     })
+
     Object.keys(appointed.totalCharges).forEach((charge) => {
         appointed.percentageCharges[charge] = toPercent(
             appointed.totalCharges[charge],
@@ -120,7 +102,9 @@ export default function StackedBarChart() {
         )
     })
 
-    const primaryCharges = Array.from(pcSet)
+    const chargeCategories = Array.from(
+        new Set<string>(parsed.data.map((a) => a.charge_category))
+    )
 
     const renderCustomPercentage = (props: any, charge: string) => {
         const percentage = props[charge]
@@ -140,9 +124,7 @@ export default function StackedBarChart() {
 
     return (
         <>
-            <ChartTitle>
-                Cases per Attorney Type Grouped by Charge Category
-            </ChartTitle>
+            <ChartTitle>Charge Categories / Attorney Type</ChartTitle>
             <ResponsiveContainer
                 width="100%"
                 height="100%"
@@ -167,7 +149,7 @@ export default function StackedBarChart() {
                         axisLine={false}
                         tickLine={false}
                     />
-                    {primaryCharges.map((charge, index) => {
+                    {chargeCategories.map((charge, index) => {
                         return (
                             <Bar
                                 maxBarSize={100}
@@ -176,7 +158,7 @@ export default function StackedBarChart() {
                                 fill={
                                     stackedGraphColors[
                                         index %
-                                            Object.keys(primaryCharges).length
+                                            Object.keys(chargeCategories).length
                                     ]
                                 }
                                 stackId="a"
@@ -226,7 +208,7 @@ export default function StackedBarChart() {
                             renderLegend(props, 'Primary charge category', sums)
                         }
                     />
-                    {primaryCharges.map((charge, index) => {
+                    {chargeCategories.map((charge, index) => {
                         return (
                             <Bar
                                 maxBarSize={100}
@@ -235,7 +217,7 @@ export default function StackedBarChart() {
                                 fill={
                                     stackedGraphColors[
                                         index %
-                                            Object.keys(primaryCharges).length
+                                            Object.keys(chargeCategories).length
                                     ]
                                 }
                                 stackId="a"
