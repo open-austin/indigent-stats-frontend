@@ -37,7 +37,10 @@ const schema = z.array(
 )
 
 const CounselBarChart = () => {
-    const { data, error, isLoading } = useSWR(`/api/get-all-cases`, fetcher)
+    const { data, error, isLoading } = useSWR(
+        `/api/counsel-per-charge`,
+        fetcher
+    )
     const isLg = useMediaQuery('lg')
 
     if (isLoading) {
@@ -48,7 +51,7 @@ const CounselBarChart = () => {
         return <ErrorComponent />
     }
 
-    const parsed = schema.safeParse(data?.data)
+    const parsed = schema.safeParse(data)
 
     if (!parsed.success) {
         console.error(parsed.error.format())
