@@ -113,6 +113,7 @@ const Hero = () => {
                                 <Image
                                     src={openAustinSvg}
                                     alt="Open Austin logo"
+                                    priority
                                 />
                             </ImageWrapper>
                             <Heading>{headingText}</Heading>

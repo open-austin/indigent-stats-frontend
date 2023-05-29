@@ -1,72 +1,111 @@
 import React from 'react'
 import styled from 'styled-components'
+import useSWR from 'swr'
 import {
-    BarChart,
     Bar,
+    BarChart,
+    CartesianGrid,
+    Label,
+    LabelList,
+    Legend,
+    ResponsiveContainer,
     XAxis,
     YAxis,
-    CartesianGrid,
-    ResponsiveContainer,
-    Legend,
-    LabelList,
-    Label,
 } from 'recharts'
 import { Props as LegendProps } from 'recharts/types/component/Legend'
-import { colors } from '../../lib/colors'
-import { bp } from '../../lib/breakpoints'
-import { renderLegend } from './Legend'
+import { z } from 'zod'
+
 import { groupBy } from '../../lib/array'
-import { mapWithIndex } from '../../lib/record'
-import { FullWidthContainer } from '../FullWidthContainer'
+import { bp } from '../../lib/breakpoints'
+import { colors } from '../../lib/colors'
+import fetcher from '../../lib/fetcher'
 import useMediaQuery from '../../lib/hooks/useMediaQuery'
+import { mapWithIndex } from '../../lib/record'
+import { ErrorComponent } from '../ErrorComponent'
+import { FullWidthContainer } from '../FullWidthContainer'
+import { Loading } from '../Loading'
 import { H4 } from '../Typography/Headings'
+import { renderLegend } from './Legend'
+import { decToPercent } from '../../lib/number'
 
-const Layout = styled.section`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1 1;
+const countPerYearSchema = z.array(
+    z.object({
+        attorney_type: z.string(),
+        year: z.number(),
+        case_count: z.number(),
+        has_evidence_of_representation: z.boolean(),
+    })
+)
 
-    @media ${bp.lg} {
-        justify-content: center;
-        flex-direction: row;
-        gap: 4rem;
+export function BarChartYears() {
+    const isLg = useMediaQuery('lg')
+
+    const { data, error, isLoading } = useSWR(`/api/rep-by-years`, fetcher)
+
+    if (error) {
+        console.error('Error loading cosmos data: ', error)
+        return <div>Error fetching data</div>
     }
-`
 
-const ChartWrapper = styled.div`
-    max-width: 80rem;
-    width: 100%;
-    margin-top: 2rem;
-    @media ${bp.lg} {
-        flex: 1;
-        margin-top: 0;
+    if (isLoading) {
+        return <Loading />
     }
-`
 
-const ChartTitle = styled(H4)`
-    text-align: center;
-`
+    const parsed = countPerYearSchema.safeParse(data)
 
-type CasesByYear = Array<{
-    attorney_type: string
-    year: number
-    case_count: number
-    has_evidence_of_representation: boolean
-}>
+    if (!parsed.success) {
+        console.error(
+            'Error parsing data: ',
+            JSON.stringify(parsed.error.issues, null, 2)
+        )
 
-interface BarChartProps {
-    data: CasesByYear
+        return <ErrorComponent />
+    }
+
+    const groupedByYear = groupBy(parsed.data)((a) => a.year.toString())
+    const totals = getTotals(groupedByYear)
+
+    // Sum the number of cases
+    const retained = parsed.data
+        .filter((a) => a.attorney_type === 'Retained')
+        .reduce((acc, curr) => acc + curr.case_count, 0)
+    const appointed = parsed.data
+        .filter((a) => a.attorney_type === 'Court Appointed')
+        .reduce((acc, curr) => acc + curr.case_count, 0)
+
+    return (
+        <Wrapper>
+            <Layout className="years-bar-chart">
+                <ChartWrapper>
+                    <ChartTitle>
+                        Evidence of Representation Over the Years
+                    </ChartTitle>
+
+                    <FullWidthContainer hasPadding={true}>
+                        {isLg ? (
+                            <BarChartDesktop
+                                retained={retained}
+                                appointed={appointed}
+                                totals={totals}
+                            />
+                        ) : (
+                            <BarChartMobile
+                                retained={retained}
+                                appointed={appointed}
+                                totals={totals}
+                            />
+                        )}
+                    </FullWidthContainer>
+                </ChartWrapper>
+            </Layout>
+        </Wrapper>
+    )
 }
 
 interface BarChartIndividualProps {
     totals: TotalsByYear
     retained: number
     appointed: number
-}
-
-const toPercent = (decimal: number) => {
-    return `${decimal.toFixed(2)}%`
 }
 
 const domain = [0, 15]
@@ -136,7 +175,7 @@ const BarChartDesktop = ({
                         fontSize={8}
                         fill={colors.white}
                         formatter={(value: number) =>
-                            value ? toPercent(value) : ''
+                            value ? decToPercent(value) : ''
                         }
                     />
                 </Bar>
@@ -152,7 +191,7 @@ const BarChartDesktop = ({
                         fontSize={8}
                         fill={colors.white}
                         formatter={(value: number) =>
-                            value ? toPercent(value) : ''
+                            value ? decToPercent(value) : ''
                         }
                     />
                 </Bar>
@@ -235,7 +274,7 @@ const BarChartMobile = ({
                         fontSize={8}
                         fill={colors.white}
                         formatter={(value: number) =>
-                            value ? toPercent(value) : ''
+                            value ? decToPercent(value) : ''
                         }
                     />
                 </Bar>
@@ -251,7 +290,7 @@ const BarChartMobile = ({
                         fontSize={8}
                         fill={colors.white}
                         formatter={(value: number) =>
-                            value ? toPercent(value) : ''
+                            value ? decToPercent(value) : ''
                         }
                     />
                 </Bar>{' '}
@@ -268,51 +307,6 @@ const BarChartMobile = ({
         </ResponsiveContainer>
     )
 }
-
-function BarChartYears({ data }: BarChartProps) {
-    const isLg = useMediaQuery('lg')
-
-    const groupedByYear = groupBy(data)((a) => a.year.toString())
-    const totals = getTotals(groupedByYear)
-
-    // Sum the number of cases
-    const retained = data
-        .filter((a) => a.attorney_type === 'Retained')
-        .reduce((acc, curr) => acc + curr.case_count, 0)
-    const appointed = data
-        .filter((a) => a.attorney_type === 'Court Appointed')
-        .reduce((acc, curr) => acc + curr.case_count, 0)
-
-    return (
-        <>
-            <Layout className="years-bar-chart">
-                <ChartWrapper>
-                    <ChartTitle>
-                        Evidence of Representation Over the Years
-                    </ChartTitle>
-
-                    <FullWidthContainer hasPadding={true}>
-                        {isLg ? (
-                            <BarChartDesktop
-                                retained={retained}
-                                appointed={appointed}
-                                totals={totals}
-                            />
-                        ) : (
-                            <BarChartMobile
-                                retained={retained}
-                                appointed={appointed}
-                                totals={totals}
-                            />
-                        )}
-                    </FullWidthContainer>
-                </ChartWrapper>
-            </Layout>
-        </>
-    )
-}
-
-export default BarChartYears
 
 type GroupedByYear = Record<
     string,
@@ -351,3 +345,40 @@ const getTotals = (r: GroupedByYear): TotalsByYear => {
         }
     })
 }
+
+/////////////////////
+// Styled Components
+/////////////////////
+
+const Layout = styled.section`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1;
+
+    @media ${bp.lg} {
+        justify-content: center;
+        flex-direction: row;
+        gap: 4rem;
+    }
+`
+
+const Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+`
+
+const ChartWrapper = styled.div`
+    max-width: 80rem;
+    width: 100%;
+    margin-top: 2rem;
+    @media ${bp.lg} {
+        flex: 1;
+        margin-top: 0;
+    }
+`
+
+const ChartTitle = styled(H4)`
+    text-align: center;
+`

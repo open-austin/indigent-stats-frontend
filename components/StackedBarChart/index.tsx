@@ -1,4 +1,6 @@
 import React from 'react'
+import useSWR from 'swr'
+import { z } from 'zod'
 import {
     BarChart,
     Bar,
@@ -7,120 +9,58 @@ import {
     ResponsiveContainer,
     Legend,
     LabelList,
-    Label,
     LabelListProps,
-    Text,
 } from 'recharts'
 import styled from 'styled-components'
 import { Props as LegendProps } from 'recharts/types/component/Legend'
 import { stackedGraphColors } from '../../lib/colors'
-import { upsertAtMap } from '../../lib/record'
 import { flattenObject } from '../../lib/flatten'
-import { Case } from '../../models/Case'
 import { renderLegend } from './Legend'
 import { H4 } from '../Typography/Headings'
+import fetcher from '../../lib/fetcher'
+import { Loading } from '../Loading'
+import { ErrorComponent } from '../ErrorComponent'
+import { toPercent } from '../../lib/number'
+import { groupBy } from '../../lib/array'
 
-type AttorneySummary = {
-    attorney: 'Retained' | 'Court Appointed'
-    caseCount: number
-    totalCharges: Record<string, number>
-    percentageCharges: Record<string, number>
-}
+const schema = z.array(
+    z.object({
+        charge_category: z.string(),
+        attorney_type: z.string(),
+        count: z.number(),
+    })
+)
 
-interface StackedBarChartProps {
-    cases: Array<Case>
-}
+export default function StackedBarChart() {
+    const { data, error, isLoading } = useSWR(
+        `/api/counsel-per-charge`,
+        fetcher
+    )
 
-const ChartTitle = styled(H4)`
-    text-align: center;
-`
-
-function StackedBarChart({ cases }: StackedBarChartProps) {
-    const retained: AttorneySummary = {
-        attorney: 'Retained',
-        caseCount: 0,
-        totalCharges: {},
-        percentageCharges: {},
-    }
-    const appointed: AttorneySummary = {
-        attorney: 'Court Appointed',
-        caseCount: 0,
-        totalCharges: {},
-        percentageCharges: {},
+    if (error) {
+        console.error('Error loading cosmos data: ', error)
+        return <div>Error fetching</div>
     }
 
-    // TODO -- what's the shape of retained.primaryCharges?
-    // note: the type of the key is really a number
-    let pcSet = new Set<string>()
+    if (isLoading) return <Loading />
 
-    // console.log('num of cases\n', cases.length)
+    const parsed = schema.safeParse(data)
 
-    cases.forEach((c) => {
-        if (!c.charge_category?.length) {
-            return
-        }
-        pcSet.add(c.charge_category[0])
+    if (!parsed.success) {
+        console.log(parsed.error.format())
 
-        // This should work since all of the "charges" within a given case were
-        // all scraped from the same record -- although in practice I'm not sure
-        // whether an attorney represents *all* charges for a given client..
-        // or is that ridiculous? Surely they represent them for all charges...
-        if (c.attorney_type === 'Retained') {
-            retained.caseCount += 1
-
-            retained.totalCharges = upsertAtMap(
-                retained.totalCharges,
-                c.charge_category[0],
-                (a) => a + 1,
-                1
-            )
-        }
-
-        if (c.attorney_type === 'Court Appointed') {
-            appointed.caseCount += 1
-
-            appointed.totalCharges = upsertAtMap(
-                appointed.totalCharges,
-                c.charge_category[0],
-                (a) => a + 1,
-                1
-            )
-        }
-    })
-
-    const toPercent = (num: number, denom: number) => {
-        return (num / denom) * 100
+        return <ErrorComponent message="Parsing failure" />
     }
-    Object.keys(retained.totalCharges).forEach((charge) => {
-        retained.percentageCharges[charge] = toPercent(
-            retained.totalCharges[charge],
-            retained.caseCount
-        )
-    })
-    Object.keys(appointed.totalCharges).forEach((charge) => {
-        appointed.percentageCharges[charge] = toPercent(
-            appointed.totalCharges[charge],
-            appointed.caseCount
-        )
-    })
 
-    const formattedResults = [flattenObject(retained), flattenObject(appointed)]
+    const grouped = groupBy(parsed.data)((a) => a.attorney_type)
 
-    const primaryCharges = Array.from(pcSet)
+    const retained = getTotals('Retained', grouped['Retained'])
 
-    const appointedPrimaryCharges = Object.keys(appointed.percentageCharges)
-        .sort()
-        .reduce((obj: any, key) => {
-            obj[key] = appointed.percentageCharges[key]
-            return obj
-        }, {})
+    const appointed = getTotals('Court Appointed', grouped['Court Appointed'])
 
-    // console.log('primaryCharges\n', primaryCharges)
-    // console.log('retained\n', retained)
-    // console.log('appointed\n', appointed)
-    // console.log('formattedResults\n', formattedResults)
-
-    if (!cases) return <div>Loading...</div>
+    const chargeCategories = Array.from(
+        new Set<string>(parsed.data.map((a) => a.charge_category))
+    )
 
     const renderCustomPercentage = (props: any, charge: string) => {
         const percentage = props[charge]
@@ -140,9 +80,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
 
     return (
         <>
-            <ChartTitle>
-                Cases per Attorney Type Grouped by Charge Category
-            </ChartTitle>
+            <ChartTitle>Charge Categories / Attorney Type</ChartTitle>
             <ResponsiveContainer
                 width="100%"
                 height="100%"
@@ -167,7 +105,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                         axisLine={false}
                         tickLine={false}
                     />
-                    {primaryCharges.map((charge, index) => {
+                    {chargeCategories.map((charge, index) => {
                         return (
                             <Bar
                                 maxBarSize={100}
@@ -175,8 +113,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                                 dataKey={charge}
                                 fill={
                                     stackedGraphColors[
-                                        index %
-                                            Object.keys(primaryCharges).length
+                                        index % chargeCategories.length
                                     ]
                                 }
                                 stackId="a"
@@ -226,7 +163,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                             renderLegend(props, 'Primary charge category', sums)
                         }
                     />
-                    {primaryCharges.map((charge, index) => {
+                    {chargeCategories.map((charge, index) => {
                         return (
                             <Bar
                                 maxBarSize={100}
@@ -234,8 +171,7 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
                                 dataKey={charge}
                                 fill={
                                     stackedGraphColors[
-                                        index %
-                                            Object.keys(primaryCharges).length
+                                        index % chargeCategories.length
                                     ]
                                 }
                                 stackId="a"
@@ -259,4 +195,53 @@ function StackedBarChart({ cases }: StackedBarChartProps) {
     )
 }
 
-export default StackedBarChart
+////////////////
+// Utilities
+////////////////
+
+type AttorneySummary = {
+    attorney: 'Retained' | 'Court Appointed'
+    caseCount: number
+    totalCharges: Record<string, number>
+    percentageCharges: Record<string, number>
+}
+
+const getTotals = (
+    /** The type of Attorney */
+    attorney: 'Retained' | 'Court Appointed',
+    /** A summary of case counts per charge category */
+    counts: ReadonlyArray<{
+        charge_category: string
+        attorney_type: string
+        count: number
+    }>
+) => {
+    const result: AttorneySummary = {
+        attorney,
+        caseCount: 0,
+        totalCharges: {},
+        percentageCharges: {},
+    }
+
+    counts.forEach((r) => {
+        result.caseCount += r.count
+        result['totalCharges'][r.charge_category] = r.count
+    })
+
+    Object.keys(result.totalCharges).forEach((charge) => {
+        result.percentageCharges[charge] = toPercent(
+            result.totalCharges[charge],
+            result.caseCount
+        )
+    })
+
+    return result
+}
+
+///////////////////////
+// Styled Components
+///////////////////////
+
+const ChartTitle = styled(H4)`
+    text-align: center;
+`

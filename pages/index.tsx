@@ -1,57 +1,22 @@
 import Head from 'next/head'
-import useSWR from 'swr'
-import { z } from 'zod'
-import { Loading } from '../components/Loading'
-import StackedBarChart from '../components/StackedBarChart'
-import BarChartInteractive from '../components/BarChartInteractive'
-import BarChartYears from '../components/BarChartYears'
-import { caseSchema } from '../models/Case'
-import styles from '../styles/Home.module.css'
-import fetcher from '../lib/fetcher'
-import Hero from '../components/Hero'
 import styled from 'styled-components'
-import { Section } from '../components/Section'
-import { H3 } from '../components/Typography/Headings'
+
+import BarChartInteractive from '../components/BarChartInteractive'
+import { BarChartYears } from '../components/BarChartYears'
 import { Container, TextContainer } from '../components/Container'
-import { Highlight } from '../components/Typography/Highlight'
-import { countPerYearSchema } from '../models/schemas'
-import { Paragraph, Small } from '../components/Typography/Body'
-import { bp } from '../lib/breakpoints'
-import { InlineLink } from '../components/Link'
-import FadeInSection from '../components/FadeInSection'
-import Spacer from '../components/Spacer'
-import { ErrorComponent } from '../components/ErrorComponent'
 import CounselPerChargeCategoryBarChart from '../components/CounselPerChargeCategoryBarChart'
+import FadeInSection from '../components/FadeInSection'
+import Hero from '../components/Hero'
+import { InlineLink } from '../components/Link'
+import { Section } from '../components/Section'
+import Spacer from '../components/Spacer'
+import StackedBarChart from '../components/StackedBarChart'
+import { Paragraph, Small } from '../components/Typography/Body'
+import { H3 } from '../components/Typography/Headings'
+import { Highlight } from '../components/Typography/Highlight'
 
-const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
-// TODO: Update cosmos query later
-// currently getting data with 'null'
-const COSMOS_QUERY = `
-SELECT * FROM c
-  WHERE NOT ARRAY_CONTAINS(c['charge_category'], null)
-  ORDER BY c['earliest_charge_date'] DESC
-  OFFSET 0 LIMIT 6000
-`
-
-const REPRESENTATION_BY_YEAR_QUERY = `
-SELECT
-  c.attorney_type,
-  c.has_evidence_of_representation,
-  DateTimePart("year", c.earliest_charge_date) AS year,
-  COUNT(1) AS case_count
- FROM c
- WHERE
-  IS_DEFINED(c.has_evidence_of_representation)
-  AND DateTimePart("year", c.earliest_charge_date) > 2007
-  AND (
-       c.attorney_type = "Court Appointed"
-    OR c.attorney_type = "Retained"
-  )
- GROUP BY
-  DateTimePart("year", c.earliest_charge_date),
-  c.has_evidence_of_representation,
-  c.attorney_type
-`
+import { bp } from '../lib/breakpoints'
+import styles from '../styles/Home.module.css'
 
 const Visualizations = styled.section`
     position: relative;
@@ -64,36 +29,6 @@ const Visualizations = styled.section`
 `
 
 export default function Home() {
-    const {
-        data: cosmosData,
-        error: cosmosError,
-        isLoading: isLoadingCosmos,
-    } = useSWR(`/api/cosmos?secret=${SECRET}&sql=${COSMOS_QUERY}`, fetcher)
-
-    const {
-        data: repByYearsRaw,
-        error: repByYearsErr,
-        isLoading: isLoadingRepsByYear,
-    } = useSWR(
-        `/api/cosmos?secret=${SECRET}&sql=${REPRESENTATION_BY_YEAR_QUERY}`,
-        fetcher
-    )
-
-    if (cosmosError || repByYearsErr) {
-        console.error('Error loading cosmos data: ', cosmosError)
-        return <div>Error fetching</div>
-    }
-
-    const parsed = z.array(caseSchema).safeParse(cosmosData?.data)
-    const repByYears = countPerYearSchema.safeParse(repByYearsRaw?.data)
-
-    if (!parsed.success && !!cosmosData) {
-        console.error(
-            'Error parsing data: ',
-            JSON.stringify(parsed.error.issues, null, 2)
-        )
-    }
-
     return (
         <div className={styles.container}>
             <Head>
@@ -210,15 +145,9 @@ export default function Home() {
                             </TextContainer>
                         </Section>
                         <Visualizations>
-                            {isLoadingCosmos ? (
-                                <Loading />
-                            ) : !parsed.success ? (
-                                <ErrorComponent />
-                            ) : (
-                                <div className={styles.charts}>
-                                    <BarChartInteractive data={parsed.data} />
-                                </div>
-                            )}
+                            <div className={styles.charts}>
+                                <BarChartInteractive />
+                            </div>
                         </Visualizations>
                     </Container>
                 </FadeInSection>
@@ -235,15 +164,7 @@ export default function Home() {
                             </TextContainer>
                         </Section>
                         <Visualizations>
-                            {isLoadingRepsByYear ? (
-                                <Loading />
-                            ) : !repByYears.success ? (
-                                <ErrorComponent />
-                            ) : (
-                                <div className={styles.charts}>
-                                    <BarChartYears data={repByYears.data} />
-                                </div>
-                            )}
+                            <BarChartYears />
                         </Visualizations>
                     </Container>
                 </FadeInSection>
@@ -282,15 +203,9 @@ export default function Home() {
                             </TextContainer>
                         </Section>
                         <Visualizations>
-                            {isLoadingCosmos ? (
-                                <Loading />
-                            ) : !parsed.success ? (
-                                <ErrorComponent />
-                            ) : (
-                                <div className={styles.charts}>
-                                    <StackedBarChart cases={parsed?.data} />
-                                </div>
-                            )}
+                            <div className={styles.charts}>
+                                <StackedBarChart />
+                            </div>
                         </Visualizations>
                     </Container>
                 </FadeInSection>
