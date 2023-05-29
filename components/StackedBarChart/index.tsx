@@ -23,17 +23,6 @@ import { ErrorComponent } from '../ErrorComponent'
 import { toPercent } from '../../lib/number'
 import { groupBy } from '../../lib/array'
 
-type AttorneySummary = {
-    attorney: 'Retained' | 'Court Appointed'
-    caseCount: number
-    totalCharges: Record<string, number>
-    percentageCharges: Record<string, number>
-}
-
-const ChartTitle = styled(H4)`
-    text-align: center;
-`
-
 const schema = z.array(
     z.object({
         charge_category: z.string(),
@@ -53,54 +42,21 @@ export default function StackedBarChart() {
         return <div>Error fetching</div>
     }
 
-    const parsed = schema.safeParse(data)
-
     if (isLoading) return <Loading />
+
+    const parsed = schema.safeParse(data)
 
     if (!parsed.success) {
         console.log(parsed.error.format())
 
-        return <ErrorComponent />
-    }
-
-    const retained: AttorneySummary = {
-        attorney: 'Retained',
-        caseCount: 0,
-        totalCharges: {},
-        percentageCharges: {},
-    }
-    const appointed: AttorneySummary = {
-        attorney: 'Court Appointed',
-        caseCount: 0,
-        totalCharges: {},
-        percentageCharges: {},
+        return <ErrorComponent message="Parsing failure" />
     }
 
     const grouped = groupBy(parsed.data)((a) => a.attorney_type)
 
-    grouped['Retained'].forEach((r) => {
-        retained.caseCount += r.count
-        retained['totalCharges'][r.charge_category] = r.count
-    })
+    const retained = getTotals('Retained', grouped['Retained'])
 
-    grouped['Court Appointed'].forEach((r) => {
-        appointed.caseCount += r.count
-        appointed['totalCharges'][r.charge_category] = r.count
-    })
-
-    Object.keys(retained.totalCharges).forEach((charge) => {
-        retained.percentageCharges[charge] = toPercent(
-            retained.totalCharges[charge],
-            retained.caseCount
-        )
-    })
-
-    Object.keys(appointed.totalCharges).forEach((charge) => {
-        appointed.percentageCharges[charge] = toPercent(
-            appointed.totalCharges[charge],
-            appointed.caseCount
-        )
-    })
+    const appointed = getTotals('Court Appointed', grouped['Court Appointed'])
 
     const chargeCategories = Array.from(
         new Set<string>(parsed.data.map((a) => a.charge_category))
@@ -157,8 +113,7 @@ export default function StackedBarChart() {
                                 dataKey={charge}
                                 fill={
                                     stackedGraphColors[
-                                        index %
-                                            Object.keys(chargeCategories).length
+                                        index % chargeCategories.length
                                     ]
                                 }
                                 stackId="a"
@@ -216,8 +171,7 @@ export default function StackedBarChart() {
                                 dataKey={charge}
                                 fill={
                                     stackedGraphColors[
-                                        index %
-                                            Object.keys(chargeCategories).length
+                                        index % chargeCategories.length
                                     ]
                                 }
                                 stackId="a"
@@ -240,3 +194,54 @@ export default function StackedBarChart() {
         </>
     )
 }
+
+////////////////
+// Utilities
+////////////////
+
+type AttorneySummary = {
+    attorney: 'Retained' | 'Court Appointed'
+    caseCount: number
+    totalCharges: Record<string, number>
+    percentageCharges: Record<string, number>
+}
+
+const getTotals = (
+    /** The type of Attorney */
+    attorney: 'Retained' | 'Court Appointed',
+    /** A summary of case counts per charge category */
+    counts: ReadonlyArray<{
+        charge_category: string
+        attorney_type: string
+        count: number
+    }>
+) => {
+    const result: AttorneySummary = {
+        attorney,
+        caseCount: 0,
+        totalCharges: {},
+        percentageCharges: {},
+    }
+
+    counts.forEach((r) => {
+        result.caseCount += r.count
+        result['totalCharges'][r.charge_category] = r.count
+    })
+
+    Object.keys(result.totalCharges).forEach((charge) => {
+        result.percentageCharges[charge] = toPercent(
+            result.totalCharges[charge],
+            result.caseCount
+        )
+    })
+
+    return result
+}
+
+///////////////////////
+// Styled Components
+///////////////////////
+
+const ChartTitle = styled(H4)`
+    text-align: center;
+`
