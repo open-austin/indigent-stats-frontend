@@ -80,7 +80,7 @@ const FiltersWrapper = styled.div`
     }
 `
 
-function BarChartInteractive() {
+export default function BarChartInteractive() {
     const isMd = useMediaQuery('md')
     const barSize = isMd ? undefined : 50
     const defaultFilters = {
@@ -138,8 +138,12 @@ function BarChartInteractive() {
     }
 
     // TODO: Create a reusable function for retained/appointed so we're not duplicating all this logic
-    const retainedData = denominatorFilter(data, filters, 'Retained')
-    const appointedData = denominatorFilter(data, filters, 'Court Appointed')
+    const retainedData = denominatorFilter(parsed.data, filters, 'Retained')
+    const appointedData = denominatorFilter(
+        parsed.data,
+        filters,
+        'Court Appointed'
+    )
 
     const numOfCasesInFilterRetained = numeratorFilter(retainedData, filters)
     const numOfCasesInFilterAppointed = numeratorFilter(appointedData, filters)
@@ -294,5 +298,3 @@ function BarChartInteractive() {
         </>
     )
 }
-
-export default BarChartInteractive
