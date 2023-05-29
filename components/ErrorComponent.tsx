@@ -15,8 +15,12 @@ const Wrapper = styled.div`
 
 // TODO: This is an awkward name, but "Error" is a reserved word.
 // TODO: We may want to actually show some error information here.
-export const ErrorComponent = () => (
+export const ErrorComponent = ({
+    message = 'An error occured.',
+}: {
+    message?: string
+}) => (
     <Wrapper>
-        <div>An error occured.</div>
+        <div>{message}</div>
     </Wrapper>
 )

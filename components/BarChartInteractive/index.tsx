@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import useSWR from 'swr'
+import { z } from 'zod'
 import {
     BarChart,
     Bar,
@@ -11,7 +13,7 @@ import {
     LabelList,
 } from 'recharts'
 import { Props as LegendProps } from 'recharts/types/component/Legend'
-import { Case } from '../../models/Case'
+import { Case, caseSchema } from '../../models/Case'
 import { colors } from '../../lib/colors'
 import { bp } from '../../lib/breakpoints'
 import Filters, { IFilters } from '../Filters'
@@ -20,13 +22,12 @@ import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
 import { H3, H4 } from '../Typography/Headings'
 import useMediaQuery from '../../lib/hooks/useMediaQuery'
+import fetcher from '../../lib/fetcher'
+import { ErrorComponent } from '../ErrorComponent'
+import { Loading } from '../Loading'
 
 // TODO: This should be changed to 50 once we use the larger sample size
 const MIN_SAMPLE_SIZE = 15
-
-interface BarChartProps {
-    data: Array<Case>
-}
 
 const toPercent = (decimal: number) => {
     return `${decimal.toFixed(2)}%`
@@ -79,7 +80,7 @@ const FiltersWrapper = styled.div`
     }
 `
 
-function BarChartInteractive({ data }: BarChartProps) {
+export default function BarChartInteractive() {
     const isMd = useMediaQuery('md')
     const barSize = isMd ? undefined : 50
     const defaultFilters = {
@@ -91,6 +92,26 @@ function BarChartInteractive({ data }: BarChartProps) {
     const [filters, setFilters] = useState<IFilters>(defaultFilters)
     const resetFilters = () => {
         setFilters(defaultFilters)
+    }
+
+    const { data, error, isLoading } = useSWR(`/api/get-all-cases`, fetcher)
+
+    if (error) {
+        console.error('Error loading cosmos data: ', error)
+        return <div>Error fetching</div>
+    }
+
+    const parsed = z.array(caseSchema).safeParse(data)
+
+    if (isLoading) return <Loading />
+
+    if (!parsed.success) {
+        console.error(
+            'Error parsing data: ',
+            JSON.stringify(parsed.error.issues, null, 2)
+        )
+
+        return <ErrorComponent />
     }
 
     const denominatorFilter = (
@@ -117,8 +138,12 @@ function BarChartInteractive({ data }: BarChartProps) {
     }
 
     // TODO: Create a reusable function for retained/appointed so we're not duplicating all this logic
-    const retainedData = denominatorFilter(data, filters, 'Retained')
-    const appointedData = denominatorFilter(data, filters, 'Court Appointed')
+    const retainedData = denominatorFilter(parsed.data, filters, 'Retained')
+    const appointedData = denominatorFilter(
+        parsed.data,
+        filters,
+        'Court Appointed'
+    )
 
     const numOfCasesInFilterRetained = numeratorFilter(retainedData, filters)
     const numOfCasesInFilterAppointed = numeratorFilter(appointedData, filters)
@@ -159,8 +184,6 @@ function BarChartInteractive({ data }: BarChartProps) {
     // console.log('retained\n', retained)
     // console.log('appointed\n', appointed)
     // console.log('formattedResults\n', formattedResults)
-
-    if (!data) return <div>Loading...</div>
 
     const domain = [0, 100]
     const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
@@ -208,7 +231,7 @@ function BarChartInteractive({ data }: BarChartProps) {
             <Layout>
                 <FiltersWrapper>
                     <Filters
-                        data={data}
+                        data={parsed.data}
                         filters={filters}
                         setFilters={setFilters}
                     >
@@ -275,5 +298,3 @@ function BarChartInteractive({ data }: BarChartProps) {
         </>
     )
 }
-
-export default BarChartInteractive

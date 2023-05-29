@@ -1,6 +1,9 @@
 import { z } from 'zod'
+/*
 
-const example = {
+Example case data:
+
+ {
     case_number: '20-0551CR-2',
     event_name_formatted: 'Discovery Receipt',
     event_date: '2021-07-02',
@@ -27,6 +30,7 @@ const example = {
     offense_type_code: 2,
     offense_type_desc: 'Property',
 }
+*/
 
 export const caseSchema = z.object({
     attorney: z.string(),
@@ -59,12 +63,3 @@ export const caseSchema = z.object({
 export const combinedDataSchema = z.array(caseSchema)
 
 export type CombinedData = z.TypeOf<typeof combinedDataSchema>
-
-export const countPerYearSchema = z.array(
-    z.object({
-        attorney_type: z.string(),
-        year: z.number(),
-        case_count: z.number(),
-        has_evidence_of_representation: z.boolean(),
-    })
-)
