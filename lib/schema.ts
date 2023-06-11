@@ -1,4 +1,4 @@
-interface CaseTable {
+export interface CaseTable {
     case_id: string
     case_number: string
     attorney_type: string
@@ -16,6 +16,6 @@ interface CaseTable {
     _ts: number
 }
 
-interface Database {
-    c: CaseTable
+export interface Database {
+    case: CaseTable
 }
