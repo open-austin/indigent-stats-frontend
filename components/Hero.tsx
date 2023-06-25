@@ -6,7 +6,7 @@ import { Banner } from './Banner'
 import { Container, TextContainer } from './Container'
 import { Section } from './Section'
 import { Highlight } from './Typography/Highlight'
-import { H1, H3 } from './Typography/Headings'
+import { H1 } from './Typography/Headings'
 import { bp } from '../lib/breakpoints'
 import openAustinSvg from '../public/open-austin-logo.svg'
 import { InlineLink } from './Link'
@@ -81,6 +81,18 @@ const Subheading = styled.p`
         font-size: 1.3rem;
     }
 `
+const BiggerText = styled.p`
+    color: ${(props) => (props.color ? props.color : colors.openAustinOrange)};
+    font-size: 1.5rem;
+    line-height: 1.75;
+    font-weight: 400;
+    font-family: 'Merriweather', serif;
+
+    @media ${bp.lg} {
+        font-size: 2rem;
+    }
+`
+
 
 const ImageWrapper = styled.div`
     display: flex;
@@ -149,7 +161,7 @@ const Hero = () => {
                 <FadeInSection>
                     <Banner bgColor={colors.blueNavy} color={colors.white}>
                         <TextContainer>
-                            <H3 color={colors.white}>
+                            <BiggerText color={colors.white}>
                                 <Highlight>
                                     Very few people accused of crimes in Hays
                                     County have any evidence of defense motions
@@ -160,7 +172,7 @@ const Hero = () => {
                                 evidence of effective representation. This is
                                 particularly true of people represented by
                                 court-appointed counsel.
-                            </H3>
+                            </BiggerText>
                         </TextContainer>
                     </Banner>
                 </FadeInSection>
