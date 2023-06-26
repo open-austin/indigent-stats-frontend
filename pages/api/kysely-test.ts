@@ -22,7 +22,7 @@ export default async function handler(
     res: NextApiResponse
 ) {
     const result = await db
-        .selectFrom('case')
+        .selectFrom('c')
         .select(sql`count(1)`.as('count'))
         .execute()
     res.status(200).json({ result })

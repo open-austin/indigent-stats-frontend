@@ -17,5 +17,5 @@ export interface CaseTable {
 }
 
 export interface Database {
-    case: CaseTable
+    c: CaseTable
 }
