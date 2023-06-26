@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 import { z } from 'zod'
@@ -20,29 +20,11 @@ import Filters, { IFilters } from '../Filters'
 import { Button } from '../Button'
 import multifilter from '../../lib/multifilter'
 import { renderLegend } from './Legend'
-import { H3, H4 } from '../Typography/Headings'
+import { H4 } from '../Typography/Headings'
 import useMediaQuery from '../../lib/hooks/useMediaQuery'
 import fetcher from '../../lib/fetcher'
 import { ErrorComponent } from '../ErrorComponent'
 import { Loading } from '../Loading'
-
-import { Kysely } from 'kysely'
-import { CosmosDialect } from '../../lib/adapter/CosmosDialect'
-import { CosmosClient } from '@azure/cosmos'
-import { Database } from '../../lib/schema'
-
-const SECRET = process.env.NEXT_PUBLIC_COSMOSDB_SECRET
-const ENDPOINT = process.env.COSMOSDB_ENDPOINT
-
-const db = new Kysely<Database>({
-    // PostgresDialect requires the Cursor dependency
-    dialect: new CosmosDialect({
-        client: new CosmosClient({ endpoint: ENDPOINT!, key: SECRET! }),
-        database: 'cases-json-db',
-        container: 'clean-cases',
-    }),
-    // MysqlDialect doesn't require any special configuration
-})
 
 // TODO: This should be changed to 50 once we use the larger sample size
 const MIN_SAMPLE_SIZE = 15
