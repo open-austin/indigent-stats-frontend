@@ -294,11 +294,8 @@ export default function Home() {
                 </FadeInSection>
             </main>
             <Spacer />
-            <FadeInSection>
-                <ContactForm />
-            </FadeInSection>
-            <Spacer />
-            <Spacer />
+            <ContactForm />
+
             <footer className={styles.footer}>
                 <span>
                     <InlineLink

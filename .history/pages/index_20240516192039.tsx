@@ -17,7 +17,6 @@ import { Highlight } from '../components/Typography/Highlight'
 
 import { bp } from '../lib/breakpoints'
 import styles from '../styles/Home.module.css'
-import { ContactForm } from '../components/ContactForm'
 
 const Visualizations = styled.section`
     position: relative;
@@ -294,11 +293,7 @@ export default function Home() {
                 </FadeInSection>
             </main>
             <Spacer />
-            <FadeInSection>
-                <ContactForm />
-            </FadeInSection>
-            <Spacer />
-            <Spacer />
+
             <footer className={styles.footer}>
                 <span>
                     <InlineLink

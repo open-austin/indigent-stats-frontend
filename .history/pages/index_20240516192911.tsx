@@ -288,17 +288,14 @@ export default function Home() {
                                         </Paragraph>
                                     </li>
                                 </ul>
+                                <ContactForm />
                             </TextContainer>
                         </Section>
                     </Container>
                 </FadeInSection>
             </main>
             <Spacer />
-            <FadeInSection>
-                <ContactForm />
-            </FadeInSection>
-            <Spacer />
-            <Spacer />
+
             <footer className={styles.footer}>
                 <span>
                     <InlineLink
