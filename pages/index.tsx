@@ -17,6 +17,7 @@ import { Highlight } from '../components/Typography/Highlight'
 
 import { bp } from '../lib/breakpoints'
 import styles from '../styles/Home.module.css'
+import { ContactForm } from '../components/ContactForm'
 
 const Visualizations = styled.section`
     position: relative;
@@ -35,6 +36,10 @@ export default function Home() {
                 <title>Open Austin | Indigent Defense Data Visualization</title>
                 <meta name="description" content="Indigent Defense Stats" />
                 <link rel="icon" href="/favicon.ico" />
+                <script
+                    async={true}
+                    src="https://tally.so/widgets/embed.js"
+                ></script>
             </Head>
             <main className={styles.main}>
                 <Hero />
@@ -289,7 +294,11 @@ export default function Home() {
                 </FadeInSection>
             </main>
             <Spacer />
-
+            <FadeInSection>
+                <ContactForm />
+            </FadeInSection>
+            <Spacer />
+            <Spacer />
             <footer className={styles.footer}>
                 <span>
                     <InlineLink
